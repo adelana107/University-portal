@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>oceanview</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+    <div class="container min-vh-100 d-flex flex-column align-items-center justify-content-center">
+        <div class="card shadow-lg p-5 text-center">
+            <h1 class="text-primary mb-3">oceanview University</h1>
+            <p class="text-muted mb-4">Education Is Key to success!</p>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <a href="{% url 'apply'%}" class="btn btn-primary w-100 py-3">Apply for Admission</a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{% url 'application' %}" class="btn btn-success w-100 py-3">Sign in to Application Portal</a>
+                </div>
+                <div class="col-md-6">
+                    <a href="#" class="btn btn-warning w-100 py-3">View School News</a>
+                </div>
+                <div class="col-md-6">
+                    <a href="#" class="btn btn-secondary w-100 py-3">Sign in as Admitted Student</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
