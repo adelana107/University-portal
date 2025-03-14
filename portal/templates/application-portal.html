@@ -4,52 +4,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Applications List</title>
+    <title>Applicant Biodata</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .biodata-container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid #007bff;
+        }
+    </style>
 </head>
 <body class="bg-light">
-    <div class="container my-5">
-        <h2 class="text-center text-primary mb-4">List of Applications</h2>
-        <table class="table table-striped table-bordered">
-            <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Application Number</th>
-                    <th>Surname</th>
-                    <th>First Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
-                    <th>Course</th>
-                    <th>School</th>
-                    <th>Address</th>
-                    <th>State</th>
-                    <th>Local Govt</th>
-                    <th>Date of Birth</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for application in applications %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ application.application_number }}</td>
-                    <td>{{ application.surname }}</td>
-                    <td>{{ application.first_name }}</td>
-                    <td>{{ application.email }}</td>
-                    <td>{{ application.phone_number }}</td>
-                    <td>{{ application.course.name }}</td>
-                    <td>{{ application.school.name }}</td>
-                    <td>{{ application.address }}</td>
-                    <td>{{ application.state_of_origin.name }}</td>
-                    <td>{{ application.local_government.name }}</td>
-                    <td>{{ application.date_of_birth }}</td>
-                </tr>
-                {% empty %}
-                <tr>
-                    <td colspan="11" class="text-center">No applications found.</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+<div class="container my-5">
+    <h2 class="text-center text-primary mb-4">Applicant Biodata</h2>
+
+    {% for application in applications %}
+    <div class="biodata-container mb-4">
+        <div class="d-flex justify-content-between align-items-start">
+            <h4 class="text-dark">Application Number: {{ application.application_number }}</h4>
+            <img src="{{ application.profile_picture.url }}" alt="Profile Picture" class="profile-img">
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Surname:</strong> {{ application.surname }}</p>
+                <p><strong>First Name:</strong> {{ application.first_name }}</p>
+                <p><strong>Email:</strong> {{ application.email }}</p>
+                <p><strong>Phone:</strong> {{ application.phone_number }}</p>
+                <p><strong>Date of Birth:</strong> {{ application.date_of_birth }}</p>
+            </div>
+            <div class="col-md-6">
+                <p><strong>Course:</strong> {{ application.course.name }}</p>
+                <p><strong>School:</strong> {{ application.school.name }}</p>
+                <p><strong>Address:</strong> {{ application.address }}</p>
+                <p><strong>State:</strong> {{ application.state_of_origin.name }}</p>
+                <p><strong>Local Govt:</strong> {{ application.local_government.name }}</p>
+            </div>
+        </div>
     </div>
+    {% empty %}
+    <div class="alert alert-warning text-center">No applications found.</div>
+    {% endfor %}
+</div>
+
 </body>
 </html>
