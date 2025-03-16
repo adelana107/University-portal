@@ -1,0 +1,14 @@
+{% if error %}
+<p style="color: red;">{{ error }}</p>
+{% endif %}
+
+<form method="post">
+    {% csrf_token %}
+    <label>Application Number:</label>
+    <input type="text" name="application_number" required>
+
+    <label>Surname:</label>
+    <input type="password" name="surname" required>
+
+    <button type="submit">Login</button>
+</form>
