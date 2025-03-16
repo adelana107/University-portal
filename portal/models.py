@@ -48,7 +48,9 @@ class Application(models.Model):
     school = models.ForeignKey(School, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     application_number = models.CharField(max_length=10, unique=True, blank=True)
+    profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True, default="profile_pics/default-profile.png")
 
+    
     def save(self, *args, **kwargs):
         if not self.application_number:
             last_entry = Application.objects.order_by('-id').first()

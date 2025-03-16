@@ -1,10 +1,9 @@
 from django.urls import path
-from . import views
-from .views import applicant_login, applicant_profile
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
-from .views import application_success
-
-
+from . import views
+from .views import applicant_login, applicant_profile, application_success
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -15,4 +14,8 @@ urlpatterns = [
     path("profile/", applicant_profile, name="profile"),
     path("logout/", LogoutView.as_view(next_page="applicant_login"), name="logout"), 
     path('application-success/<str:application_number>/<str:surname>/', application_success, name='application_success'), 
-]    
+]
+
+# ✅ Serve media files in development mode
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

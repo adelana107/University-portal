@@ -7,49 +7,64 @@
     <title>Applicant Biodata</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
+        body {
+            background-color: #f8f9fa;
+        }
         .biodata-container {
             max-width: 800px;
             margin: auto;
             background: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease-in-out;
+        }
+        .biodata-container:hover {
+            transform: scale(1.02);
         }
         .profile-img {
             width: 150px;
             height: 150px;
             object-fit: cover;
             border-radius: 50%;
-            border: 2px solid #007bff;
+            border: 3px solid #007bff;
+        }
+        .bio-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .bio-value {
+            font-size: 1.1rem;
+            color: #333;
         }
     </style>
 </head>
-<body class="bg-light">
+<body>
 
 <div class="container my-5">
-    <h2 class="text-center text-primary mb-4">Applicant Biodata</h2>
+    <h2 class="text-center text-primary fw-bold mb-4">Applicant Biodata</h2>
 
     {% for application in applications %}
     <div class="biodata-container mb-4">
-        <div class="d-flex justify-content-between align-items-start">
-            <h4 class="text-dark">Application Number: {{ application.application_number }}</h4>
+        <div class="d-flex justify-content-between align-items-center">
+            <h4 class="text-dark">Application Number: <span class="text-primary">{{ application.application_number }}</span></h4>
             <img src="{{ application.profile_picture.url }}" alt="Profile Picture" class="profile-img">
         </div>
         <hr>
         <div class="row">
             <div class="col-md-6">
-                <p><strong>Surname:</strong> {{ application.surname }}</p>
-                <p><strong>First Name:</strong> {{ application.first_name }}</p>
-                <p><strong>Email:</strong> {{ application.email }}</p>
-                <p><strong>Phone:</strong> {{ application.phone_number }}</p>
-                <p><strong>Date of Birth:</strong> {{ application.date_of_birth }}</p>
+                <p class="bio-label">Surname:</p> <p class="bio-value">{{ application.surname }}</p>
+                <p class="bio-label">First Name:</p> <p class="bio-value">{{ application.first_name }}</p>
+                <p class="bio-label">Email:</p> <p class="bio-value">{{ application.email }}</p>
+                <p class="bio-label">Phone:</p> <p class="bio-value">{{ application.phone_number }}</p>
+                <p class="bio-label">Date of Birth:</p> <p class="bio-value">{{ application.date_of_birth }}</p>
             </div>
             <div class="col-md-6">
-                <p><strong>Course:</strong> {{ application.course.name }}</p>
-                <p><strong>School:</strong> {{ application.school.name }}</p>
-                <p><strong>Address:</strong> {{ application.address }}</p>
-                <p><strong>State:</strong> {{ application.state_of_origin.name }}</p>
-                <p><strong>Local Govt:</strong> {{ application.local_government.name }}</p>
+                <p class="bio-label">Course:</p> <p class="bio-value">{{ application.course.name }}</p>
+                <p class="bio-label">School:</p> <p class="bio-value">{{ application.school.name }}</p>
+                <p class="bio-label">Address:</p> <p class="bio-value">{{ application.address }}</p>
+                <p class="bio-label">State:</p> <p class="bio-value">{{ application.state_of_origin.name }}</p>
+                <p class="bio-label">Local Govt:</p> <p class="bio-value">{{ application.local_government.name }}</p>
             </div>
         </div>
     </div>

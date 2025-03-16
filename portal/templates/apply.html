@@ -11,29 +11,22 @@
     <div class="container my-5">
         <h2 class="text-center text-primary">Apply for Admission</h2>
         <div class="card p-4 shadow-lg">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">  <!-- enctype is required -->
                 {% csrf_token %}
-
-                {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <strong>Please correct the errors below:</strong>
-                    </div>
-                {% endif %}
-
-                <div class="row g-3">
-                    {% for field in form %}
-                    <div class="col-md-6">
-                        <label class="form-label">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <small class="text-danger">{{ field.errors.0 }}</small>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
+            
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <small class="text-danger">{{ field.errors.0 }}</small>
+                    {% endif %}
                 </div>
-
-                <button type="submit" class="btn btn-success mt-4 w-100 py-2">Submit Application</button>
+                {% endfor %}
+            
+                <button type="submit" class="btn btn-success w-100">Submit Application</button>
             </form>
+            
         </div>
     </div>
 
@@ -46,31 +39,21 @@
             $("#id_school").change(function() {
                 const schoolId = $(this).val();
                 const courseField = $("#id_course");
-                
-                // Clear the dropdown
-                courseField.empty();
-                courseField.append('<option value="">Select Course</option>');
-                
-                // If a school is selected, fetch courses via AJAX
+
+                courseField.empty().append('<option value="">Loading...</option>').prop("disabled", true);
+
                 if (schoolId) {
                     $.ajax({
                         url: "{% url 'get_courses' %}",
-                        data: {
-                            'school_id': schoolId
-                        },
+                        data: { 'school_id': schoolId },
                         success: function(data) {
-                            if (data.courses) {
-                                // Add each course as an option
-                                data.courses.forEach(function(course) {
-                                    const option = document.createElement('option');
-                                    option.value = course.id;
-                                    option.textContent = course.name;
-                                    courseField.append(option);
-                                });
-                            }
+                            courseField.empty().append('<option value="">Select Course</option>').prop("disabled", false);
+                            data.courses.forEach(course => {
+                                courseField.append(new Option(course.name, course.id));
+                            });
                         },
-                        error: function(xhr, status, error) {
-                            console.error("Error fetching courses:", error);
+                        error: function() {
+                            courseField.empty().append('<option value="">Error loading courses</option>').prop("disabled", false);
                         }
                     });
                 }
@@ -80,20 +63,16 @@
             $("#id_state_of_origin").change(function() {
                 const stateId = $(this).val();
                 const lgaField = $("#id_local_government");
-                
-                // Clear the dropdown
-                lgaField.empty();
-                lgaField.append('<option value="">Select Local Government</option>');
-                
-                // If a state is selected and we have LGAs for it
+
+                lgaField.empty().append('<option value="">Loading...</option>').prop("disabled", true);
+
                 if (stateId && allLGAs[stateId]) {
-                    // Add each LGA as an option
-                    allLGAs[stateId].forEach(function(lga) {
-                        const option = document.createElement('option');
-                        option.value = lga.id;
-                        option.textContent = lga.name;
-                        lgaField.append(option);
+                    lgaField.empty().append('<option value="">Select Local Government</option>').prop("disabled", false);
+                    allLGAs[stateId].forEach(lga => {
+                        lgaField.append(new Option(lga.name, lga.id));
                     });
+                } else {
+                    lgaField.empty().append('<option value="">No LGAs found</option>').prop("disabled", false);
                 }
             });
         });

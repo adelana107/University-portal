@@ -53,7 +53,7 @@ def apply_for_admission(request):
     form = ApplicationForm()
     
     if request.method == "POST":
-        form = ApplicationForm(request.POST)
+        form = ApplicationForm(request.POST, request.FILES)
         if form.is_valid():
             application = form.save()
             return redirect('application_success', application.application_number, application.surname)

@@ -7,7 +7,7 @@ class ApplicationForm(forms.ModelForm):
         fields = [
             'surname', 'first_name', 'other_name', 'email', 'phone_number', 
             'address', 'state_of_origin', 'local_government', 
-            'date_of_birth', 'school', 'course'
+            'date_of_birth', 'school', 'course', 'profile_picture'
         ]
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
@@ -18,12 +18,14 @@ class ApplicationForm(forms.ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(ApplicationForm, self).__init__(*args, **kwargs)
-        
+        super().__init__(*args, **kwargs)
+
+        # Apply Bootstrap styling to all fields
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+
         # Initialize course queryset
         self.fields['course'].queryset = Course.objects.none()
-        
-        # Initialize local_government queryset
         self.fields['local_government'].queryset = Lga.objects.none()
 
         # If form is being edited and already has data
@@ -48,8 +50,6 @@ class ApplicationForm(forms.ModelForm):
                 self.fields['local_government'].queryset = Lga.objects.filter(state_of_origin_id=state_id)
             except (ValueError, TypeError):
                 pass
-
-
 
 
 class ApplicantLoginForm(forms.Form):
