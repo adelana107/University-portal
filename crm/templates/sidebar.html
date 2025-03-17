@@ -1,0 +1,49 @@
+<div class="sidebar d-flex flex-column">
+    <h3 class="text-center text-white mb-4">OceanView Admin</h3>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a href="{% url 'dashboard' %}" class="nav-link text-white">
+                <i class="fas fa-home me-2"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'applicant_list' %}" class="nav-link text-white">
+                <i class="fas fa-users me-2"></i> Applications
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white">
+                <i class="fas fa-cog me-2"></i> Settings
+            </a>
+        </li>
+    </ul>
+</div>
+
+<style>
+    .sidebar {
+        height: 100vh;
+        width: 250px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background: #2c3e50; /* Dark Blue */
+        padding: 20px;
+        transition: 0.3s ease;
+    }
+    .sidebar h3 {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+    .sidebar .nav-link {
+        padding: 10px;
+        border-radius: 5px;
+        margin: 5px 0;
+        transition: background 0.3s ease;
+    }
+    .sidebar .nav-link:hover {
+        background: #34495e; /* Slightly lighter blue */
+    }
+    .sidebar .nav-link i {
+        font-size: 1.2rem;
+    }
+</style>

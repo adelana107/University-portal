@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
 
-    'portal'
+    'portal',
+    'crm'
 ]
 
 MIDDLEWARE = [

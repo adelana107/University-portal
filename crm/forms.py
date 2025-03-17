@@ -1,5 +1,7 @@
 from django import forms
-from .models import Application, Course, State, Lga
+from portal.models import Application, Course, School, State, Lga
+
+
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
@@ -15,7 +17,6 @@ class ApplicationForm(forms.ModelForm):
             'course': forms.Select(attrs={'class': 'form-select'}),
             'state_of_origin': forms.Select(attrs={'class': 'form-select', 'id': 'id_state_of_origin'}),
             'local_government': forms.Select(attrs={'class': 'form-select', 'id': 'id_local_government'}),
-            
         }
 
     def __init__(self, *args, **kwargs):
@@ -51,8 +52,3 @@ class ApplicationForm(forms.ModelForm):
                 self.fields['local_government'].queryset = Lga.objects.filter(state_of_origin_id=state_id)
             except (ValueError, TypeError):
                 pass
-
-
-class ApplicantLoginForm(forms.Form):
-    application_number = forms.CharField(label="Application Number", max_length=20)
-    surname = forms.CharField(label="Surname", widget=forms.PasswordInput)

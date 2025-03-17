@@ -4,6 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.contrib.auth.hashers import make_password
 from django.db.models.signals import post_save, post_delete
+from django.utils.timezone import now
 
 
 
@@ -49,6 +50,7 @@ class Application(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     application_number = models.CharField(max_length=10, unique=True, blank=True)
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True, default="profile_pics/default-profile.png")
+    created_at = models.DateTimeField(default=now, editable=True)
 
     
     def save(self, *args, **kwargs):
