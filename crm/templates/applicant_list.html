@@ -39,7 +39,9 @@
                                         {{ course }}
                                     </button>
                                 </h2>
-                                <div id="courseCollapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" class="accordion-collapse collapse">
+                                <div id="courseCollapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" 
+                                     class="accordion-collapse collapse"
+                                     data-bs-parent="#courseAccordion{{ forloop.parentloop.counter }}">
                                     <div class="accordion-body">
                                         <table class="table table-striped">
                                             <thead>
