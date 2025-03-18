@@ -25,6 +25,51 @@
             max-width: 600px;
             margin: auto;
         }
+
+        /* Custom Styling for Overview Cards */
+.stats-card {
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffc107, #d39e00);
+}
+
+.bg-gradient-danger {
+    background: linear-gradient(135deg, #dc3545, #a71d2a);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #17a2b8, #117a8b);
+}
+
+.card-title {
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+h3 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
     </style>
 </head>
 <body>
@@ -37,40 +82,55 @@
         <h2 class="text-primary mb-4">Dashboard</h2>
 
         <!-- Overview Cards -->
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5>Total Applications</h5>
-                        <h3>{{ total_applications }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5>Schools</h5>
-                        <h3>{{ total_schools }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5>Courses</h5>
-                        <h3>{{ total_courses }}</h3>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="card text-center">
-                    <div class="card-body">
-                        <h5>Pending Applications</h5>
-                        <h3>{{ pending_applications }}</h3>
-                    </div>
-                </div>
+        <!-- Overview Cards -->
+<div class="row">
+    <div class="col-md-3">
+        <div class="card stats-card text-white bg-gradient-primary">
+            <div class="card-body text-center">
+                <i class="fas fa-file-alt fa-3x mb-2"></i>
+                <h5 class="card-title">Total Applications</h5>
+                <h3>{{ total_applications }}</h3>
             </div>
         </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card text-white bg-gradient-success">
+            <div class="card-body text-center">
+                <i class="fas fa-school fa-3x mb-2"></i>
+                <h5 class="card-title">Schools</h5>
+                <h3>{{ total_schools }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card text-white bg-gradient-warning">
+            <div class="card-body text-center">
+                <i class="fas fa-book fa-3x mb-2"></i>
+                <h5 class="card-title">Courses</h5>
+                <h3>{{ total_courses }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card text-white bg-gradient-danger">
+            <div class="card-body text-center">
+                <i class="fas fa-hourglass-half fa-3x mb-2"></i>
+                <h5 class="card-title">Pending Applications</h5>
+                <h3>{{ pending_applications }}</h3>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mt-3">
+        <div class="card stats-card text-white bg-gradient-info">
+            <div class="card-body text-center">
+                <i class="fas fa-user-graduate fa-3x mb-2"></i>
+                <h5 class="card-title">Admitted Students</h5>
+                <h3>{{ admitted_students }}</h3>
+            </div>
+        </div>
+    </div>
+</div>
+
 
         <!-- Applications by Month Chart -->
         <div class="chart-container mt-5">
@@ -121,28 +181,98 @@
 
     <!-- JavaScript for Chart -->
     <script>
-        var ctx = document.getElementById('applicationsChart').getContext('2d');
-        var applicationsChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: {{ months|safe }},
-                datasets: [{
-                    label: 'Applications Per Month',
-                    data: {{ application_counts|safe }},
-                    backgroundColor: 'rgba(54, 162, 235, 0.5)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        document.addEventListener("DOMContentLoaded", function() {
+            var ctx = document.getElementById('applicationsChart').getContext('2d');
+    
+            // Create a gradient fill
+            var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+            gradient.addColorStop(0, 'rgba(54, 162, 235, 0.5)');
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
+    
+            var applicationsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: {{ months|safe }},
+                    datasets: [{
+                        label: 'Applications Trend',
+                        data: {{ application_counts|safe }},
+                        backgroundColor: gradient,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                        pointRadius: 5,
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false
+                    },
+                    plugins: {
+                        tooltip: {
+                            enabled: true,
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            borderColor: '#ddd',
+                            borderWidth: 1,
+                            cornerRadius: 5,
+                        },
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: '#333',
+                                font: { size: 14 }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'Number of Applications',
+                                color: '#333'
+                            },
+                            grid: { color: 'rgba(0,0,0,0.1)' }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Months',
+                                color: '#333'
+                            },
+                            grid: { color: 'rgba(0,0,0,0.1)' }
+                        }
                     }
                 }
-            }
+            });
+    
+            // WebSocket connection for real-time updates
+            var socket = new WebSocket("ws://localhost:8000/ws/applications/");
+    
+            socket.onmessage = function(event) {
+                var data = JSON.parse(event.data);
+                var newMonth = data.month;
+                var newCount = data.count;
+    
+                // Add new data dynamically
+                if (!applicationsChart.data.labels.includes(newMonth)) {
+                    applicationsChart.data.labels.push(newMonth);
+                    applicationsChart.data.datasets[0].data.push(newCount);
+                } else {
+                    var index = applicationsChart.data.labels.indexOf(newMonth);
+                    applicationsChart.data.datasets[0].data[index] = newCount;
+                }
+    
+                applicationsChart.update();
+            };
         });
     </script>
-
+    
+    
 </body>
 </html>

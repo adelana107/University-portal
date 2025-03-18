@@ -18,7 +18,8 @@ def dashboard(request):
     total_applications = Application.objects.count()
     total_schools = School.objects.count()
     total_courses = Course.objects.count()
-    pending_applications = Application.objects.filter().count()  # Adjust filter to show pending applications
+    pending_applications = Application.objects.filter(is_approved=False).count()  # Adjust filter to show pending applications
+    admitted_students = Student.objects.count()
 
     # Applications by Month using SQLite-compatible function
     applications_by_month = (
@@ -42,6 +43,7 @@ def dashboard(request):
         'total_schools': total_schools,
         'total_courses': total_courses,
         'pending_applications': pending_applications,
+        'admitted_students' : admitted_students,
         'recent_applications': recent_applications,
         'months': months,
         'application_counts': application_counts,
@@ -121,3 +123,55 @@ def edit_student(request, student_id):
 def view_applicant(request, application_id):
     applicant = get_object_or_404(Application, id=application_id)
     return render(request, "applicant_profile.html", {"applicant": applicant})
+
+
+
+def approve_application(request, application_id):
+    application = get_object_or_404(Application, id=application_id)
+
+    # Check if a student with the same application number already exists
+    if Student.objects.filter(application_number=application.application_number).exists():
+        print(f"⚠️ Student with application number {application.application_number} already exists!")
+        return redirect("applicant_list")  # Redirect to an error page or handle it gracefully
+
+    # Create Student record
+    student = Student.objects.create(
+        surname=application.surname,
+        first_name=application.first_name,
+        other_name=application.other_name,
+        email=application.email,
+        phone_number=application.phone_number,
+        address=application.address,
+        state_of_origin=application.state_of_origin,
+        local_government=application.local_government,
+        date_of_birth=application.date_of_birth,
+        school=application.school,
+        course=application.course,
+        application_number=application.application_number,
+        profile_picture=application.profile_picture
+    )
+
+    # ✅ Mark application as approved instead of deleting
+    application.is_approved = True
+    application.save()
+
+    print(f"✅ Application {application.application_number} approved and student created.")
+    return redirect("applicant_list")  # Redirect to the list of applicants
+
+
+
+def revoke_application(request, application_id):
+    application = get_object_or_404(Application, id=application_id)
+
+    # Check if a student exists with this application number and delete it
+    student = Student.objects.filter(application_number=application.application_number).first()
+    if student:
+        student.delete()
+        print(f"🚨 Student {application.application_number} record deleted.")
+
+    # Mark application as not approved
+    application.is_approved = False
+    application.save()
+
+    print(f"🚫 Application {application.application_number} has been revoked.")
+    return redirect("applicant_list")

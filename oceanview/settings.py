@@ -30,7 +30,8 @@ INSTALLED_APPS = [
 
 
     'portal',
-    'crm'
+    'crm',
+    
 ]
 
 MIDDLEWARE = [

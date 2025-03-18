@@ -113,13 +113,21 @@
             </table>
 
             <div class="d-flex justify-content-between mt-4">
-                <a href="{% url 'applicant_list' %}" class="btn btn-custom">
-                    <i class="fas fa-arrow-left"></i> Back
-                </a>
                 <a href="{% url 'edit_application' applicant.id %}" class="btn btn-custom">
                     <i class="fas fa-edit"></i> Edit
                 </a>
+            
+                {% if applicant.is_approved %}
+                    <a href="{% url 'revoke_application' applicant.id %}" class="btn btn-danger">
+                        <i class="fas fa-times"></i> Revoke Application
+                    </a>
+                {% else %}
+                    <a href="{% url 'approve_application' applicant.id %}" class="btn btn-success">
+                        <i class="fas fa-check"></i> Approve
+                    </a>
+                {% endif %}
             </div>
+            
         </div>
     </div>
 

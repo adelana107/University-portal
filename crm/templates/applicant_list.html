@@ -52,7 +52,8 @@
                                                     <th>First Name</th>
                                                     <th>Email</th>
                                                     <th>Phone</th>
-                                                    <th>Actions</th>
+                                                    <th>View</th>
+                                                    <th>Action</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -68,8 +69,7 @@
                                                         <a href="{% url 'view_applicant' application.id %}" class="btn btn-sm btn-primary">
                                                             <i class="fas fa-eye"></i> View
                                                         </a>
-                                                        <a href="{% url 'approve_application' application.id %}" class="btn btn-sm btn-success">Approve</a>
-
+                                                        <!-- <a href="{% url 'approve_application' application.id %}" class="btn btn-success">Approve</a> -->
                                                     </td>
                                                 </tr>
                                                 {% empty %}
