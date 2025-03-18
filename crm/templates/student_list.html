@@ -16,13 +16,13 @@
 
     <!-- Main Content -->
     <div class="container mt-4">
-        <h2 class="text-primary">Applicants</h2>
+        <h2 class="text-primary">Students</h2>
 
         <!-- Search Bar -->
-        <input type="text" class="form-control mb-3" placeholder="Search applications..." id="searchInput">
+        <input type="text" class="form-control mb-3" placeholder="Search students..." id="searchInput">
 
         <div class="accordion" id="schoolAccordion">
-            {% for school, courses in grouped_applications.items %}
+            {% for school, courses in grouped_students.items %}
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading{{ forloop.counter }}">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}">
@@ -32,7 +32,7 @@
                 <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" data-bs-parent="#schoolAccordion">
                     <div class="accordion-body">
                         <div class="accordion" id="courseAccordion{{ forloop.counter }}">
-                            {% for course, applications in courses.items %}
+                            {% for course, students in courses.items %}
                             <div class="accordion-item">
                                 <h2 class="accordion-header" id="courseHeading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
                                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#courseCollapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
@@ -56,28 +56,25 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {% for application in applications %}
-                                                <tr>
-                                                    <td>{{ forloop.counter }}</td>
-                                                    <td>{{ application.application_number }}</td>
-                                                    <td>{{ application.surname }}</td>
-                                                    <td>{{ application.first_name }}</td>
-                                                    <td>{{ application.email }}</td>
-                                                    <td>{{ application.phone_number }}</td>
-                                                    <td>
-                                                        <a href="{% url 'view_applicant' application.id %}" class="btn btn-sm btn-primary">
-                                                            <i class="fas fa-eye"></i> View
-                                                        </a>
-                                                        <a href="{% url 'approve_application' application.id %}" class="btn btn-sm btn-success">Approve</a>
+    {% for student in students %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ student.application_number }}</td>
+        <td>{{ student.surname }}</td>
+        <td>{{ student.first_name }}</td>
+        <td>{{ student.email }}</td>
+        <td>{{ student.phone_number }}</td>
+        <td>
+            <a href="{% url 'edit_student' student.id %}" class="btn btn-sm btn-primary">Edit</a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="7" class="text-center">No Student record found.</td>
+    </tr>
+    {% endfor %}
+</tbody>
 
-                                                    </td>
-                                                </tr>
-                                                {% empty %}
-                                                <tr>
-                                                    <td colspan="7" class="text-center">No applications found.</td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -88,7 +85,7 @@
                 </div>
             </div>
             {% empty %}
-            <div class="alert alert-info">No applications found.</div>
+            <div class="alert alert-info">No student record found.</div>
             {% endfor %}
         </div>
     </div>

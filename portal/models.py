@@ -98,3 +98,30 @@ def delete_application_user(sender, instance, **kwargs):
             print(f"⚠️ Skipping deletion for admin user: {instance.application_number}")
     except User.DoesNotExist:
         print(f"⚠️ No user found for deletion: {instance.application_number}")
+
+
+
+
+class Student(models.Model):
+    surname = models.CharField(max_length=100)
+    first_name = models.CharField(max_length=100)
+    other_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(unique=True)
+    phone_number = models.CharField(max_length=11)
+    address = models.CharField(max_length=100)
+    state_of_origin = models.ForeignKey(State, on_delete=models.CASCADE)
+    local_government = models.ForeignKey(Lga, on_delete=models.CASCADE)
+    date_of_birth = models.DateField()
+    school = models.ForeignKey(School, on_delete=models.CASCADE)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    application_number = models.CharField(max_length=10, unique=True, blank=True)
+    profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True, default="profile_pics/default-profile.png")
+    created_at = models.DateTimeField(default=now, editable=True)
+
+
+    def __str__(self):
+        return f"{self.surname} ({self.application_number})"
+
+
+    
+

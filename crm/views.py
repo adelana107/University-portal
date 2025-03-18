@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from portal.models import Application, School, Course
+from portal.models import Application, School, Course, Student
 from django.contrib.auth.decorators import user_passes_test
-from .forms import ApplicationForm
+from .forms import ApplicationForm, StudentForm
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
 from datetime import datetime
+from django.contrib import messages
 
 # Create your views here.
 
@@ -74,9 +75,49 @@ def edit_application(request, application_id):
         form = ApplicationForm(request.POST, request.FILES, instance=application)
         if form.is_valid():
             form.save()
-            return redirect("applicant_list")  # Redirect to the CRM dashboard or list page
+            return redirect("view_applicant", application_id=application.id)  # Redirect to the CRM dashboard or list page
     else:
         form = ApplicationForm(instance=application)
     
     return render(request, "edit_application.html", {"form": form, "application": application})
 
+
+
+
+
+def student_list(request):
+    students = Student.objects.all()  # Fetch all applications
+
+    # Group applications by school and course
+    grouped_students = {}
+    for student in students:
+        school = student.school.name  # Assuming `school` is a ForeignKey in Application model
+        course = student.course.name  # Assuming `course` is a ForeignKey in Application model
+
+        if school not in grouped_students:
+            grouped_students[school] = {}
+        if course not in grouped_students[school]:
+            grouped_students[school][course] = []
+        
+        grouped_students[school][course].append(student)
+
+    return render(request, "student_list.html", {"grouped_students": grouped_students})
+
+
+def edit_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    if request.method == "POST":
+        form = StudentForm(request.POST, request.FILES, instance=student)
+        if form.is_valid():
+            form.save()
+            return redirect("student_list")  # Redirect to the CRM dashboard or list page
+    else:
+        form = StudentForm(instance=student)
+    
+    return render(request, "edit_student.html", {"form": form, "student": student})
+
+
+
+def view_applicant(request, application_id):
+    applicant = get_object_or_404(Application, id=application_id)
+    return render(request, "applicant_profile.html", {"applicant": applicant})
