@@ -59,34 +59,34 @@
                                             </thead>
                                             
                                             <tbody>
-                                                {% for application in applications %}
-                                                <tr class="{% if application.is_approved %}table-success{% else %}table-warning{% endif %}">
-                                                    <td>{{ forloop.counter }}</td>
-                                                    <td>{{ application.application_number }}</td>
-                                                    <td>{{ application.surname }}</td>
-                                                    <td>{{ application.first_name }}</td>
-                                                    <td>{{ application.email }}</td>
-                                                    <td>{{ application.phone_number }}</td>
-                                                    <td>
-                                                        {% if application.is_approved %}
-                                                            <span class="badge bg-success">✅ Approved</span>
-                                                        {% else %}
-                                                            <span class="badge bg-warning text-dark">⏳ Pending</span>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td>
-                                                        <a href="{% url 'view_applicant' application.id %}" class="btn btn-sm btn-primary">
-                                                            <i class="fas fa-eye"></i> View
-                                                        </a>
-                                                    </td>
-                                                </tr>
-                                                {% empty %}
-                                                <tr>
-                                                    <td colspan="9" class="text-center">No applications found.</td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                            
+    {% for application in applications %}
+    <tr class="{% if application.is_approved %}table-success{% else %}table-warning{% endif %}">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ application.application_number }}</td>
+        <td>{{ application.surname }}</td>
+        <td>{{ application.first_name }}</td>
+        <td>{{ application.email }}</td>
+        <td>{{ application.phone_number }}</td>
+        <td>
+            {% if application.is_approved %}
+                <span class="badge bg-success">✅ Approved</span>
+            {% else %}
+                <span class="badge bg-warning text-dark">⏳ Pending</span>
+            {% endif %}
+        </td>
+        <td>
+            <a href="{% url 'view_applicant' application.id %}" class="btn btn-sm btn-primary">
+                <i class="fas fa-eye"></i> View
+            </a>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="9" class="text-center">No applications found.</td>
+    </tr>
+    {% endfor %}
+</tbody>
+
                                         </table>
                                     </div>
                                 </div>
