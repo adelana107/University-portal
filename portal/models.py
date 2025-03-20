@@ -52,6 +52,7 @@ class Application(models.Model):
     application_number = models.CharField(max_length=10, unique=True, blank=True)
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True, default="profile_pics/default-profile.png")
     created_at = models.DateTimeField(default=now, editable=True)
+    academic_session = models.ForeignKey("AcademicSession", on_delete=models.CASCADE, related_name="applications")
     is_approved = models.BooleanField(default=False)  # New field to track approval
 
     def save(self, *args, **kwargs):
@@ -77,7 +78,8 @@ class Application(models.Model):
             school=self.school,
             department=self.department,
             application_number=self.application_number,
-            profile_picture=self.profile_picture
+            profile_picture=self.profile_picture,
+            academic_session=self.academic_session,
         )
         
         self.is_approved = True  # Mark as approved instead of deleting
@@ -116,7 +118,20 @@ class Student(models.Model):
     department = models.ForeignKey(Department, on_delete=models.CASCADE)
     application_number = models.CharField(max_length=10, unique=True, blank=True)
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True, default="profile_pics/default-profile.png")
+    academic_session = models.ForeignKey("AcademicSession", on_delete=models.CASCADE, related_name="students")
     created_at = models.DateTimeField(default=now, editable=True)
 
     def __str__(self):
         return f"{self.surname} ({self.application_number})"
+    
+
+
+class AcademicSession(models.Model):
+    name = models.CharField(max_length=100, unique=True)  # Ensuring session names are unique
+    
+    def __str__(self):
+        return self.name
+    
+
+    class Meta:
+      ordering = ["-id"]  # Orders by newest first

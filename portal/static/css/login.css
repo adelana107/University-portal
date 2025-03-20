@@ -1,0 +1,118 @@
+/* General Styles */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: #f4f6f9;
+    transition: background 0.3s ease-in-out;
+}
+
+.login-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    border-radius: 12px;
+    background: white;
+    box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.1);
+    transition: 0.3s ease-in-out;
+}
+
+.login-container:hover {
+    transform: translateY(-3px);
+}
+
+.login-title {
+    font-weight: 600;
+    color: #007bff;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.form-label {
+    font-weight: 500;
+}
+
+.form-control {
+    border-radius: 8px;
+    transition: all 0.3s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
+}
+
+.btn-primary {
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 10px;
+    transition: all 0.3s ease-in-out;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: scale(1.05);
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.forgot-password a {
+    text-decoration: none;
+    color: #007bff;
+    font-weight: 500;
+}
+
+.forgot-password a:hover {
+    text-decoration: underline;
+}
+
+/* Dark Mode */
+.dark-mode {
+    background: #121212;
+    color: #e0e0e0;
+}
+
+.dark-mode .login-container {
+    background: #1e1e1e;
+    box-shadow: 0px 5px 20px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .form-control {
+    background: #2b2b2b;
+    color: white;
+    border-color: #444;
+}
+
+.dark-mode .btn-primary {
+    background: #28a745;
+}
+
+.dark-mode .btn-primary:hover {
+    background: #218838;
+}
+
+.dark-mode .forgot-password a {
+    color: #28a745;
+}
+
+/* Dark Mode Toggle */
+.dark-mode-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    cursor: pointer;
+    font-size: 20px;
+    background: none;
+    border: none;
+    color: #007bff;
+    transition: 0.3s;
+}
+
+.dark-mode-toggle:hover {
+    color: #0056b3;
+}
+
+.dark-mode .dark-mode-toggle {
+    color: #28a745;
+}

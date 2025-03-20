@@ -118,6 +118,7 @@ STATIC_URL = "static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "crm/static",
+    BASE_DIR / "portal/static",
 ]
 
 STATIC_ROOT = BASE_DIR / "staticfiles"

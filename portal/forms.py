@@ -7,7 +7,7 @@ class ApplicationForm(forms.ModelForm):
         fields = [
             'surname', 'first_name', 'other_name', 'email', 'phone_number', 
             'address', 'state_of_origin', 'local_government', 
-            'date_of_birth', 'school', 'department', 'profile_picture',
+            'date_of_birth', 'school', 'department', 'profile_picture', 'academic_session'
         ]
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),

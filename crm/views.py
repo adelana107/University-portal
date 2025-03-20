@@ -147,6 +147,8 @@ def approve_application(request, application_id):
         date_of_birth=application.date_of_birth,
         school=application.school,
         department=application.department,
+        academic_session=application.academic_session,
+        profile_picture=application.profile_picture,
     )
 
     # Mark application as approved
