@@ -3,13 +3,15 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 from . import views
-from .views import applicant_login, applicant_profile, application_success
+from .views import applicant_login, applicant_profile, application_success, get_lgas, get_departments
 
 urlpatterns = [
     path('', views.home, name='home'),
     path('apply/', views.apply_for_admission, name='apply'),
-    path('get-courses/', views.get_courses, name='get_courses'),
-    path('get-lgas/', views.get_lgas, name='get_lgas'),
+    path("get_lgas/", get_lgas, name="get_lgas"),  # ✅ Ensure this URL exists
+    path("get_departments/", views.get_departments, name="get_departments"),
+
+
     path("login/", applicant_login, name="applicant_login"),
     path("profile/", applicant_profile, name="profile"),
     path("logout/", LogoutView.as_view(next_page="applicant_login"), name="logout"), 

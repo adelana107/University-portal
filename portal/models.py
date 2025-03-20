@@ -28,7 +28,7 @@ class School(models.Model):
     def __str__(self):
         return self.name
 
-class Course(models.Model):
+class Department(models.Model):
     name = models.CharField(max_length=100)
     school = models.ForeignKey(School, on_delete=models.CASCADE)
 
@@ -48,7 +48,7 @@ class Application(models.Model):
     local_government = models.ForeignKey(Lga, on_delete=models.CASCADE)
     date_of_birth = models.DateField()
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
     application_number = models.CharField(max_length=10, unique=True, blank=True)
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True, default="profile_pics/default-profile.png")
     created_at = models.DateTimeField(default=now, editable=True)
@@ -75,7 +75,7 @@ class Application(models.Model):
             local_government=self.local_government,
             date_of_birth=self.date_of_birth,
             school=self.school,
-            course=self.course,
+            department=self.department,
             application_number=self.application_number,
             profile_picture=self.profile_picture
         )
@@ -113,7 +113,7 @@ class Student(models.Model):
     local_government = models.ForeignKey(Lga, on_delete=models.CASCADE)
     date_of_birth = models.DateField()
     school = models.ForeignKey(School, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE)
     application_number = models.CharField(max_length=10, unique=True, blank=True)
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True, default="profile_pics/default-profile.png")
     created_at = models.DateTimeField(default=now, editable=True)

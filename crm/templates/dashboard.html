@@ -45,8 +45,8 @@
         <div class="card stats-card text-white bg-gradient-warning">
             <div class="card-body text-center">
                 <i class="fas fa-book fa-3x mb-2"></i>
-                <h5 class="card-title">Courses</h5>
-                <h3>{{ total_courses }}</h3>
+                <h5 class="card-title">Departments</h5>
+                <h3>{{ total_departments }}</h3>
             </div>
         </div>
     </div>
@@ -98,7 +98,7 @@
                         <tr>
                             <td>{{ application.application_number }}</td>
                             <td>{{ application.surname }} {{ application.first_name }}</td>
-                            <td>{{ application.course.name }}</td>
+                            <td>{{ application.department.name }}</td>
                             <td>{{ application.school.name }}</td>
                             <td>{{ application.date_of_birth }}</td>
                             <td>

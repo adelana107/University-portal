@@ -30,52 +30,62 @@
         </div>
     </div>
 
-    <script>
-        // Store all LGAs data
-        const allLGAs = {{ all_lgas_json|safe }};
-        
-        $(document).ready(function() {
-            // Handle school-course dependency
-            $("#id_school").change(function() {
-                const schoolId = $(this).val();
-                const courseField = $("#id_course");
-
-                courseField.empty().append('<option value="">Loading...</option>').prop("disabled", true);
-
-                if (schoolId) {
-                    $.ajax({
-                        url: "{% url 'get_courses' %}",
-                        data: { 'school_id': schoolId },
-                        success: function(data) {
-                            courseField.empty().append('<option value="">Select Course</option>').prop("disabled", false);
-                            data.courses.forEach(course => {
-                                courseField.append(new Option(course.name, course.id));
-                            });
-                        },
-                        error: function() {
-                            courseField.empty().append('<option value="">Error loading courses</option>').prop("disabled", false);
-                        }
-                    });
-                }
-            });
-            
-            // Handle state-LGA dependency
-            $("#id_state_of_origin").change(function() {
-                const stateId = $(this).val();
-                const lgaField = $("#id_local_government");
-
-                lgaField.empty().append('<option value="">Loading...</option>').prop("disabled", true);
-
-                if (stateId && allLGAs[stateId]) {
-                    lgaField.empty().append('<option value="">Select Local Government</option>').prop("disabled", false);
-                    allLGAs[stateId].forEach(lga => {
-                        lgaField.append(new Option(lga.name, lga.id));
-                    });
-                } else {
-                    lgaField.empty().append('<option value="">No LGAs found</option>').prop("disabled", false);
-                }
-            });
+<script>    
+    $(document).ready(function() {
+        // 📌 Handle School -> Department Selection
+        $("#id_school").change(function() {
+            const schoolId = $(this).val();
+            const departmentField = $("#id_department");
+    
+            departmentField.empty().append('<option value="">Loading...</option>').prop("disabled", true);
+    
+            if (schoolId) {
+                $.ajax({
+                    url: "{% url 'get_departments' %}",
+                    data: { 'school_id': schoolId },
+                    dataType: "json",
+                    success: function(data) {
+                        departmentField.empty().append('<option value="">Select Department</option>').prop("disabled", false);
+                        data.departments.forEach(department => {
+                            departmentField.append(new Option(department.name, department.id));
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error("Error loading departments:", xhr.responseText);
+                        departmentField.empty().append('<option value="">Error loading departments</option>').prop("disabled", false);
+                    }
+                });
+            }
         });
-    </script>
+    
+        // 📌 Handle State -> LGA Selection
+        $("#id_state_of_origin").change(function() {
+            const stateId = $(this).val();
+            const lgaField = $("#id_local_government");
+    
+            lgaField.empty().append('<option value="">Loading...</option>').prop("disabled", true);
+    
+            if (stateId) {
+                $.ajax({
+                    url: "{% url 'get_lgas' %}",  // ✅ Ensure this matches Django URL
+                    data: { 'state_id': stateId },
+                    dataType: "json",
+                    success: function(data) {
+                        lgaField.empty().append('<option value="">Select Local Government</option>').prop("disabled", false);
+                        data.lgas.forEach(lga => {
+                            lgaField.append(new Option(lga.name, lga.id));
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error("Error loading LGAs:", xhr.responseText);
+                        lgaField.empty().append('<option value="">Error loading LGAs</option>').prop("disabled", false);
+                    }
+                });
+            }
+        });
+    });
+
+</script>    
+    
 </body>
 </html>

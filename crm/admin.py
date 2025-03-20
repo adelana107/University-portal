@@ -10,19 +10,18 @@ if not admin.site.is_registered(Application):
 
 
 class ApplicationAdmin(admin.ModelAdmin):
-    list_display = ("surname", "first_name", "application_number", "email", "phone_number", "course")
+    list_display = ("surname", "first_name", "application_number", "email", "phone_number", "department")
     search_fields = ("surname", "application_number", "email")
-    list_filter = ("school", "course")
+    list_filter = ("school", "department")
 
 
+    @admin.display(description="Approval")
     def approve_button(self, obj):
         """Displays the approval button in the CRM admin panel."""
         if not obj.is_approved:
-            return format_html('<a class="button" href="approve/{}/">✅ Approve</a>', obj.id)
+            return format_html('<a class="button btn btn-success" href="approve/{}/">✅ Approve</a>', obj.id)
         return "✔️ Approved"
-    
-    approve_button.allow_tags = True
-    approve_button.short_description = "Approval"
+
 
     def get_urls(self):
         """Defines a custom URL for approving applications in CRM."""

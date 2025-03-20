@@ -1,5 +1,5 @@
 from django import forms
-from .models import Application, Course, State, Lga
+from .models import Application, Department, State, Lga
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
@@ -7,12 +7,12 @@ class ApplicationForm(forms.ModelForm):
         fields = [
             'surname', 'first_name', 'other_name', 'email', 'phone_number', 
             'address', 'state_of_origin', 'local_government', 
-            'date_of_birth', 'school', 'course', 'profile_picture',
+            'date_of_birth', 'school', 'department', 'profile_picture',
         ]
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
             'school': forms.Select(attrs={'class': 'form-select'}),
-            'course': forms.Select(attrs={'class': 'form-select'}),
+            'department': forms.Select(attrs={'class': 'form-select'}),
             'state_of_origin': forms.Select(attrs={'class': 'form-select', 'id': 'id_state_of_origin'}),
             'local_government': forms.Select(attrs={'class': 'form-select', 'id': 'id_local_government'}),
             
@@ -26,13 +26,13 @@ class ApplicationForm(forms.ModelForm):
             self.fields[field].widget.attrs.update({"class": "form-control"})
 
         # Initialize course queryset
-        self.fields['course'].queryset = Course.objects.none()
+        self.fields['department'].queryset = Department.objects.none()
         self.fields['local_government'].queryset = Lga.objects.none()
 
         # If form is being edited and already has data
         if self.instance.pk:
             if self.instance.school:
-                self.fields['course'].queryset = Course.objects.filter(school=self.instance.school)
+                self.fields['Department'].queryset = Department.objects.filter(school=self.instance.school)
             
             if self.instance.state_of_origin:
                 self.fields['local_government'].queryset = Lga.objects.filter(state_of_origin=self.instance.state_of_origin)
@@ -41,7 +41,7 @@ class ApplicationForm(forms.ModelForm):
         if 'school' in self.data:
             try:
                 school_id = int(self.data.get('school'))
-                self.fields['course'].queryset = Course.objects.filter(school_id=school_id)
+                self.fields['department'].queryset = Department.objects.filter(school_id=school_id)
             except (ValueError, TypeError):
                 pass
 

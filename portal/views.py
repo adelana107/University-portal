@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ApplicationForm
-from .models import Application, Course, State, Lga  # Ensure you import your model
+from .models import Application, Department, State, Lga  # Ensure you import your model
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
@@ -85,14 +85,24 @@ def application_success(request, application_number, surname):
     })
 
 
-def get_courses(request):
-    school_id = request.GET.get('school_id')
 
+
+def get_lgas(request):
+    """Returns LGAs based on the selected state."""
+    state_id = request.GET.get("state_id")  # ✅ Get state ID from AJAX request
+    if state_id:
+        lgas = Lga.objects.filter(state_id=state_id).values("id", "name")
+        return JsonResponse({"lgas": list(lgas)})
+    return JsonResponse({"lgas": []})  # ✅ Return empty list if no state is selected
+
+
+def get_departments(request):
+    """Returns departments based on the selected school."""
+    school_id = request.GET.get("school_id")  # ✅ Get school ID from AJAX request
     if school_id:
-        courses = Course.objects.filter(school_id=school_id).values('id', 'name')
-        return JsonResponse({'courses': list(courses)})
-
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+        departments = Department.objects.filter(school_id=school_id).values("id", "name")
+        return JsonResponse({"departments": list(departments)})
+    return JsonResponse({"departments": []})  # ✅ Return empty list if no school is selected
 
 def get_lgas(request):
     state_id = request.GET.get('state_id')
