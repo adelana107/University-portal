@@ -56,3 +56,4 @@ class ApplicationForm(forms.ModelForm):
 class ApplicantLoginForm(forms.Form):
     application_number = forms.CharField(label="Application Number", max_length=20)
     surname = forms.CharField(label="Surname", widget=forms.PasswordInput)
+

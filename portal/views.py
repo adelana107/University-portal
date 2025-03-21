@@ -26,11 +26,11 @@ def applicant_login(request):
                 login(request, user)
                 return redirect("profile")  # Redirect to profile page
             else:
-                return render(request, "login.html", {"form": form, "error": "Invalid application number or surname."})
+                return render(request, "portal_login.html", {"form": form, "error": "Invalid application number or surname."})
     else:
         form = ApplicantLoginForm()
 
-    return render(request, "login.html", {"form": form})
+    return render(request, "portal_login.html", {"form": form})
 
 
 

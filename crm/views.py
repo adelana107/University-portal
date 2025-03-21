@@ -1,21 +1,55 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from portal.models import Application, School, Department, Student
-from django.contrib.auth.decorators import user_passes_test
-from .forms import ApplicationForm, StudentForm
+from django.contrib.auth.decorators import user_passes_test,login_required
+from .forms import ApplicationForm, StudentForm, CrmLoginForm
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
 from datetime import datetime
 from django.contrib import messages
 from django.db.models.functions import ExtractMonth
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User
 
 # Create your views here.
 
 
+
+def Crmlogin(request):
+    if request.method == "POST":
+        form = CrmLoginForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            password = form.cleaned_data["password"]
+
+            # Check if a user exists with this email
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                messages.error(request, "User with this email does not exist.")
+                return render(request, "crm/crm_login.html", {"form": form})
+
+            # Authenticate user
+            user = authenticate(request, username=user.username, password=password)
+
+            if user is not None and user.is_superuser:  # Ensure only superusers can log in
+                login(request, user)
+                return redirect("crm_dashboard")
+            else:
+                messages.error(request, "Invalid email or password.")
+    else:
+        form = CrmLoginForm()
+
+    return render(request, "crm/crm_login.html", {"form": form})
+
 def is_superuser(user):
+    """Check if the user is a superuser."""
     return user.is_superuser
 
+
 @user_passes_test(is_superuser)
+@login_required(login_url="crm_login")
 def dashboard(request):
+    # Fetch counts for dashboard metrics
     total_applications = Application.objects.count()
     total_schools = School.objects.count()
     total_departments = Department.objects.count()
@@ -24,12 +58,13 @@ def dashboard(request):
 
     # Applications by Month (Compatible with SQLite & PostgreSQL)
     applications_by_month = (
-        Application.objects.annotate(month=ExtractMonth("created_at"))  # Use created_at instead
+        Application.objects.annotate(month=ExtractMonth("created_at"))
         .values("month")
         .annotate(count=Count("id"))
         .order_by("month")
     )
 
+    # Format months and counts for the chart
     months = [datetime.strptime(str(item["month"]), "%m").strftime("%b") for item in applications_by_month if item["month"]]
     application_counts = [item["count"] for item in applications_by_month]
 
@@ -47,7 +82,7 @@ def dashboard(request):
         "application_counts": application_counts,
     }
 
-    return render(request, "dashboard.html", context)
+    return render(request, "crm/crm_dashboard.html", context)
 
 
 def applicant_list(request):
@@ -66,7 +101,7 @@ def applicant_list(request):
 
         grouped_applications[school][department].append(app)
 
-    return render(request, "applicant_list.html", {"grouped_applications": grouped_applications})
+    return render(request, "crm/applicant_list.html", {"grouped_applications": grouped_applications})
 
 
 def edit_application(request, application_id):
@@ -79,7 +114,7 @@ def edit_application(request, application_id):
     else:
         form = ApplicationForm(instance=application)
     
-    return render(request, "edit_application.html", {"form": form, "application": application})
+    return render(request, "crm/edit_application.html", {"form": form, "application": application})
 
 
 
@@ -101,7 +136,7 @@ def student_list(request):
 
         grouped_students[school][department].append(student)
 
-    return render(request, "student_list.html", {"grouped_students": grouped_students})
+    return render(request, "crm/student_list.html", {"grouped_students": grouped_students})
 
 
 
@@ -115,13 +150,13 @@ def edit_student(request, student_id):
     else:
         form = StudentForm(instance=student)
     
-    return render(request, "edit_student.html", {"form": form, "student": student})
+    return render(request, "crm/edit_student.html", {"form": form, "student": student})
 
 
 
 def view_applicant(request, application_id):
     applicant = get_object_or_404(Application, id=application_id)
-    return render(request, "applicant_profile.html", {"applicant": applicant})
+    return render(request, "crm/applicant_profile.html", {"applicant": applicant})
 
 
 

@@ -104,3 +104,9 @@ class StudentForm(forms.ModelForm):
                 self.fields['local_government'].queryset = Lga.objects.filter(state_of_origin_id=state_id)
             except (ValueError, TypeError):
                 pass            
+
+
+
+class CrmLoginForm(forms.Form):
+    email = forms.CharField(label="Email", max_length=20)
+    password = forms.CharField(label="Password", widget=forms.PasswordInput)
