@@ -9,10 +9,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
-
+    <style>
+        @media (max-width: 768px) {
+            .table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
 </head>
-<body>
 
+<body class="d-flex flex-column min-vh-100">
     <!-- Sidebar -->
     {% include 'crm/sidebar.html' %}
 
@@ -21,55 +28,57 @@
         <h2 class="text-primary mb-4">Dashboard</h2>
 
         <!-- Overview Cards -->
-        <!-- Overview Cards -->
-<div class="row">
-    <div class="col-md-3">
-        <div class="card stats-card text-white bg-gradient-primary">
-            <div class="card-body text-center">
-                <i class="fas fa-file-alt fa-3x mb-2"></i>
-                <h5 class="card-title">Total Applications</h5>
-                <h3>{{ total_applications }}</h3>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card stats-card text-white bg-gradient-primary">
+                    <div class="card-body text-center">
+                        <i class="fas fa-file-alt fa-3x mb-2"></i>
+                        <h5 class="card-title">Total Applications</h5>
+                        <h3>{{ total_applications }}</h3>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card stats-card text-white bg-gradient-success">
-            <div class="card-body text-center">
-                <i class="fas fa-school fa-3x mb-2"></i>
-                <h5 class="card-title">Schools</h5>
-                <h3>{{ total_schools }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card stats-card text-white bg-gradient-warning">
-            <div class="card-body text-center">
-                <i class="fas fa-book fa-3x mb-2"></i>
-                <h5 class="card-title">Departments</h5>
-                <h3>{{ total_departments }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3">
-        <div class="card stats-card text-white bg-gradient-danger">
-            <div class="card-body text-center">
-                <i class="fas fa-hourglass-half fa-3x mb-2"></i>
-                <h5 class="card-title">Pending Applications</h5>
-                <h3>{{ pending_applications }}</h3>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 mt-3">
-        <div class="card stats-card text-white bg-gradient-info">
-            <div class="card-body text-center">
-                <i class="fas fa-user-graduate fa-3x mb-2"></i>
-                <h5 class="card-title">Admitted Students</h5>
-                <h3>{{ admitted_students }}</h3>
-            </div>
-        </div>
-    </div>
-</div>
 
+            <div class="col-md-3">
+                <div class="card stats-card text-white bg-gradient-success">
+                    <div class="card-body text-center">
+                        <i class="fas fa-school fa-3x mb-2"></i>
+                        <h5 class="card-title">Schools</h5>
+                        <h3>{{ total_schools }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card stats-card text-white bg-gradient-warning">
+                    <div class="card-body text-center">
+                        <i class="fas fa-book fa-3x mb-2"></i>
+                        <h5 class="card-title">Departments</h5>
+                        <h3>{{ total_departments }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card stats-card text-white bg-gradient-danger">
+                    <div class="card-body text-center">
+                        <i class="fas fa-hourglass-half fa-3x mb-2"></i>
+                        <h5 class="card-title">Pending Applications</h5>
+                        <h3>{{ pending_applications }}</h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 mt-3">
+                <div class="card stats-card text-white bg-gradient-info">
+                    <div class="card-body text-center">
+                        <i class="fas fa-user-graduate fa-3x mb-2"></i>
+                        <h5 class="card-title">Admitted Students</h5>
+                        <h3>{{ admitted_students }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Applications by Month Chart -->
         <div class="chart-container mt-5">
@@ -100,7 +109,7 @@
                             <td>{{ application.surname }} {{ application.first_name }}</td>
                             <td>{{ application.department.name }}</td>
                             <td>{{ application.school.name }}</td>
-                            <td>{{ application.date_of_birth }}</td>
+                            <td>{{ application.submission_date|date:"Y-m-d" }}</td>
                             <td>
                                 <a href="{% url 'view_applicant' application.id %}" class="btn btn-sm btn-primary">
                                     <i class="fas fa-eye"></i> View
@@ -118,16 +127,18 @@
         </div>
     </div>
 
+    
+
     <!-- JavaScript for Chart -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             var ctx = document.getElementById('applicationsChart').getContext('2d');
-    
+
             // Create a gradient fill
             var gradient = ctx.createLinearGradient(0, 0, 0, 400);
             gradient.addColorStop(0, 'rgba(54, 162, 235, 0.5)');
             gradient.addColorStop(1, 'rgba(255, 255, 255, 0.1)');
-    
+
             var applicationsChart = new Chart(ctx, {
                 type: 'line',
                 data: {
@@ -189,16 +200,17 @@
                     }
                 }
             });
-    
+
             // WebSocket connection for real-time updates
-            var socket = new WebSocket("ws://localhost:8000/ws/applications/");
-    
+            var socket = new WebSocket(
+                (window.location.protocol === "https:" ? "wss://" : "ws://") + window.location.host + "/ws/applications/"
+            );
+
             socket.onmessage = function(event) {
                 var data = JSON.parse(event.data);
                 var newMonth = data.month;
                 var newCount = data.count;
-    
-                // Add new data dynamically
+
                 if (!applicationsChart.data.labels.includes(newMonth)) {
                     applicationsChart.data.labels.push(newMonth);
                     applicationsChart.data.datasets[0].data.push(newCount);
@@ -206,12 +218,14 @@
                     var index = applicationsChart.data.labels.indexOf(newMonth);
                     applicationsChart.data.datasets[0].data[index] = newCount;
                 }
-    
+
                 applicationsChart.update();
             };
         });
     </script>
-    
-    
+
+<div class="footer text-center mt-4">
+        © 2025 University Portal | All Rights Reserved
+    </div>    
 </body>
 </html>

@@ -159,6 +159,11 @@ def view_applicant(request, application_id):
     return render(request, "crm/applicant_profile.html", {"applicant": applicant})
 
 
+def view_student(request, student_id):
+    student = get_object_or_404(Student, id=student_id)
+    return render(request, "crm/student_profile.html", {"student": student})
+
+
 
 def approve_application(request, application_id):
     application = get_object_or_404(Application, id=application_id)
