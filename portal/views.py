@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ApplicationForm
-from .models import Application, Department, State, Lga  # Ensure you import your model
+from .models import Application, Department, State, Lga, Student  # Ensure you import your model
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
@@ -44,8 +44,22 @@ def home(request):
 def applicant_profile(request):
     user = request.user  # Get the logged-in user
     applications = Application.objects.filter(application_number=user.username)  # Fetch their application
+    students = Student.objects.filter(application_number=user.username).first()
 
-    return render(request, "profile.html", {"applications": applications})
+    if students:
+        
+        return redirect("admission_success", students.application_number, students.surname )
+
+    return render(request, "profile.html", {"applications": applications, "students": students})
+
+
+
+
+def student_portal(request):
+    user = request.user  # Get the logged-in user
+    students = Student.objects.filter(application_number=user.username)
+    return render(request, "student_portal.html", {"students": students})
+
 
 
 
@@ -84,6 +98,11 @@ def application_success(request, application_number, surname):
         'surname': surname
     })
 
+def admission_success(request, application_number, surname):
+    return render(request, 'admission_success.html', {
+        'application_number': application_number,
+        'surname': surname
+    })
 
 
 
@@ -121,3 +140,5 @@ def get_lgas(request):
     except Exception as e:
         print(f"Error in get_lgas: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
+    
+

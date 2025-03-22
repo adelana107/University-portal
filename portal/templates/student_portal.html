@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+            background: #34495e;
+            border-radius: 5px;
+        }
+        .sidebar ul li:hover {
+            background: #1abc9c;
+        }
+        .sidebar ul li i {
+            margin-right: 10px;
+        }
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .logout {
+            background: #e74c3c;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .logout:hover {
+            background: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <div>
+            <h2>Student Portal</h2>
+            <ul>
+                <li><i class="fas fa-home"></i> Dashboard</li>
+                <li><i class="fas fa-book"></i> Courses</li>
+                <li><i class="fas fa-user"></i> Profile</li>
+                <li><i class="fas fa-bell"></i> Notifications</li>
+                <li><i class="fas fa-credit-card"></i> Payments</li>
+                <li><i class="fas fa-cog"></i> Settings</li>
+            </ul>
+        </div>
+        <div class="logout"><i class="fas fa-sign-out-alt"></i> Logout</div>
+    </div>
+    {%for student in students %}
+    <div class="content">
+        <h1>Welcome! {{student.surname}}</h1>
+        <div class="dashboard">
+            <div class="card">
+                <h3>Total Courses</h3>
+                <p>5</p>
+            </div>
+            <div class="card">
+                <h3>GPA</h3>
+                <p>3.8</p>
+            </div>
+            <div class="card">
+                <h3>Pending Payments</h3>
+                <p>$200</p>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+</body>
+</html>

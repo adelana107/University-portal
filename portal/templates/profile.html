@@ -20,16 +20,15 @@
    
 
     <script>
-        function printBiodata() {
-            window.print();
-        }
-
-        function downloadPDF() {
-            const { jsPDF } = window.jspdf;
-            let doc = new jsPDF();
-            doc.text("Applicant Biodata", 20, 20);
-            doc.save("Applicant_Biodata.pdf");
-        }
+       function printBiodata() {
+        var printContents = document.getElementById("print-section").innerHTML;
+        var originalContents = document.body.innerHTML;
+        
+        document.body.innerHTML = printContents;
+        window.print();
+        document.body.innerHTML = originalContents;
+        location.reload();  // Reload to restore the original content
+    }
 
         function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
@@ -42,7 +41,6 @@
     <div class="text-center mb-4">
         <h2 class="header-title">Applicant Biodata</h2>
         <button class="btn btn-custom me-2 no-print" onclick="printBiodata()">🖨️ Print</button>
-        <button class="btn btn-custom me-2 no-print" onclick="downloadPDF()">📄 Download PDF</button>
         <button class="btn btn-dark no-print" onclick="toggleDarkMode()">🌙 Toggle Dark Mode</button>
     </div>
 
@@ -79,6 +77,15 @@
         <div class="alert alert-warning text-center">No applications found.</div>
         {% endfor %}
     </div>
+    {% for application in applications %}
+
+    <div class="text-center">
+        <span class="status-badge {% if application.is_approved %}approved{% else %}pending{% endif %}">
+            {% if application.is_approved %}✅Login into portal{% else %}⏳You have not been given admisson yet{% endif %}
+        </span>
+    </div>
+    {% endfor %}
+    
 </div>
 
 </body>
