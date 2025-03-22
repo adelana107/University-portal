@@ -48,7 +48,7 @@ def is_superuser(user):
 
 @user_passes_test(is_superuser)
 @login_required(login_url="crm_login")
-def dashboard(request):
+def crm_dashboard(request):
     # Fetch counts for dashboard metrics
     total_applications = Application.objects.count()
     total_schools = School.objects.count()

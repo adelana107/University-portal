@@ -1,73 +1,37 @@
-{% load static   %}
-
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-        body {
-            display: flex;
-            height: 100vh;
-            background-color: #f4f4f4;
-        }
-        
-        .content {
-            flex: 1;
-            padding: 20px;
-        }
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .logout {
-            background: #e74c3c;
-            text-align: center;
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        .logout:hover {
-            background: #c0392b;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/student_portal.css' %}">
 </head>
 <body>
-    {% include 'portal_dashboard.html'   %}
-    {%for student in students %}
+
+    <!-- Sidebar -->
+    {% include 'portal_sidebar.html' %}
+
+    <!-- Main Content -->
     <div class="content">
-        <h1>Welcome! {{student.surname}}</h1>
-        <div class="dashboard">
-            <div class="card">
-                <h3>Total Courses</h3>
-                <p>5</p>
+        {% for student in students %}
+            <h1>Welcome! {{ student.surname }}</h1>
+            <div class="dashboard">
+                <div class="card">
+                    <h3>Total Courses</h3>
+                    <p>5</p>
+                </div>
+                <div class="card">
+                    <h3>GPA</h3>
+                    <p>3.8</p>
+                </div>
+                <div class="card">
+                    <h3>Pending Payments</h3>
+                    <p>$200</p>
+                </div>
             </div>
-            <div class="card">
-                <h3>GPA</h3>
-                <p>3.8</p>
-            </div>
-            <div class="card">
-                <h3>Pending Payments</h3>
-                <p>$200</p>
-            </div>
-        </div>
+        {% endfor %}
     </div>
-    {%endfor%}
+
 </body>
 </html>

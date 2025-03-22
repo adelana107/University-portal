@@ -56,11 +56,16 @@ def applicant_profile(request):
 
 
 def student_portal(request):
-    user = request.user  # Get the logged-in user
+    user = request.user
     students = Student.objects.filter(application_number=user.username)
-    return render(request, "student_portal.html", {"students": students})
+    return render(request, 'student_portal.html', {"students": students})
 
 
+def student_biodata(request):
+    user = request.user  # Get the logged-in user
+    students = Student.objects.filter(application_number=user.username)  # Fetch their application
+
+    return render(request, "student_biodata.html", {"students": students})
 
 
 def apply_for_admission(request):
