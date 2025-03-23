@@ -1,0 +1,65 @@
+.sidebar {
+    width: 250px;
+    background: #2c3e50;
+    color: white;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+.sidebar ul {
+    list-style: none;
+}
+.sidebar ul li {
+    padding: 10px;
+    margin: 10px 0;
+    cursor: pointer;
+    background: #34495e;
+    border-radius: 5px;
+}
+.sidebar ul li:hover {
+    background: #1abc9c;
+}
+.sidebar ul li i {
+    margin-right: 10px;
+}
+
+.sidebar ul li a {
+    text-decoration: none; /* Remove underline */
+    color: white; /* Match sidebar text color */
+    display: block; /* Make the whole list item clickable */
+    width: 100%;
+}
+
+.sidebar ul li a:hover {
+    color: white; /* Keep text white even on hover */
+}
+
+
+/* Dark Mode Styling */
+.dark-mode {
+    background-color: #1e1e1e;
+    color: white;
+}
+
+/* Ensure sidebar, cards, and text adjust in dark mode */
+.dark-mode .sidebar {
+    background: #121212;
+}
+
+.dark-mode .card {
+    background: #2a2a2a;
+    color: white;
+}
+
+.dark-mode .nav-link {
+    color: white;
+}
+
+.dark-mode .nav-link:hover {
+    color: #1abc9c;
+}

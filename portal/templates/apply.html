@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Apply for Admission</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/apply.css' %}">
+
+  
+</head>
+<body>
+    <div class="container">
+        <h2 class="text-center text-white">Apply for Admission</h2>
+        <div class="card">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="mb-3">
+                    <label class="form-label">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <small class="text-danger">{{ field.errors.0 }}</small>
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-success w-100">Submit Application</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+<script>    
+    $(document).ready(function() {
+        // 📌 Handle School -> Department Selection
+        $("#id_school").change(function() {
+            const schoolId = $(this).val();
+            const departmentField = $("#id_department");
+    
+            departmentField.empty().append('<option value="">Loading...</option>').prop("disabled", true);
+    
+            if (schoolId) {
+                $.ajax({
+                    url: "{% url 'get_departments' %}",
+                    data: { 'school_id': schoolId },
+                    dataType: "json",
+                    success: function(data) {
+                        departmentField.empty().append('<option value="">Select Department</option>').prop("disabled", false);
+                        data.departments.forEach(department => {
+                            departmentField.append(new Option(department.name, department.id));
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error("Error loading departments:", xhr.responseText);
+                        departmentField.empty().append('<option value="">Error loading departments</option>').prop("disabled", false);
+                    }
+                });
+            }
+        });
+    
+        // 📌 Handle State -> LGA Selection
+        $("#id_state_of_origin").change(function() {
+            const stateId = $(this).val();
+            const lgaField = $("#id_local_government");
+    
+            lgaField.empty().append('<option value="">Loading...</option>').prop("disabled", true);
+    
+            if (stateId) {
+                $.ajax({
+                    url: "{% url 'get_lgas' %}",  // ✅ Ensure this matches Django URL
+                    data: { 'state_id': stateId },
+                    dataType: "json",
+                    success: function(data) {
+                        lgaField.empty().append('<option value="">Select Local Government</option>').prop("disabled", false);
+                        data.lgas.forEach(lga => {
+                            lgaField.append(new Option(lga.name, lga.id));
+                        });
+                    },
+                    error: function(xhr) {
+                        console.error("Error loading LGAs:", xhr.responseText);
+                        lgaField.empty().append('<option value="">Error loading LGAs</option>').prop("disabled", false);
+                    }
+                });
+            }
+        });
+    });
+
+</script>    
+    
+   <!-- Bootstrap JS -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

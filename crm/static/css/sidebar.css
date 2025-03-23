@@ -1,0 +1,44 @@
+.sidebar {
+    height: 100vh;
+    width: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #2c3e50; /* Dark Blue */
+    padding: 20px;
+    transition: 0.3s ease;
+}
+.sidebar h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+.sidebar .nav-link {
+    padding: 10px;
+    border-radius: 5px;
+    margin: 5px 0;
+    transition: background 0.3s ease;
+}
+.sidebar .nav-link:hover {
+    background: #34495e; /* Slightly lighter blue */
+}
+.sidebar .nav-link i {
+    font-size: 1.2rem;
+}
+.collapse .nav-link {
+    padding-left: 20px;
+}
+/* Dark Mode */
+.dark-mode {
+    background-color: #121212 !important;
+    color: #ffffff !important;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+.dark-mode .sidebar {
+    background: #1a1a2e !important;
+}
+.dark-mode .nav-link {
+    color: #ddd !important;
+}
+.dark-mode .nav-link:hover {
+    background: #333 !important;
+}

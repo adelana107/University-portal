@@ -1,0 +1,86 @@
+{% load static   %}
+<link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+
+<div class="sidebar d-flex flex-column">
+    <h3 class="text-center text-white mb-4">OceanView Admin</h3>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a href="{% url 'crm_dashboard' %}" class="nav-link text-white">
+                <i class="fas fa-home me-2"></i> Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'applicant_list' %}" class="nav-link text-white">
+                <i class="fas fa-users me-2"></i> Applications
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a href="{% url 'student_list' %}" class="nav-link text-white">
+                <i class="fas fa-users me-2"></i> Students
+            </a>
+        </li>
+        
+        <!-- Settings with Dropdown -->
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#settingsDropdown">
+                <i class="fas fa-cog me-2"></i> Settings <i class="fas fa-chevron-down ms-auto"></i>
+            </a>
+            <div class="collapse" id="settingsDropdown">
+                <ul class="nav flex-column ps-4">
+                    <!-- Dark Mode Toggle -->
+                    <li class="nav-item">
+                        <button onclick="toggleDarkMode()" id="darkModeToggle" class="nav-link text-white bg-transparent border-0">
+                            <i id="darkModeIcon" class="fas fa-moon me-2"></i> <span id="darkModeText">Switch to Dark Mode</span>
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</div>
+
+<!-- Dark Mode Styles -->
+
+<!-- JavaScript for Dark Mode -->
+<script>
+    function toggleDarkMode() {
+        const body = document.body;
+        const icon = document.getElementById("darkModeIcon");
+        const text = document.getElementById("darkModeText");
+
+        // Toggle dark mode
+        body.classList.toggle("dark-mode");
+
+        // Check current mode and update text/icon
+        const isDarkMode = body.classList.contains("dark-mode");
+        localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+
+        if (isDarkMode) {
+            text.innerText = "Switch to Light Mode";
+            icon.classList.replace("fa-moon", "fa-sun");
+        } else {
+            text.innerText = "Switch to Dark Mode";
+            icon.classList.replace("fa-sun", "fa-moon");
+        }
+    }
+
+    // Apply Dark Mode on page load if it was enabled
+    document.addEventListener("DOMContentLoaded", function () {
+        const body = document.body;
+        const icon = document.getElementById("darkModeIcon");
+        const text = document.getElementById("darkModeText");
+
+        if (localStorage.getItem("darkMode") === "enabled") {
+            body.classList.add("dark-mode");
+            text.innerText = "Switch to Light Mode";
+            icon.classList.replace("fa-moon", "fa-sun");
+        } else {
+            text.innerText = "Switch to Dark Mode";
+            icon.classList.replace("fa-sun", "fa-moon");
+        }
+    });
+</script>
+
+<!-- Bootstrap JS for Dropdown -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

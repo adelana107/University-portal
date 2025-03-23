@@ -1,0 +1,39 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Portal</title>
+    <link rel="stylesheet" href="{% static 'css/student_portal.css' %}">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    {% include 'portal_sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="content">
+        {% if student %}
+            <h1>Welcome, {{ student.surname }}!</h1>
+            <div class="dashboard">
+                <div class="card">
+                    <h3>Total Courses</h3>
+                    <p>{{ student.total_courses }}</p>
+                </div>
+                <div class="card">
+                    <h3>GPA</h3>
+                    <p>{{ student.gpa|default:"N/A" }}</p>
+                </div>
+                <div class="card">
+                    <h3>Pending Payments</h3>
+                    <p>${{ student.pending_payments|default:"0" }}</p>
+                </div>
+            </div>
+        {% else %}
+            <h1>Error: Student Profile Not Found</h1>
+        {% endif %}
+    </div>
+
+</body>
+</html>
