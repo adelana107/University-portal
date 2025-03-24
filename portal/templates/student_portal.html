@@ -26,8 +26,12 @@
                     <p>{{ student.gpa|default:"N/A" }}</p>
                 </div>
                 <div class="card">
-                    <h3>Pending Payments</h3>
-                    <p>${{ student.pending_payments|default:"0" }}</p>
+                    <h3>Current Year</h3>
+                    <p>{{ student.year }}</p>
+                </div>
+                <div class="card">
+                    <h3>Current Semester</h3>
+                    <p>{{ student.semester }}</p>
                 </div>
             </div>
         {% else %}

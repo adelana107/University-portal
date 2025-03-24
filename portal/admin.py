@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import School, Department, Application, State, Lga, Student, AcademicSession
+from .models import School, Department, Application, State, Lga, Student, AcademicSession, Year, Semester
 # Register your models here.
 
 
@@ -10,3 +10,5 @@ admin.site.register(State)
 admin.site.register(Lga)
 admin.site.register(Student)
 admin.site.register(AcademicSession)
+admin.site.register(Year)
+admin.site.register(Semester)

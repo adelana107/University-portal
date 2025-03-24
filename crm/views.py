@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from portal.models import Application, School, Department, Student
+from portal.models import Application, School, Department, Student, Year, Semester
 from django.contrib.auth.decorators import user_passes_test,login_required
 from .forms import ApplicationForm, StudentForm, CrmLoginForm
 from django.db.models import Count
@@ -173,9 +173,10 @@ def approve_application(request, application_id):
         messages.warning(request, f"Student with application number {application.application_number} already exists!")
         return redirect("applicant_list")
 
+
     # Create Student record
     student = Student.objects.create(
-        application_number=application.application_number,  # This was missing
+        application_number=application.application_number,
         surname=application.surname,
         first_name=application.first_name,
         other_name=application.other_name,
@@ -189,6 +190,9 @@ def approve_application(request, application_id):
         department=application.department,
         academic_session=application.academic_session,
         profile_picture=application.profile_picture,
+        year = application.year,
+        semester = application.semester,
+    
     )
 
     # Mark application as approved

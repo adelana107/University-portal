@@ -5,6 +5,27 @@ from django.dispatch import receiver
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import now
 
+
+
+
+
+
+class Year(models.Model):
+    level = models.CharField(max_length=100, unique=True)  # e.g., "Year 1", "Year 2"
+
+    def __str__(self):
+        return self.level
+
+class Semester(models.Model):
+    name = models.CharField(max_length=100)  # e.g., "First Semester", "Second Semester"
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.name} Semester"
+
+
+
+
 # ------------------ STATE & LGA MODELS ------------------
 
 class State(models.Model):
@@ -37,6 +58,13 @@ class Department(models.Model):
 
 # ------------------ APPLICATION MODEL ------------------
 
+
+def get_default_semester():
+    first_semester = Semester.objects.first()
+    return first_semester.id if first_semester else None  # Return the ID, not the object!
+
+
+
 class Application(models.Model):
     surname = models.CharField(max_length=100)
     first_name = models.CharField(max_length=100)
@@ -54,6 +82,8 @@ class Application(models.Model):
     created_at = models.DateTimeField(default=now, editable=True)
     academic_session = models.ForeignKey("AcademicSession", on_delete=models.CASCADE, related_name="applications")
     is_approved = models.BooleanField(default=False)  # New field to track approval
+    year = models.ForeignKey(Year, default=1, on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE, default=get_default_semester)
 
     def save(self, *args, **kwargs):
         if not self.application_number:
@@ -65,6 +95,8 @@ class Application(models.Model):
 
     def approve(self):
         """Transfers application data to Student model upon approval but keeps the application record."""
+    
+
         Student.objects.create(
             surname=self.surname,
             first_name=self.first_name,
@@ -80,6 +112,8 @@ class Application(models.Model):
             application_number=self.application_number,
             profile_picture=self.profile_picture,
             academic_session=self.academic_session,
+            year = self.year,
+            semester = self.semester
         )
         
         self.is_approved = True  # Mark as approved instead of deleting
@@ -120,6 +154,9 @@ class Student(models.Model):
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True, default="profile_pics/default-profile.png")
     academic_session = models.ForeignKey("AcademicSession", on_delete=models.CASCADE, related_name="students")
     created_at = models.DateTimeField(default=now, editable=True)
+    year = models.ForeignKey(Year, on_delete=models.CASCADE)  # Ensure correct field name
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)  # Lowercase 'semester'
+    
 
     def __str__(self):
         return f"{self.surname} ({self.application_number})"
