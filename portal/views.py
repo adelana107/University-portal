@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ApplicationForm, StudentLoginForm
-from .models import Application, Department, State, Lga, Student  # Ensure you import your model
+from .models import Application, Department, State, Lga, Student, Course  # Ensure you import your model
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
@@ -97,6 +97,12 @@ def student_biodata(request):
     students = Student.objects.filter(application_number=user.username)  # Fetch their application
 
     return render(request, "student_biodata.html", {"students": students})
+
+def CourseRegistration(request):
+    user = request.user  # Get the logged-in user
+    courses = Course.objects.all()  # Fetch their application
+
+    return render (request, 'course_registration.html', {"courses": courses})
 
 
 def apply_for_admission(request):
