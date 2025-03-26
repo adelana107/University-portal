@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Confirm semester transfer</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/applicant_profile.css' %}">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    {% include 'crm/sidebar.html' %}
+
+
+    <div class="container mt-5 d-flex justify-content-center">
+        <div class="card p-4 shadow-lg" style="max-width: 500px;">
+            <h2 class="text-center">Confirm Semester Update</h2>
+            <p class="text-center">Are you sure you want to move all students to the next semester?</p>
+    
+            <form method="POST" action="{% url 'move_semester' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning me-2">Confirm</button>
+                <a href="{% url 'crm_dashboard' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="footer text-center mt-4">
+        © 2025 University Portal | All Rights Reserved
+    </div>
+</body>
+</html>
