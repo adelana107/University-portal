@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import crm_dashboard, applicant_list, edit_application, student_list, edit_student, view_applicant, approve_application, revoke_application, Crmlogin, view_student
+from .views import crm_dashboard, applicant_list, edit_application, student_list, edit_student, view_applicant, approve_application, revoke_application, Crmlogin, view_student, move_to_new_semester, move_to_previous_semester
 
 
 
@@ -16,6 +16,8 @@ urlpatterns = [
     path('revoke-application/<int:application_id>/', revoke_application, name='revoke_application'),
     path("crm/login/", Crmlogin, name="crm_login"),
     path("crm/dashboard/", crm_dashboard, name="crm_dashboard"),
+    path("move-semester/", move_to_new_semester, name="move_semester"),
+     path("move-to-previous-semester/", move_to_previous_semester, name="reverse_semester"),
 
    
 ]

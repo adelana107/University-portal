@@ -1,96 +1,25 @@
 {% load static %}
-<link rel="stylesheet" href="{% static 'css/portal_sidebar.css' %}">
+<link rel="stylesheet" href="{% static 'css/portal_student_sidebar.css' %}">
+
 <div class="sidebar">
-    <div>
-        <h2>Student Portal</h2>
-        <ul>
-            <li>
-                <a href="{% url 'student_portal' %}">
-                    <i class="fas fa-home"></i> Dashboard
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'course_registration' %}">
-                <i class="fas fa-book"></i> Courses</li>
-                 </a>
-            <li><i class="fas fa-user"></i> Profile</li>
-            <li>
-                <a href="{% url 'student_biodata' %}">
-                    <i class="fas fa-user"></i> Bio-Data
-                </a>
-            </li>
-            <li><i class="fas fa-bell"></i> Notifications</li>
-            <li><i class="fas fa-credit-card"></i> Payments</li>
-            <!-- Collapsible Settings -->
-            <li class="nav-item">
-                <a href="#" class="nav-link" onclick="toggleSettings()">
-                    <i class="fas fa-cog"></i> Settings <i class="fas fa-chevron-down" id="settingsIcon"></i>
-                </a>
-                <div class="collapse" id="settingsDropdown">
-                    <ul class="nav flex-column ps-4">
-                        <li>
-                            <button onclick="toggleDarkMode()" id="darkModeToggle" class="nav-link bg-transparent border-0">
-                                <i id="darkModeIcon" class="fas fa-moon"></i> <span id="darkModeText">Switch to Dark Mode</span>
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-        </ul>
+    <!-- Profile Image -->
+    <div class="profile-container">
+        <img src="{{ student.profile_picture.url }}" alt="Profile Picture" class="profile-img">
     </div>
-    <div class="logout"><i class="fas fa-sign-out-alt"></i> Logout</div>
+
+    <!-- Student Info -->
+    <h3 class="student-id">{{ student.application_number }}</h3>
+    <h4 class="student-name">{{ student.surname }} {{ student.first_name }}</h4>
+
+    <div class="sidebar-info">
+        <p><i class="fas fa-calendar-alt"></i> <span>Academic Session:</span> {{ student.academic_session }}</p>
+        <p><i class="fas fa-graduation-cap"></i> <span>Current Level:</span> Year {{ student.year }}</p>
+        <p><i class="fas fa-book"></i> <span>Current Semester:</span> {{ student.semester }}</p>
+        <p><i class="fas fa-user-check"></i> <span>Student Status:</span> {{ student.status }}</p>
+        <p><i class="fas fa-money-bill-wave"></i> <span>School Fees Status:</span> {{ student.fees_status }}</p>
+        <p><i class="fas fa-home"></i> <span>Hostel Status:</span> {{ student.hostel_status }}</p>
+    </div>
 </div>
 
 <!-- FontAwesome Icons -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-
-<!-- FontAwesome Icons -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-
-<!-- Dark Mode Script (Placed at end of body) -->
-<script>
-    function toggleDarkMode() {
-        const body = document.body;
-        const icon = document.getElementById("darkModeIcon");
-        const text = document.getElementById("darkModeText");
-
-        body.classList.toggle("dark-mode");
-
-        const isDarkMode = body.classList.contains("dark-mode");
-        localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
-
-        if (isDarkMode) {
-            text.innerText = "Switch to Light Mode";
-            icon.classList.replace("fa-moon", "fa-sun");
-        } else {
-            text.innerText = "Switch to Dark Mode";
-            icon.classList.replace("fa-sun", "fa-moon");
-        }
-    }
-
-    document.addEventListener("DOMContentLoaded", function () {
-        if (localStorage.getItem("darkMode") === "enabled") {
-            document.body.classList.add("dark-mode");
-            document.getElementById("darkModeIcon").classList.replace("fa-moon", "fa-sun");
-            document.getElementById("darkModeText").innerText = "Switch to Light Mode";
-        }
-    });
-</script>
-
-<script>
-    function toggleSettings() {
-        const dropdown = document.getElementById("settingsDropdown");
-        const icon = document.getElementById("settingsIcon");
-
-        // Toggle show/hide class
-        if (dropdown.style.display === "block") {
-            dropdown.style.display = "none";
-            icon.classList.replace("fa-chevron-up", "fa-chevron-down");
-        } else {
-            dropdown.style.display = "block";
-            icon.classList.replace("fa-chevron-down", "fa-chevron-up");
-        }
-    }
-</script>
-
-<!-- Collapsible Settings -->               

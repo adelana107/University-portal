@@ -5,39 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Portal</title>
-    <link rel="stylesheet" href="{% static 'css/student_portal.css' %}">
+
+    <!-- Bootstrap & Custom CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/portal_student_navbar.css' %}">
+
+    <!-- FontAwesome for Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+
+
 </head>
 <body>
 
-    <!-- Sidebar -->
-    {% include 'portal_sidebar.html' %}
+    <!-- Navbar -->
+    {% include 'portal_navbar.html' %}
+
+    {% include 'portal_sidebar.html'   %}
 
     <!-- Main Content -->
-    <div class="content">
+    <div class="container dashboard-container">
         {% if student %}
-            <h1>Welcome, {{ student.surname }}!</h1>
-            <div class="dashboard">
-                <div class="card">
-                    <h3>Total Courses</h3>
-                    <p>{{ student.total_courses }}</p>
-                </div>
-                <div class="card">
-                    <h3>GPA</h3>
-                    <p>{{ student.gpa|default:"N/A" }}</p>
-                </div>
-                <div class="card">
-                    <h3>Current Year</h3>
-                    <p>{{ student.year }}</p>
-                </div>
-                <div class="card">
-                    <h3>Current Semester</h3>
-                    <p>{{ student.semester }}</p>
-                </div>
+            <h1 class="text-center">Welcome, {{ student.surname }}!</h1>
+            <div class="row mt-4">
+                <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-book icon"></i><h5 class="card-title">Total Courses</h5><p>{{ student.total_courses }}</p></div></div>
+                <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-graduation-cap icon"></i><h5 class="card-title">GPA</h5><p>{{ student.gpa|default:"N/A" }}</p></div></div>
+                <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-calendar-alt icon"></i><h5 class="card-title">Current Year</h5><p>{{ student.year }}</p></div></div>
+                <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-clock icon"></i><h5 class="card-title">Current Semester</h5><p>{{ student.semester }}</p></div></div>
             </div>
         {% else %}
-            <h1>Error: Student Profile Not Found</h1>
+            <h1 class="text-danger text-center">Error: Student Profile Not Found</h1>
         {% endif %}
     </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

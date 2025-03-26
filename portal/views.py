@@ -90,19 +90,22 @@ def student_portal(request):
 
     return render(request, "student_portal.html", {"student": student})
 
-
-
 def student_biodata(request):
     user = request.user  # Get the logged-in user
-    students = Student.objects.filter(application_number=user.username)  # Fetch their application
+    try:
+        student = Student.objects.get(application_number=user.username)
+    except Student.DoesNotExist:
+        student = None  # If student is not found, avoid errors
 
-    return render(request, "student_biodata.html", {"students": students})
+    return render(request, "student_biodata.html", {"student": student})
+
 
 def CourseRegistration(request):
     user = request.user  # Get the logged-in user
+    student = Student.objects.filter(application_number=user.username).first()
     courses = Course.objects.all()  # Fetch their application
 
-    return render (request, 'course_registration.html', {"courses": courses})
+    return render (request, 'portal_course_registration.html', {"courses": courses, "student": student})
 
 
 def apply_for_admission(request):

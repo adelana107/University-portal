@@ -11,17 +11,20 @@ from django.utils.timezone import now
 
 
 class Year(models.Model):
-    level = models.CharField(max_length=100, unique=True)  # e.g., "Year 1", "Year 2"
+    number = models.IntegerField(unique=True)  # Example: 1, 2, 3, 4
 
     def __str__(self):
-        return self.level
+        return f"Year {self.number}"
 
 class Semester(models.Model):
-    name = models.CharField(max_length=100)  # e.g., "First Semester", "Second Semester"
-    year = models.ForeignKey(Year, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20)  # "First" or "Second"
+    year = models.ForeignKey(Year, on_delete=models.CASCADE, related_name="semesters")
+
+    class Meta:
+        unique_together = ("name", "year")  # Ensure each year has only one "First" & "Second"
 
     def __str__(self):
-        return f"{self.name} Semester"
+        return f"{self.name} Semester - Year {self.year.number}"
 
 class Course(models.Model):
     title = models.CharField(max_length=100)
@@ -30,7 +33,7 @@ class Course(models.Model):
     department = models.ForeignKey("Department", on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 

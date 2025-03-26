@@ -1,0 +1,91 @@
+/* Sidebar Container */
+.sidebar {
+    width: 350px; /* Increased width for more space */
+    height: 100vh;
+    position: fixed;
+    top: 70px; /* Below the navbar */
+    left: 0;
+    background: white; /* Clean background */
+    padding: 30px;
+    text-align: center;
+    overflow-y: auto;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.1);
+    border-right: 2px solid #ddd;
+}
+
+/* Profile Image */
+.profile-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.profile-img {
+    width: 100%;
+    max-height: 350px; /* Increased height for full display */
+    object-fit: cover; /* Ensures full image visibility */
+    border-radius: 15px;
+    border: 4px solid #1abc9c;
+    padding: 5px;
+}
+
+/* Student Info */
+.student-id {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.student-name {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 15px;
+}
+
+/* Sidebar Information */
+.sidebar-info {
+    margin-top: 20px;
+    text-align: left;
+    padding: 15px;
+    border-top: 2px solid #1abc9c;
+}
+
+.sidebar-info p {
+    font-size: 1.2rem; /* Increased font size */
+    font-weight: 500;
+    margin: 15px 0; /* More spacing */
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 14px; /* Increased space between icon and text */
+}
+
+/* Icons */
+.sidebar-info i {
+    color: #1abc9c;
+    font-size: 1.6rem; /* Bigger icons */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        top: 0;
+        padding: 20px;
+        border-right: none;
+    }
+
+    .profile-img {
+        max-height: 280px;
+    }
+
+    .sidebar-info p {
+        font-size: 1.1rem;
+        gap: 12px;
+    }
+}

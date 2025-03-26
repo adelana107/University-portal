@@ -218,3 +218,69 @@ def revoke_application(request, application_id):
 
     print(f"🚫 Application {application.application_number} has been revoked.")
     return redirect("applicant_list")
+
+
+
+def move_to_new_semester(request):
+    students = Student.objects.all()
+
+    for student in students:
+        current_year = student.year
+        current_semester = student.semester
+
+        # Get First and Second semester for this year
+        first_semester = Semester.objects.filter(name="First", year=current_year).first()
+        second_semester = Semester.objects.filter(name="Second", year=current_year).first()
+
+        if not first_semester or not second_semester:
+            messages.error(request, f"Error: Year {current_year.number} does not have both semesters!")
+            return redirect("crm_dashboard")
+
+        # Move to next semester or next year
+        if current_semester == first_semester:
+            student.semester = second_semester
+        else:
+            next_year = Year.objects.filter(number=current_year.number + 1).first()
+            if next_year:
+                student.year = next_year
+                student.semester = Semester.objects.filter(name="First", year=next_year).first()
+            else:
+                student.status = "Graduated"  # Final year students graduate
+
+        student.save()
+
+    messages.success(request, "All students moved to the new semester successfully!")
+    return redirect("crm_dashboard")
+
+
+
+def move_to_previous_semester(request):
+    students = Student.objects.all()
+
+    for student in students:
+        current_year = student.year
+        current_semester = student.semester
+
+        # Get First and Second semester for this year
+        first_semester = Semester.objects.filter(name="First", year=current_year).first()
+        second_semester = Semester.objects.filter(name="Second", year=current_year).first()
+
+        if not first_semester or not second_semester:
+            messages.error(request, f"Error: Year {current_year.number} does not have both semesters!")
+            return redirect("crm_dashboard")
+
+        # Move back to the previous semester or year
+        if current_semester == second_semester:
+            student.semester = first_semester  # Move back to First Semester
+        else:
+            prev_year = Year.objects.filter(number=current_year.number - 1).first()
+            if prev_year:
+                student.year = prev_year
+                student.semester = Semester.objects.filter(name="Second", year=prev_year).first()
+            else:
+                messages.warning(request, f"Student {student} is already in the first semester of the first year and cannot go back further.")
+
+        student.save()
+
+    messages.success(request, "All students moved to the previous semester successfully!")
+    return redirect("crm_dashboard")

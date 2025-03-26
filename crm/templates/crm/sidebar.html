@@ -37,6 +37,39 @@
                 </ul>
             </div>
         </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link text-white d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#actionDropdown">
+                <i class="fas fa-bolt me-2"></i> Actions 
+                <span class="badge bg-danger ms-2">3</span> <!-- Notification counter -->
+                <i class="fas fa-chevron-down ms-auto"></i>
+            </a>
+            <div class="collapse" id="actionDropdown">
+                <ul class="nav flex-column ps-4">
+                    <!-- High Priority (Red) -->
+                    <li class="nav-item">
+                        <a href="{% url 'move_semester'  %}" class="nav-link text-white">
+                            <i class="fas fa-exclamation-circle text-danger me-2"></i> Move to next Semester
+                            <span class="badge bg-danger ms-2">2</span>
+                        </a>
+                    </li>
+                    <!-- Medium Priority (Orange) -->
+                    <li class="nav-item">
+                        <a href="{% url 'reverse_semester'%}" class="nav-link text-white">
+                            <i class="fas fa-flag text-warning me-2"></i> Reverse semester
+                            <span class="badge bg-warning ms-2">5</span>
+                        </a>
+                    </li>
+                    <!-- Low Priority (Blue) -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link text-white">
+                            <i class="fas fa-bell text-info me-2"></i> System Alerts
+                            <span class="badge bg-info ms-2">1</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+
     </ul>
 </div>
 
