@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ApplicationForm, StudentLoginForm
-from .models import Application, Department, State, Lga, Student, Course  # Ensure you import your model
+from .models import Application, Department, State, Lga, Student, Course, Year, RegisteredCourse   # Ensure you import your model
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
@@ -88,7 +88,21 @@ def student_portal(request):
     if not student:
         return render(request, "error.html", {"message": "Student profile not found."})
 
-    return render(request, "student_portal.html", {"student": student})
+    # ✅ Filter courses by department, semester, and year
+    courses = Course.objects.filter(department=student.department, semester=student.semester)
+
+    # ✅ Calculate total units
+    total_units = sum(course.unit for course in courses)
+
+    context = {
+        'student': student,
+        'courses': courses,
+        'total_course': courses.count(),
+        'total_unit': total_units,
+    }
+
+    return render(request, "student_portal.html", context)
+
 
 def student_biodata(request):
     user = request.user  # Get the logged-in user
@@ -103,9 +117,33 @@ def student_biodata(request):
 def CourseRegistration(request):
     user = request.user  # Get the logged-in user
     student = Student.objects.filter(application_number=user.username).first()
-    courses = Course.objects.all()  # Fetch their application
+    courses = Course.objects.filter(
+        department=student.department,
+        semester=student.semester,
+    )  # Fetch their application
 
     return render (request, 'portal_course_registration.html', {"courses": courses, "student": student})
+
+
+def submit_registration(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            course_ids = data.get("courses", [])
+            student = Student.objects.get(application_number=request.user.username)
+
+            # Register selected courses
+            for course_id in course_ids:
+                course = Course.objects.get(id=course_id)
+                RegisteredCourse.objects.get_or_create(student=student, course=course)
+
+            return JsonResponse({"success": True, "message": "Courses registered successfully!"})
+        except Exception as e:
+            return JsonResponse({"success": False, "message": str(e)})
+    return JsonResponse({"success": False, "message": "Invalid request method."})
+
+
+
 
 
 def apply_for_admission(request):
@@ -130,8 +168,6 @@ def apply_for_admission(request):
         'form': form,
         'all_lgas_json': json.dumps(all_lgas)  # Convert to JSON for JavaScript
     })
-
-
 
 
 

@@ -27,7 +27,15 @@
         {% if student %}
             <h1 class="text-center">Welcome, {{ student.surname }}!</h1>
             <div class="row mt-4">
-                <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-book icon"></i><h5 class="card-title">Total Courses</h5><p>{{ student.total_courses }}</p></div></div>
+                <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-book icon"></i><h5 class="card-title">Total Courses</h5><p>{{ total_course }}</p></div></div>
+                <div class="col-md-3">
+                    <div class="card p-3 text-center">
+                        <i class="fas fa-calculator icon"></i>
+                        <h5 class="card-title">Total unit</h5>
+                        <p>{{ total_unit }}</p>
+                    </div>
+                </div>
+
                 <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-graduation-cap icon"></i><h5 class="card-title">GPA</h5><p>{{ student.gpa|default:"N/A" }}</p></div></div>
                 <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-calendar-alt icon"></i><h5 class="card-title">Current Year</h5><p>{{ student.year }}</p></div></div>
                 <div class="col-md-3"><div class="card p-3 text-center"><i class="fas fa-clock icon"></i><h5 class="card-title">Current Semester</h5><p>{{ student.semester }}</p></div></div>

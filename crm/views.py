@@ -253,6 +253,17 @@ def move_to_new_semester(request):
     return redirect("semester_success")
 
 
+def move_semester_confirmationPage(request):
+    """Renders the confirmation page before processing the semester update."""
+    if request.method == "POST":
+        return redirect("move_semester")  # Redirect to the actual move function
+
+    return render(request, "crm/crm_move_confirmation_page.html")
+
+
+def semester_success(request):
+    return render(request, "crm/crm_move_semester_success_page.html")
+
 
 def move_to_previous_semester(request):
     students = Student.objects.all()
@@ -283,16 +294,16 @@ def move_to_previous_semester(request):
         student.save()
 
     messages.success(request, "All students moved to the previous semester successfully!")
-    return redirect("crm_dashboard")
+    return redirect("reverse_semester_success")
 
 
-def confirmationPage(request):
+def reverse_semester_confirmationPage(request):
     """Renders the confirmation page before processing the semester update."""
     if request.method == "POST":
-        return redirect("move_semester")  # Redirect to the actual move function
+        return redirect("reverse_semester")  # Redirect to the actual move function
 
-    return render(request, "crm/crm_move_confirmation_page.html")
+    return render(request, "crm/crm_reverse_comfirmation_page.html")
 
 
-def semester_success(request):
-    return render(request, "crm/crm_move_semester_success_page.html")
+def semester_reverse_success(request):
+    return render(request, "crm/crm_reverse_semester_success.html")

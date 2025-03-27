@@ -31,10 +31,22 @@ class Course(models.Model):
     code = models.CharField(max_length=10, unique=True)
     unit = models.IntegerField()
     department = models.ForeignKey("Department", on_delete=models.CASCADE)
+    semester = models.ForeignKey(Semester, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
 
+class RegisteredCourse(models.Model):
+    student = models.ForeignKey("Student", on_delete=models.CASCADE, related_name="registered_courses")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE)  
+
+    class Meta:
+        unique_together = ("student", "course")  # Ensures students can't register the same course twice
+
+    def __str__(self):
+        return f"{self.student.surname} - {self.course.title}"  
+
+    
 
 
 

@@ -2,8 +2,8 @@ from django.urls import path
 from .views import (
     crm_dashboard, applicant_list, edit_application, student_list, 
     edit_student, view_applicant, approve_application, revoke_application, 
-    Crmlogin, view_student, move_to_new_semester, move_to_previous_semester, confirmationPage,
-    semester_success
+    Crmlogin, view_student, move_to_new_semester, move_to_previous_semester, move_semester_confirmationPage,
+    semester_success, reverse_semester_confirmationPage, semester_reverse_success
 )
 
 urlpatterns = [
@@ -25,10 +25,12 @@ urlpatterns = [
 
     # Semester Management
     path("move-semester/", move_to_new_semester, name="move_semester"),
-    path("confirm-move/", confirmationPage, name="confirmation_page"),
+    path("confirm-move/", move_semester_confirmationPage, name="confirmation_page"),
+    path("confirm-reverse/",reverse_semester_confirmationPage, name="reverse_confirmation_page"),
     path("semester-success/", semester_success, name="semester_success"),
+    path("semester-reverse-success/", semester_reverse_success, name="reverse_semester_success"),
+    path("move-to-previous-semester/", move_to_previous_semester, name="reverse_semester"),
 
-    # path("move-to-previous-semester/", move_to_previous_semester, name="reverse_semester"),
     
     
 ]
