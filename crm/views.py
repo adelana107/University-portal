@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from portal.models import Application, School, Department, Student, Year, Semester
+from portal.models import Application, School, Department, Student, Year, Semester, Headline
 from django.contrib.auth.decorators import user_passes_test,login_required
 from .forms import ApplicationForm, StudentForm, CrmLoginForm
 from django.db.models import Count
@@ -307,3 +307,17 @@ def reverse_semester_confirmationPage(request):
 
 def semester_reverse_success(request):
     return render(request, "crm/crm_reverse_semester_success.html")
+
+
+def Post_headline(request):
+    if request.method == "POST":
+        title = request.POST.get("title")
+        content = request.POST.get("content")
+        image = request.FILES.get("image")
+
+        # Create a new headline
+        headline = Headline.objects.create(title=title, content=content, image=image)
+        messages.success(request, "Headline posted successfully!")
+        return redirect("crm_dashboard")
+
+    return render(request, "crm/crm_post_headline.html")

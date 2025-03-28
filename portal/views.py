@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ApplicationForm, StudentLoginForm
-from .models import Application, Department, State, Lga, Student, Course, Year, RegisteredCourse   # Ensure you import your model
+from .models import Application, Department, State, Lga, Student, Course, Year, RegisteredCourse, Headline   # Ensure you import your model
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
@@ -156,6 +156,10 @@ def registered_courses(request):
         "student": student
     })
 
+def headline_news(request):
+    headlines = Headline.objects.all()
+    return render(request, "portal-news.html", {"headlines": headlines})
+
 
 
 def apply_for_admission(request):
@@ -234,4 +238,5 @@ def get_lgas(request):
         print(f"Error in get_lgas: {str(e)}")
         return JsonResponse({'error': str(e)}, status=500)
     
+
 

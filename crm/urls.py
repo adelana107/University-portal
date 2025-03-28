@@ -3,7 +3,7 @@ from .views import (
     crm_dashboard, applicant_list, edit_application, student_list, 
     edit_student, view_applicant, approve_application, revoke_application, 
     Crmlogin, view_student, move_to_new_semester, move_to_previous_semester, move_semester_confirmationPage,
-    semester_success, reverse_semester_confirmationPage, semester_reverse_success
+    semester_success, reverse_semester_confirmationPage, semester_reverse_success, Post_headline
 )
 
 urlpatterns = [
@@ -31,6 +31,7 @@ urlpatterns = [
     path("semester-reverse-success/", semester_reverse_success, name="reverse_semester_success"),
     path("move-to-previous-semester/", move_to_previous_semester, name="reverse_semester"),
 
-    
+    #headline Post
+    path("headline/", Post_headline, name="Post_headline"),
     
 ]

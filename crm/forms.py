@@ -1,5 +1,5 @@
 from django import forms
-from portal.models import Application, Department, School, State, Lga, Student
+from portal.models import Application, Department, School, State, Lga, Student, Headline
 
 
 
@@ -110,3 +110,14 @@ class StudentForm(forms.ModelForm):
 class CrmLoginForm(forms.Form):
     email = forms.CharField(label="Email", max_length=20)
     password = forms.CharField(label="Password", widget=forms.PasswordInput)
+
+
+class HeadlineForm(forms.ModelForm):
+    class Meta:
+        model = Headline
+        fields = ["title", "content", "image"]
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter headline title"}),
+            "content": forms.Textarea(attrs={"class": "form-control", "rows": 5, "placeholder": "Enter headline content"}),
+            "image": forms.FileInput(attrs={"class": "form-control"}),
+        }
