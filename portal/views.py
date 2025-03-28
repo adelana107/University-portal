@@ -142,7 +142,19 @@ def submit_registration(request):
             return JsonResponse({"success": False, "message": str(e)})
     return JsonResponse({"success": False, "message": "Invalid request method."})
 
+def registered_courses(request):
+    user = request.user
+    student = Student.objects.filter(application_number=user.username).first()
+    
+    if not student:
+        return render(request, "error.html", {"message": "Student profile not found."})
 
+    registered_courses = RegisteredCourse.objects.filter(student=student)
+
+    return render(request, "portal_registered_courses.html", {
+        "registered_courses": registered_courses,
+        "student": student
+    })
 
 
 

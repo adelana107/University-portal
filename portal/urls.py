@@ -3,7 +3,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth.views import LogoutView
 from . import views
-from .views import apply_for_admission,  applicant_login, applicant_profile, application_success, get_lgas, get_departments, student_portal, admission_success, student_biodata, student_login, CourseRegistration, submit_registration
+from .views import apply_for_admission,  applicant_login, applicant_profile, application_success, get_lgas, get_departments, student_portal, admission_success, student_biodata, student_login, CourseRegistration, submit_registration, registered_courses
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -17,6 +17,7 @@ urlpatterns = [
     path("student-biodata/", student_biodata, name="student_biodata"),
     path('course-registration/', CourseRegistration, name='course_registration'),
     path("submit-registration/", submit_registration, name="submit_registration"),
+    path("registered-courses/", registered_courses, name="registered_courses"),
     path("logout/", LogoutView.as_view(next_page="applicant_login"), name="logout"), 
     path('application-success/<str:application_number>/<str:surname>/', application_success, name='application_success'),
     path('admission-success/<str:application_number>/<str:surname>/', admission_success, name='admission_success'), 
