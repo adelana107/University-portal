@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from portal.models import Application, School, Department, Student, Year, Semester, Headline
 from django.contrib.auth.decorators import user_passes_test,login_required
-from .forms import ApplicationForm, StudentForm, CrmLoginForm
+from .forms import ApplicationForm, StudentForm, CrmLoginForm, HeadlineForm
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
 from datetime import datetime
@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.db.models.functions import ExtractMonth
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -311,13 +312,41 @@ def semester_reverse_success(request):
 
 def Post_headline(request):
     if request.method == "POST":
-        title = request.POST.get("title")
-        content = request.POST.get("content")
-        image = request.FILES.get("image")
+        form = HeadlineForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Headline posted successfully!")
+            return redirect("Post_headline")
+    else:
+        form = HeadlineForm()
 
-        # Create a new headline
-        headline = Headline.objects.create(title=title, content=content, image=image)
-        messages.success(request, "Headline posted successfully!")
-        return redirect("crm_dashboard")
+    # Paginate headlines
+    headlines = paginate_headlines(request)
 
-    return render(request, "crm/crm_post_headline.html")
+    return render(request, "crm/crm_post_headline.html", {"form": form, "headlines": headlines})
+
+
+def paginate_headlines(request):
+    """ Helper function to paginate headlines """
+    headlines_list = Headline.objects.all().order_by('-created_at')
+    paginator = Paginator(headlines_list, 3)  # 3 headlines per page
+    page_number = request.GET.get("page")
+    return paginator.get_page(page_number)
+
+
+def Edit_headline(request, headline_id):
+    headline = get_object_or_404(Headline, id=headline_id)
+
+    if request.method == "POST":
+        form = HeadlineForm(request.POST, request.FILES, instance=headline)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Headline updated successfully!")
+            return redirect("Post_headline")
+    else:
+        form = HeadlineForm(instance=headline)
+
+    # Paginate headlines
+    headlines = paginate_headlines(request)
+
+    return render(request, "crm/crm_edit_post.html", {"form": form, "headline": headline, "headlines": headlines})

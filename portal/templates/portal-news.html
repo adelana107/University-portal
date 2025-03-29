@@ -12,6 +12,8 @@
         .news-card { transition: transform 0.3s; }
         .news-card:hover { transform: scale(1.05); }
         .category-badge { font-size: 0.8rem; padding: 5px 10px; }
+
+        
     </style>
 </head>
 <body>
@@ -65,18 +67,18 @@
         <h2 class="text-center mb-4">Latest Campus News</h2>
         <div class="row">
             {% for headline in headlines %}
-            <div class="col-md-4">
-                <div class="card news-card">
-                    <img src="{% if headline.image %}{{ headline.image.url }}{% else %}/static/default.jpg{% endif %}" class="card-img-top" alt="News Image">
-                    <div class="card-body">
-                        <span class="badge bg-success category-badge">Academics</span>
-                        <h5 class="card-title">{{ headline.title }}</h5>
-                        <p class="card-text">{{ headline.content|truncatechars:150 }}</p>
-                        <a href="#" class="btn btn-primary">Read More</a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+<div class="col-md-4">
+    <div class="card news-card">
+        <img src="{% if headline.image %}{{ headline.image.url }}{% else %}/static/default.jpg{% endif %}" class="card-img-top" alt="News Image">
+        <div class="card-body">
+            <span class="badge bg-success category-badge">{{ headline.category.name }}</span>  <!-- Corrected this line -->
+            <h5 class="card-title">{{ headline.title }}</h5>
+            <p class="card-text">{{ headline.content|truncatechars:150 }}</p>
+            <a href="#" class="btn btn-primary">Read More</a>
+        </div>
+    </div>
+</div>
+{% endfor %}
         </div>
     </div>
 
@@ -87,3 +89,4 @@
 
 </body>
 </html>
+

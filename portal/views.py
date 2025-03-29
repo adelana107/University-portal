@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ApplicationForm, StudentLoginForm
-from .models import Application, Department, State, Lga, Student, Course, Year, RegisteredCourse, Headline   # Ensure you import your model
+from .models import Application, Department, State, Lga, Student, Course, Year, RegisteredCourse, Headline, Category   # Ensure you import your model
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
