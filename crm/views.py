@@ -350,3 +350,15 @@ def Edit_headline(request, headline_id):
     headlines = paginate_headlines(request)
 
     return render(request, "crm/crm_edit_post.html", {"form": form, "headline": headline, "headlines": headlines})
+
+
+def delete_headline(request, headline_id):
+    headline = get_object_or_404(Headline, id=headline_id)
+    
+    if request.user.is_superuser:  # Ensure only superusers can delete
+        headline.delete()
+        messages.success(request, "Headline deleted successfully!")
+    else:
+        messages.error(request, "You do not have permission to delete this headline.")
+    
+    return redirect("Post_headline")  # Redirect to the headline list page
