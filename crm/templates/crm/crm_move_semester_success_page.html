@@ -9,26 +9,159 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="{% static 'css/applicant_profile.css' %}">
-</head>
-<body>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --success-color: #38b000;
+            --light-bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --border-color: #e9ecef;
+        }
 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 992px) {
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        .success-card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            background-color: var(--card-bg);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            padding: 2.5rem;
+        }
+
+        .success-icon {
+            color: var(--success-color);
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            padding: 0.75rem;
+            font-weight: 500;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a56d4;
+            border-color: #3a56d4;
+        }
+
+        .footer {
+            background-color: var(--card-bg);
+            padding: 1rem;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+
+        .stats-container {
+            background-color: rgba(56, 176, 0, 0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .success-card {
+                padding: 1.5rem;
+            }
+            
+            .success-icon {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
     <!-- Sidebar -->
     {% include 'crm/sidebar.html' %}
 
-    <div class="container mt-5 d-flex justify-content-center">
-        <div class="card p-4 shadow-lg" style="max-width: 500px;">
-            <h2 class="text-center text-success">Semester Update Successful</h2>
-            <p class="text-center">All students have been successfully moved to the new semester.</p>
-
-            <a href="{% url 'crm_dashboard' %}" class="btn btn-primary w-100">Back to Dashboard</a>
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 class="text-success mb-3">Semester Update Complete</h2>
+            <p class="lead">All students have been successfully advanced to the new semester.</p>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span>Students Moved:</span>
+                    <strong>{{ student_count }}</strong>
+                </div>
+                <div class="stat-item">
+                    <span>Previous Semester:</span>
+                    <strong>{{ previous_semester }}</strong>
+                </div>
+                <div class="stat-item">
+                    <span>New Semester:</span>
+                    <strong>{{ new_semester }}</strong>
+                </div>
+            </div>
+            
+            <div class="alert alert-success">
+                <i class="fas fa-info-circle me-2"></i>
+                A confirmation email has been sent to the admin team.
+            </div>
+            
+            <a href="{% url 'crm_dashboard' %}" class="btn btn-primary w-100">
+                <i class="fas fa-tachometer-alt me-2"></i> Return to Dashboard
+            </a>
         </div>
     </div>
 
     <!-- Footer -->
-    <div class="footer text-center mt-4">
-        © 2025 University Portal | All Rights Reserved
+    <div class="footer text-center">
+        © 2025 University Portal | v2.1.0 | <a href="#" class="text-decoration-none">Privacy Policy</a>
     </div>
 
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

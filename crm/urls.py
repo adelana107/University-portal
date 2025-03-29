@@ -3,13 +3,15 @@ from .views import (
     crm_dashboard, applicant_list, edit_application, student_list, 
     edit_student, view_applicant, approve_application, revoke_application, 
     Crmlogin, view_student, move_to_new_semester, move_to_previous_semester, move_semester_confirmationPage,
-    semester_success, reverse_semester_confirmationPage, semester_reverse_success, Post_headline, Edit_headline, delete_headline
+    semester_success, reverse_semester_confirmationPage, semester_reverse_success, Post_headline, Edit_headline, delete_headline,
+    school_view
 )
 
 urlpatterns = [
     # Applicant URLs
     path('applicant/', applicant_list, name='applicant_list'),
     path('applications/view/<int:application_id>/', view_applicant, name='view_applicant'),
+    
     path('edit-application/<int:application_id>/', edit_application, name='edit_application'),
     path("approve/<int:application_id>/", approve_application, name="approve_application"),
     path('revoke-application/<int:application_id>/', revoke_application, name='revoke_application'),
@@ -35,4 +37,7 @@ urlpatterns = [
     path("headline/", Post_headline, name="Post_headline"),
     path("edit-headline/<int:headline_id>/", Edit_headline, name="Edit_headline"),
     path('delete-headline/<int:headline_id>/', delete_headline, name='delete_headline'),
+
+    #school view
+    path("school-list/", school_view, name = "school_list")
 ]

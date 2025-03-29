@@ -84,6 +84,7 @@ def applicant_profile(request):
 def student_portal(request):
     user = request.user
     student = Student.objects.filter(application_number=user.username).first()
+    registered_courses = RegisteredCourse.objects.filter(student=student)
 
     if not student:
         return render(request, "error.html", {"message": "Student profile not found."})
@@ -99,6 +100,7 @@ def student_portal(request):
         'courses': courses,
         'total_course': courses.count(),
         'total_unit': total_units,
+        'registered_courses' : registered_courses
     }
 
     return render(request, "student_portal.html", context)

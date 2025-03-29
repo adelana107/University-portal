@@ -160,6 +160,7 @@ def view_applicant(request, application_id):
     return render(request, "crm/applicant_profile.html", {"applicant": applicant})
 
 
+
 def view_student(request, student_id):
     student = get_object_or_404(Student, id=student_id)
     return render(request, "crm/student_profile.html", {"student": student})
@@ -362,3 +363,8 @@ def delete_headline(request, headline_id):
         messages.error(request, "You do not have permission to delete this headline.")
     
     return redirect("Post_headline")  # Redirect to the headline list page
+
+def school_view(request):
+    schools = School.objects.all()
+
+    return render(request, 'crm/crm_school_list.html', {'schools':schools})

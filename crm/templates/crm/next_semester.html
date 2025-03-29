@@ -1,4 +1,49 @@
-<form action="{% url 'move_semester' %}" method="post">
+<form action="{% url 'move_semester' %}" method="post" class="d-inline">
     {% csrf_token %}
-    <button type="submit" class="btn btn-primary">Move to Next Semester</button>
+    <button type="button" 
+            class="btn btn-primary"
+            data-bs-toggle="modal" 
+            data-bs-target="#semesterMoveModal">
+        <i class="fas fa-arrow-right me-2"></i> Advance to Next Semester
+    </button>
 </form>
+
+<!-- Confirmation Modal -->
+<div class="modal fade" id="semesterMoveModal" tabindex="-1" aria-labelledby="semesterMoveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="semesterMoveModalLabel">
+                    <i class="fas fa-exclamation-triangle me-2"></i> Confirm Semester Advancement
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <strong>Important:</strong> This action will affect all student records.
+                </div>
+                
+                <p>You are about to:</p>
+                <ul>
+                    <li>Move all students to the next academic semester</li>
+                    <li>Update all related course registrations</li>
+                    <li>This action cannot be automatically undone</li>
+                </ul>
+                
+                <p class="mb-0">Are you sure you want to proceed?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i> Cancel
+                </button>
+                <form action="{% url 'move_semester' %}" method="post" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check me-2"></i> Confirm Advancement
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

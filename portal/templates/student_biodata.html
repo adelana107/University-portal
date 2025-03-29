@@ -4,137 +4,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal</title>
+    <title>Student Bio-data | Oceanview University</title>
 
     <!-- Bootstrap & Custom CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'css/portal_student_navbar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/portal_biodata.css' %}">
+ 
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- FontAwesome for Icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
-
-    <style>
-        /* Printable Area Styling */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #printable-area, #printable-area * {
-                visibility: visible;
-            }
-            #printable-area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-            }
-            .no-print {
-                display: none !important;
-            }
-        }
-    </style>
+   
 </head>
 <body>
 
-    <!-- Navbar (Hidden in Print) -->
+    <!-- Navbar -->
     {% include 'portal_navbar.html' %}
 
-    <div class="container-fluid mt-4">  
+    <div class="container-fluid mt-4">
         <div class="row">
-            <!-- Sidebar Column (Hidden in Print) -->
+            <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 d-md-block sidebar no-print">
                 {% include 'portal_sidebar.html' %}
             </div>
             
             <!-- Main Content -->
             <div class="col-md-9 col-lg-10">
-                <div class="content"> 
-                    <div class="text-center mb-4">
-                        <h2 class="header-title">📄 Student Bio-data</h2>
-                    </div>
-
-                    <!-- Print Button (Hidden in Print) -->
-                    <div class="text-end mb-3 no-print">
-                        <button class="btn btn-success" onclick="printBioData()">
-                            <i class="fas fa-print"></i> Print Bio-data
-                        </button>
-                    </div>
-
-                    <!-- ✅ Printable Bio-data Section -->
-                    <div id="printable-area" class="card shadow-lg">
-                        <div class="card-header bg-primary text-white text-center">
-                            <h4 class="mb-0">Student Information</h4>
+                <div class="content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="header-title">
+                            <i class="fas fa-id-card me-2"></i> Student Bio-data
+                        </h2>
+                        <div class="no-print">
+                            <button class="btn btn-primary" onclick="printBioData()">
+                                <i class="fas fa-print me-2"></i> Print Bio-data
+                            </button>
                         </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped table-hover table-bordered align-middle text-center">
-                                    {% if student %}
-                                    <tbody>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Full Name:</th>
-                                            <td>{{ student.surname }} {{ student.first_name }} {{ student.other_name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Application Number:</th>
-                                            <td>{{ student.application_number }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Program:</th>
-                                            <td>{{ student.program }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Department:</th>
-                                            <td>{{ student.department.name }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Email:</th>
-                                            <td>{{ student.email }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Phone:</th>
-                                            <td>{{ student.phone_number }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Academic Session:</th>
-                                            <td>{{ student.academic_session }}</td>
-                                        </tr>
-                                        <!-- <tr>
-                                            <th class="bg-light fw-bold">Current Level:</th>
-                                            <td>{{ student.year }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Current Semester:</th>
-                                            <td>{{ student.semester }}</td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">School Fees Status:</th>
-                                            <td>
-                                                {% if student.fees_status == 'Paid' %}
-                                                    <span class="badge bg-success px-3 py-2">Paid</span>
-                                                {% else %}
-                                                    <span class="badge bg-danger px-3 py-2">Not Paid</span>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th class="bg-light fw-bold">Hostel Status:</th>
-                                            <td>{{ student.hostel_status }}</td>
-                                        </tr> -->
-                                    </tbody>
-                                    {% else %}
-                                    <tbody>
-                                        <tr>
-                                            <td colspan="2" class="text-center text-danger fw-bold">No student data available.</td>
-                                        </tr>
-                                    </tbody>
-                                    {% endif %}
-                                </table>
+                    </div>
+
+                    <!-- Printable Bio-data Section -->
+                    <div id="printable-area" class="bio-data-card">
+                        <div class="bio-data-header">
+                            <img src="{% static 'images/university-logo-white.png' %}" 
+                                 alt="Oceanview University Logo" 
+                                 class="university-logo"
+                                 onerror="this.style.display='none'">
+                            <h3>STUDENT BIO-DATA</h3>
+                        </div>
+                        
+                        <div class="bio-data-body">
+                            <table class="info-table">
+                                {% if student %}
+                                <tbody>
+                                    <tr>
+                                        <th>Full Name:</th>
+                                        <td>{{ student.surname }} {{ student.first_name }} {{ student.other_name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Application Number:</th>
+                                        <td>{{ student.application_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Program:</th>
+                                        <td>{{ student.program }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Department:</th>
+                                        <td>{{ student.department.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Email:</th>
+                                        <td>{{ student.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Phone Number:</th>
+                                        <td>{{ student.phone_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Date of Birth:</th>
+                                        <td>{{ student.date_of_birth|date:"F d, Y" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Gender:</th>
+                                        <td>{{ student.get_gender_display }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Academic Session:</th>
+                                        <td>{{ student.academic_session }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Current Level:</th>
+                                        <td>Year {{ student.year }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Current Semester:</th>
+                                        <td>Semester {{ student.semester }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>School Fees Status:</th>
+                                        <td>
+                                            <span class="badge-status {% if student.fees_status == 'Paid' %}badge-paid{% else %}badge-not-paid{% endif %}">
+                                                {{ student.fees_status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Hostel Status:</th>
+                                        <td>
+                                            <span class="badge-status {% if student.hostel_status == 'Assigned' %}badge-assigned{% else %}badge-not-paid{% endif %}">
+                                                {{ student.hostel_status }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {% else %}
+                                <tbody>
+                                    <tr>
+                                        <td colspan="2" class="text-center text-danger fw-bold py-4">
+                                            No student data available.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                                {% endif %}
+                            </table>
+                            
+                            <div class="signature-area text-center mt-5">
+                                <div class="mb-3">
+                                    <div class="signature-line"></div>
+                                    <p class="mt-2 mb-0">Student's Signature</p>
+                                </div>
+                                <div class="mt-4">
+                                    <div class="signature-line"></div>
+                                    <p class="mt-2 mb-0">Registration Officer's Signature</p>
+                                </div>
+                                <p class="text-muted mt-4">
+                                    <small>
+                                        Generated on {% now "F j, Y" %} | Oceanview University
+                                    </small>
+                                </p>
                             </div>
                         </div>
-                    </div> <!-- End of Printable Bio-data Section -->
+                    </div>
+                    <!-- End of Printable Bio-data Section -->
 
                 </div>
-            </div>  
+            </div>
         </div>
     </div>
 
