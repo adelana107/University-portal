@@ -217,3 +217,12 @@ class Headline(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class Notification(models.Model):
+    title = models.CharField(max_length=100)
+    content = models.CharField(max_length=10000)
+
+    def __str__(self):
+        return self.title

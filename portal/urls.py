@@ -35,6 +35,10 @@ urlpatterns = [
     path('get_departments/', views.get_departments, name='get_departments'),
 
     path('headline-news/', views.headline_news, name='headline_news'),
+
+    #notifications
+    path('student-notifications/', views.Notification_Page, name='notifications'),
+    path('student-notification/<int:Notification_id>/',  views.View_Notification,  name='notification_page')
     
 ]
 

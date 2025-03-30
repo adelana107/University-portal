@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import School, Department, Application, State, Lga, Student, AcademicSession, Year, Semester, Course, RegisteredCourse, Headline, Category
+from .models import School, Department, Application, State, Lga, Student, AcademicSession, Year, Semester, Course, RegisteredCourse, Headline, Category, Notification
 # Register your models here.
 
 
@@ -16,3 +16,4 @@ admin.site.register(Course)
 admin.site.register(RegisteredCourse)
 admin.site.register(Headline)
 admin.site.register(Category)
+admin.site.register(Notification)

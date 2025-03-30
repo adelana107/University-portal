@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import ApplicationForm, StudentLoginForm
-from .models import Application, Department, State, Lga, Student, Course, Year, RegisteredCourse, Headline, Category   # Ensure you import your model
+from .models import Application, Department, State, Lga, Student, Course, Year, RegisteredCourse, Headline, Category, Notification   # Ensure you import your model
 from django.http import JsonResponse
 import json
 from django.contrib.auth import authenticate, login, logout
@@ -242,3 +242,23 @@ def get_lgas(request):
     
 
 
+def Notification_Page(request):
+    user = request.user
+    notifications = Notification.objects.all()
+    student = Student.objects.filter(application_number=user.username).first()
+
+    return render(request, 'portal_notification.html', {'notifications':notifications, 'student':student})
+
+def View_Notification(request, Notification_id): 
+    user = request.user
+    student = Student.objects.filter(application_number=user.username).first()
+    notification = get_object_or_404(
+        Notification, 
+        id=Notification_id,
+    )
+    
+    
+    return render(request, 'portal_notification_page.html', {
+        'notification': notification,
+        'student': student,
+    })
