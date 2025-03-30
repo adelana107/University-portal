@@ -70,7 +70,7 @@
             <div class="card-body">
                 {% if notification %}
                 <div class="notification-content mb-4">
-                    {{ notification.content|linebreaks }}
+                    {{ notification.message|linebreaks }}
                 </div>
 
                 {% if notification.attachment %}

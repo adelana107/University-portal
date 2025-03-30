@@ -1,5 +1,5 @@
 from django.contrib import admin
-from portal.models import Application,Student
+from portal.models import Application,Student, Notification
 from django.shortcuts import redirect
 from django.urls import path
 from django.utils.html import format_html

@@ -93,7 +93,7 @@
                             </h6>
                             <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
                         </div>
-                        <p class="mb-1">{{ notification.content }}</p>
+                        <p class="mb-1">{{ notification.message }}</p>
                         {% if notification.course %}
                         <span class="badge bg-info">{{ notification.course }}</span>
                         {% endif %}

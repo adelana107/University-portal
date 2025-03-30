@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from portal.models import Application, School, Department, Student, Year, Semester, Headline
+from portal.models import Application, School, Department, Student, Year, Semester, Headline, Notification
 from django.contrib.auth.decorators import user_passes_test,login_required
-from .forms import ApplicationForm, StudentForm, CrmLoginForm, HeadlineForm
+from .forms import ApplicationForm, StudentForm, CrmLoginForm, HeadlineForm, NotificationForm
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
 from datetime import datetime
@@ -311,6 +311,31 @@ def semester_reverse_success(request):
     return render(request, "crm/crm_reverse_semester_success.html")
 
 
+
+def Notify_student(request):
+    if request.method == "POST":
+        form = NotificationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Notification Sent successfully!")
+            return redirect("Notify_student")
+        
+    else:
+        form = NotificationForm()
+
+    notifications = paginate_notifications(request)
+
+    return render(request, "crm/crm_post_notification.html", {"form":form, "notifications":notifications})    
+
+def paginate_notifications(request):
+    """ Helper function to paginate headlines """
+    notification_list = Notification.objects.all()
+    paginator = Paginator(notification_list, 3)  # 3 headlines per page
+    page_number = request.GET.get("page")
+    return paginator.get_page(page_number)
+
+
+
 def Post_headline(request):
     if request.method == "POST":
         form = HeadlineForm(request.POST, request.FILES)
@@ -368,3 +393,4 @@ def school_view(request):
     schools = School.objects.all()
 
     return render(request, 'crm/crm_school_list.html', {'schools':schools})
+

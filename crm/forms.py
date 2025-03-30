@@ -1,5 +1,5 @@
 from django import forms
-from portal.models import Application, Department, School, State, Lga, Student, Headline, Category
+from portal.models import Application, Department, School, State, Lga, Student, Headline, Category, Notification
 
 
 
@@ -121,4 +121,14 @@ class HeadlineForm(forms.ModelForm):
             "content": forms.Textarea(attrs={"class": "form-control", "rows": 5, "placeholder": "Enter headline content"}),
             "image": forms.FileInput(attrs={"class": "form-control"}),
             "category": forms.Select(attrs={"class": "form-select"}),
+        }
+
+class NotificationForm(forms.ModelForm):
+    class Meta:
+        model = Notification
+        fields = ["title", "message"]
+        widgets = {
+            "title": forms.TextInput(attrs={"class": "form-control", "placeholder": "Enter notification title"}),
+            "message": forms.Textarea(attrs={"class": "form-control", "rows": 5, "placeholder": "Enter notification content"}),
+           
         }

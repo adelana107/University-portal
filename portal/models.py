@@ -5,7 +5,6 @@ from django.dispatch import receiver
 from django.contrib.auth.hashers import make_password
 from django.utils.timezone import now
 
-
 # ------------------ CATEGORY MODEL ------------------
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -222,7 +221,7 @@ class Headline(models.Model):
 
 class Notification(models.Model):
     title = models.CharField(max_length=100)
-    content = models.CharField(max_length=10000)
+    message = models.CharField(max_length=10000)
 
     def __str__(self):
         return self.title
