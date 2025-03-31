@@ -4,7 +4,7 @@ from .views import (
     edit_student, view_applicant, approve_application, revoke_application, 
     Crmlogin, view_student, move_to_new_semester, move_to_previous_semester, move_semester_confirmationPage,
     semester_success, reverse_semester_confirmationPage, semester_reverse_success, Post_headline, Edit_headline, delete_headline,
-    school_view, Notify_student
+    school_view, Notify_student, add_School, department_view, add_department
 )
 
 urlpatterns = [
@@ -41,7 +41,16 @@ urlpatterns = [
     #school view
     path("school-list/", school_view, name = "school_list"),
 
+    #department view
+    path("department-list/", department_view, name = "department_list" ),
+
     #Notification URLS
 
     path("notification/", Notify_student, name = "Notify_student" ),
+
+    #school management
+    path("add-school/", add_School, name = "add_school" ),
+
+    #department management
+    path("add-department/", add_department, name = "add_department" )
 ]

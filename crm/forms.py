@@ -132,3 +132,30 @@ class NotificationForm(forms.ModelForm):
             "message": forms.Textarea(attrs={"class": "form-control", "rows": 5, "placeholder": "Enter notification content"}),
            
         }
+
+
+class SchoolForm(forms.ModelForm):
+    class Meta:
+        model = School
+        fields = ["name"]  # Changed from "Name" to "name" to match model field
+        widgets = {
+            "name": forms.TextInput(attrs={
+                "class": "form-control", 
+                "placeholder": "Enter school name"
+            }),
+        }
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ["name", "school"]
+        widgets = {
+            "name": forms.TextInput(attrs={
+                "class": "form-control", 
+                "placeholder": "Enter department name"  # Changed from "school name" to be more accurate
+            }),
+            "school": forms.Select(attrs={  # Changed to Select since school is likely a ForeignKey
+                "class": "form-control",
+                "placeholder": "Select school"
+            }),
+        }

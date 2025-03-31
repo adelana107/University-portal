@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Schools List - CRM</title>
+    <title>Department List - CRM</title>
     
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -109,47 +109,47 @@
     <div class="main-content">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="text-primary mb-0">
-                <i class="fas fa-school me-2"></i>Schools Directory
+                <i class="fas fa-book me-2"></i>Department Directory
             </h2>
             <div class="d-flex">
                 <div class="search-container me-3">
                     <i class="fas fa-search"></i>
-                    <input type="text" class="form-control search-input" placeholder="Search schools..." id="searchInput">
+                    <input type="text" class="form-control search-input" placeholder="Search department..." id="searchInput">
                 </div>
-                <a href="{% url 'add_school'    %}" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i> Add School
+                <a href="{% url 'add_department'    %}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i> Add Department
                 </a>
             </div>
         </div>
 
         <!-- Schools Grid -->
         <div class="row">
-            {% for school in schools %}
+            {% for department in departments %}
             <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
                 <div class="card school-card h-100">
                     <div class="card-header bg-primary text-white py-3">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">{{ school.name }}</h5>
-                            <span class="badge bg-white text-primary">{{ school.type }}</span>
+                            <h5 class="mb-0">{{ department.name }}</h5>
+                            <span class="badge bg-white text-primary">{{ department.type }}</span>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="text-center mb-3">
-                            <img src="{% if school.logo %}{{ school.logo.url }}{% else %}{% static 'images/default-school.png' %}{% endif %}" 
+                            <img src="{% if department.logo %}{{ department.logo.url }}{% else %}{% static 'images/default-department.png' %}{% endif %}" 
                                  alt="{{ school.name }}" class="school-logo mb-2">
                         </div>
                         <div class="school-details">
                             <p class="mb-2">
                                 <i class="fas fa-map-marker-alt location-icon"></i>
-                                {{ school.city }}, {{ school.country }}
+                                {{ department.city }}, {{ department.country }}
                             </p>
                             <p class="mb-2">
                                 <i class="fas fa-phone location-icon"></i>
-                                {{ school.phone|default:"Not provided" }}
+                                {{ department.phone|default:"Not provided" }}
                             </p>
                             <p class="mb-0">
                                 <i class="fas fa-envelope location-icon"></i>
-                                {{ school.email|truncatechars:20 }}
+                                {{ department.email|truncatechars:20 }}
                             </p>
                         </div>
                     </div>

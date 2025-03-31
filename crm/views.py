@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from portal.models import Application, School, Department, Student, Year, Semester, Headline, Notification
 from django.contrib.auth.decorators import user_passes_test,login_required
-from .forms import ApplicationForm, StudentForm, CrmLoginForm, HeadlineForm, NotificationForm
+from .forms import ApplicationForm, StudentForm, CrmLoginForm, HeadlineForm, NotificationForm, SchoolForm, DepartmentForm
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
 from datetime import datetime
@@ -394,3 +394,54 @@ def school_view(request):
 
     return render(request, 'crm/crm_school_list.html', {'schools':schools})
 
+def add_School(request):
+    if request.method == "POST":
+        form = SchoolForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "School created successfully!")
+            return redirect("add_school")
+    else:
+        form = SchoolForm()
+
+    # Paginate headlines
+    schools = paginate_schools(request)
+
+    return render(request, "crm/crm_add_school.html", {"form": form, "schools": schools})
+
+
+def paginate_schools(request):
+    """ Helper function to paginate headlines """
+    schools_list = School.objects.all()
+    paginator = Paginator(schools_list, 3)  # 3 headlines per page
+    page_number = request.GET.get("page")
+    return paginator.get_page(page_number)
+
+
+def department_view(request):
+    departments = Department.objects.all()
+
+    return render(request, 'crm/crm_department_list.html', {'departments':departments})
+
+def add_department(request):
+    if request.method == "POST":
+        form = DepartmentForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Department created successfully!")
+            return redirect("add_department")
+    else:
+        form = DepartmentForm()
+
+    # Paginate headlines
+    departments = paginate_departments(request)
+
+    return render(request, "crm/crm_add_department.html", {"form": form, "departments": departments})
+
+
+def paginate_departments(request):
+    """ Helper function to paginate headlines """
+    departments_list = Department.objects.all()
+    paginator = Paginator(departments_list, 3)  # 3 headlines per page
+    page_number = request.GET.get("page")
+    return paginator.get_page(page_number)
