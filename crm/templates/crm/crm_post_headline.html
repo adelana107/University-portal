@@ -143,16 +143,38 @@
                                 </td>
                                 <td>{{ headline.created_at|date:"M d, Y" }}</td>
                                 <td>
-                                    <a href="{% url 'Edit_headline' headline.id %}" class="btn btn-sm btn-warning">
+                                    <a href="{% url 'edit_headline' headline.id %}" class="btn btn-sm btn-warning" title="Edit Headline">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="{% url 'delete_headline' headline.id %}" method="POST" class="d-inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                
+                                    <!-- Delete Button with Modal Trigger -->
+                                    <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ headline.id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                
+                                    <!-- Delete Confirmation Modal -->
+                                    <div class="modal fade" id="deleteModal{{ headline.id }}" tabindex="-1" aria-labelledby="deleteModalLabel{{ headline.id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="deleteModalLabel{{ headline.id }}">Confirm Deletion</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    Are you sure you want to delete <strong>{{ headline.title }}</strong>?
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <form action="{% url 'delete_headline' headline.id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </td>
+                                
                             </tr>
                             {% empty %}
                             <tr>

@@ -368,14 +368,15 @@ def Edit_headline(request, headline_id):
         if form.is_valid():
             form.save()
             messages.success(request, "Headline updated successfully!")
-            return redirect("Post_headline")
+            return redirect("Post_headline")  # Ensure this is correct
     else:
         form = HeadlineForm(instance=headline)
 
-    # Paginate headlines
-    headlines = paginate_headlines(request)
 
-    return render(request, "crm/crm_edit_post.html", {"form": form, "headline": headline, "headlines": headlines})
+    return render(request, "crm/crm_edit_post.html", {"form": form, "headline": headline})
+
+
+
 
 
 def delete_headline(request, headline_id):

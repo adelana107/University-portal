@@ -217,7 +217,7 @@ class Headline(models.Model):
     def __str__(self):
         return self.title
 
-
+#--------------NOTIFICATION MODEL--------------------
 
 class Notification(models.Model):
     title = models.CharField(max_length=100)
@@ -225,3 +225,4 @@ class Notification(models.Model):
 
     def __str__(self):
         return self.title
+   

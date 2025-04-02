@@ -35,7 +35,8 @@ urlpatterns = [
 
     #headline Post
     path("headline/", Post_headline, name="Post_headline"),
-    path("edit-headline/<int:headline_id>/", Edit_headline, name="Edit_headline"),
+    path("edit-headline/<int:headline_id>/", Edit_headline, name="edit_headline"),
+
     path('delete-headline/<int:headline_id>/', delete_headline, name='delete_headline'),
 
     #school view
