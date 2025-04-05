@@ -4,7 +4,7 @@ from .views import (
     edit_student, view_applicant, approve_application, revoke_application, 
     Crmlogin, view_student, move_to_new_semester, move_to_previous_semester, move_semester_confirmationPage,
     semester_success, reverse_semester_confirmationPage, semester_reverse_success, Post_headline, Edit_headline, delete_headline,
-    school_view, Notify_student, add_School, department_view, add_department
+    school_view, Notify_student, add_School, department_view, add_department, course_view, add_course,  load_departments
 )
 
 urlpatterns = [
@@ -53,5 +53,13 @@ urlpatterns = [
     path("add-school/", add_School, name = "add_school" ),
 
     #department management
-    path("add-department/", add_department, name = "add_department" )
+    path("add-department/", add_department, name = "add_department" ),
+
+    #course view
+    path("course-list/", course_view, name = "course_list" ),
+
+    #course management
+    path("add-course/", add_course, name = "add_course" ),
+
+    path('ajax/load-departments/', load_departments, name='ajax_load_departments'),
 ]

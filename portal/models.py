@@ -53,6 +53,7 @@ class Course(models.Model):
     title = models.CharField(max_length=100)
     code = models.CharField(max_length=10, unique=True)
     unit = models.IntegerField()
+    school = models.ForeignKey(School, on_delete=models.CASCADE, related_name="courses")  # Changed from "departments"
     department = models.ForeignKey(Department, on_delete=models.CASCADE, related_name="courses")
     semester = models.ForeignKey(Semester, on_delete=models.CASCADE, related_name="courses")
 
@@ -212,7 +213,8 @@ class Headline(models.Model):
     content = models.TextField()
     image = models.ImageField(upload_to="news_images/", blank=True, null=True)
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(default=now, editable=True)
+
 
     def __str__(self):
         return self.title
@@ -222,6 +224,7 @@ class Headline(models.Model):
 class Notification(models.Model):
     title = models.CharField(max_length=100)
     message = models.CharField(max_length=10000)
+    created_at = models.DateTimeField(default=now, editable=True)
 
     def __str__(self):
         return self.title

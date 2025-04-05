@@ -1,5 +1,5 @@
 from django import forms
-from portal.models import Application, Department, School, State, Lga, Student, Headline, Category, Notification
+from portal.models import Application, Department, School, State, Lga, Student, Headline, Category, Notification, Course
 
 
 
@@ -159,3 +159,22 @@ class DepartmentForm(forms.ModelForm):
                 "placeholder": "Select school"
             }),
         }
+
+class CourseForm(forms.ModelForm):
+    class Meta:
+        model = Course
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Set initial empty queryset for department if no school is selected
+        if 'school' in self.data:
+            try:
+                school_id = int(self.data.get('school'))
+                self.fields['department'].queryset = Department.objects.filter(school_id=school_id).order_by('name')
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['department'].queryset = self.instance.school.department_set.order_by('name')
+        else:
+            self.fields['department'].queryset = Department.objects.none()

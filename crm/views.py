@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from portal.models import Application, School, Department, Student, Year, Semester, Headline, Notification
+from portal.models import Application, School, Department, Student, Year, Semester, Headline, Notification, Course
 from django.contrib.auth.decorators import user_passes_test,login_required
-from .forms import ApplicationForm, StudentForm, CrmLoginForm, HeadlineForm, NotificationForm, SchoolForm, DepartmentForm
+from .forms import ApplicationForm, StudentForm, CrmLoginForm, HeadlineForm, NotificationForm, SchoolForm, DepartmentForm, CourseForm
 from django.db.models import Count
 from django.db.models.expressions import RawSQL
 from datetime import datetime
@@ -10,6 +10,7 @@ from django.db.models.functions import ExtractMonth
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -439,10 +440,47 @@ def add_department(request):
 
     return render(request, "crm/crm_add_department.html", {"form": form, "departments": departments})
 
-
 def paginate_departments(request):
     """ Helper function to paginate headlines """
     departments_list = Department.objects.all()
     paginator = Paginator(departments_list, 3)  # 3 headlines per page
     page_number = request.GET.get("page")
     return paginator.get_page(page_number)
+
+
+
+
+def course_view(request):
+    courses = Course.objects.all()
+
+    return render(request, 'crm/crm_course_list.html', {'courses':courses})
+
+def add_course(request):
+    if request.method == "POST":
+        form = CourseForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Course created successfully!")
+            return redirect("add_course")
+    else:
+        form = CourseForm()
+
+    # Paginate headlines
+    courses = paginate_courses(request)
+
+    return render(request, "crm/crm_add_course.html", {"form": form, "courses": courses})
+
+
+def paginate_courses(request):
+    """ Helper function to paginate headlines """
+    courses_list = Course.objects.all()
+    paginator = Paginator(courses_list, 3)  # 3 headlines per page
+    page_number = request.GET.get("page")
+    return paginator.get_page(page_number)
+
+
+
+def load_departments(request):
+    school_id = request.GET.get('school_id')
+    departments = Department.objects.filter(school_id=school_id).order_by('name')
+    return JsonResponse(list(departments.values('id', 'name')), safe=False)
