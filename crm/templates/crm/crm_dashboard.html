@@ -1,0 +1,772 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="University CRM Dashboard for application management">
+    <title>Dashboard - University CRM System</title>
+    
+    <!-- Preload critical assets -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" as="style">
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" as="style">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" as="font" crossorigin>
+    
+    <!-- CSS imports -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+    
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+    <!-- Sidebar -->
+    {% include 'crm/sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Page Header -->
+        <header class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h1 class="h2 mb-0">
+                    <i class="fas fa-tachometer-alt me-2"></i>Dashboard Overview
+                </h1>
+                <nav aria-label="breadcrumb" class="d-none d-md-block">
+                    <ol class="breadcrumb bg-transparent p-0">
+                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                    </ol>
+                </nav>
+            </div>
+            <div class="d-flex">
+                <div class="input-group search-box me-2">
+                    <span class="input-group-text bg-white"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" placeholder="Search applications..." aria-label="Search applications">
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dashboardFilterDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-filter me-1"></i> Filters
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dashboardFilterDropdown">
+                        <li><h6 class="dropdown-header">Filter By</h6></li>
+                        <li><a class="dropdown-item" href="#">This Month</a></li>
+                        <li><a class="dropdown-item" href="#">Last Quarter</a></li>
+                        <li><a class="dropdown-item" href="#">This Year</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Reset Filters</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- Key Metrics Section -->
+        <section aria-labelledby="keyMetricsHeading">
+            <h2 id="keyMetricsHeading" class="visually-hidden">Key Metrics</h2>
+            
+            <div class="row g-4">
+                <!-- Total Applications -->
+                <div class="col-xl-3 col-md-6">
+                    <a href="{% url 'applicant_list' %}" class="text-decoration-none"> <!-- Replace 'your_view_name' with the actual view name -->
+                        <div class="card stats-card text-white bg-gradient-primary">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h3 class="h5 card-title">Total Applications</h3>
+                                        <h2 class="mb-0">{{ total_applications }}</h2>
+                                        <small class="opacity-75">+12% from last month</small>
+                                    </div>
+                                    <i class="fas fa-file-alt fa-3x opacity-50"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="progress-bar bg-white" style="width: 72%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+
+                <!-- Schools -->
+                <div class="col-xl-3 col-md-6">
+                    <a href="{% url 'school_list' %}" class="text-decoration-none"> <!-- Replace 'school_list' with the actual view name -->
+                        <div class="card stats-card text-white bg-gradient-success">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h3 class="h5 card-title">Schools</h3>
+                                        <h2 class="mb-0">{{ total_schools }}</h2>
+                                        <small class="opacity-75">5 new this quarter</small>
+                                    </div>
+                                    <i class="fas fa-school fa-3x opacity-50"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="progress-bar bg-white" style="width: 65%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+
+                <!-- Departments -->
+                <div class="col-xl-3 col-md-6">
+                    <a href="{% url 'department_list' %}" class="text-decoration-none"> <!-- Replace 'department_list' with the actual view name -->
+                        <div class="card stats-card text-white bg-gradient-warning">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h3 class="h5 card-title">Departments</h3>
+                                        <h2 class="mb-0">{{ total_departments }}</h2>
+                                        <small class="opacity-75">Across all schools</small>
+                                    </div>
+                                    <i class="fas fa-book fa-3x opacity-50"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="progress-bar bg-white" style="width: 58%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                
+
+                <!-- Pending Applications -->
+                <div class="col-xl-3 col-md-6">
+                    <a href="{% url 'applicant_list'   %}" class="text-decoration-none"> <!-- Change the href to your desired URL -->
+                        <div class="card stats-card text-white bg-gradient-danger">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h3 class="h5 card-title">Pending Applications</h3>
+                                        <h2 class="mb-0">{{ pending_applications }}</h2>
+                                        <small class="opacity-75">Require attention</small>
+                                    </div>
+                                    <i class="fas fa-hourglass-half fa-3x opacity-50"></i>
+                                </div>
+                                <div class="mt-3">
+                                    <div class="progress" style="height: 4px;">
+                                        <div class="progress-bar bg-white" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Visualization Section -->
+        <section aria-labelledby="dataVisualizationHeading" class="mt-4">
+            <h2 id="dataVisualizationHeading" class="visually-hidden">Data Visualization</h2>
+            
+            <div class="row g-4">
+                <div class="col-xl-8">
+                    <!-- Applications Trend Chart -->
+                    <div class="chart-container">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-chart-line me-2"></i>Applications Trend
+                            </h3>
+                            <div class="dropdown chart-actions">
+                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="chartRangeDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Last 12 Months
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="chartRangeDropdown">
+                                    <li><a class="dropdown-item" href="#" data-range="6">Last 6 Months</a></li>
+                                    <li><a class="dropdown-item active" href="#" data-range="12">Last 12 Months</a></li>
+                                    <li><a class="dropdown-item" href="#" data-range="24">Last 2 Years</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <canvas id="applicationsChart" height="300" aria-label="Applications trend chart" role="img"></canvas>
+                    </div>
+                </div>
+                
+                <!-- Admitted Students Summary -->
+                <div class="col-xl-4">
+                    <div class="card h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h3 class="h5 mb-0">
+                                <i class="fas fa-user-graduate me-2"></i>Admitted Students
+                            </h3>
+                            <div class="dropdown">
+                                <button class="btn btn-sm btn-link text-white dropdown-toggle" type="button" id="admissionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="admissionDropdown">
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Export Data</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-filter me-2"></i>Filter</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-sync-alt me-2"></i>Refresh</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="text-center my-4">
+                                <div class="position-relative d-inline-block">
+                                    <svg width="120" height="120" viewBox="0 0 120 120" class="d-block mx-auto">
+                                        <circle cx="60" cy="60" r="54" fill="none" stroke="#e9ecef" stroke-width="8"></circle>
+                                        <circle cx="60" cy="60" r="54" fill="none" stroke="#4cc9f0" stroke-width="8" stroke-dasharray="339.292" stroke-dashoffset="118.752" stroke-linecap="round"></circle>
+                                    </svg>
+                                    <div class="position-absolute top-50 start-50 translate-middle">
+                                        <h2 class="mb-0">{{ admitted_students }}</h2>
+                                        <small class="text-muted">Admitted</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between small mb-2">
+                                    <span>Admission Rate</span>
+                                    <span>65%</span>
+                                </div>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 65%"></div>
+                                </div>
+                                <div class="d-flex justify-content-between small text-muted">
+                                    <span>Target: 70%</span>
+                                    <span>+8% from last year</span>
+                                </div>
+                                <hr>
+                                <div class="d-grid">
+                                    <a href="{% url 'student_list'    %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-list me-1"></i> View All Admitted
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Recent Applications Section -->
+        <section aria-labelledby="recentApplicationsHeading" class="mt-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h3 class="h5 mb-0">
+                        <i class="fas fa-file-alt me-2"></i>Recent Applications
+                    </h3>
+                    <div>
+                        <a href="{% url 'student_list' %}" class="btn btn-sm btn-light me-2">
+                            View All <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                        <div class="dropdown d-inline-block">
+                            <button class="btn btn-sm btn-outline-light dropdown-toggle" type="button" id="applicationsActions" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v"></i>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="applicationsActions">
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-download me-2"></i>Export</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-filter me-2"></i>Filter</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i>Settings</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover" aria-describedby="recentApplicationsHeading">
+                            <caption class="visually-hidden">List of recent applications with status and actions</caption>
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Application No</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Course</th>
+                                    <th scope="col">School</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Date</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for application in recent_applications %}
+                                <tr>
+                                    <td>{{ application.application_number }}</td>
+                                    <td>
+                                        <strong>{{ application.surname }} {{ application.first_name }}</strong>
+                                    </td>
+                                    <td class="text-ellipsis" style="max-width: 150px;" title="{{ application.department.name }}">
+                                        {{ application.department.name }}
+                                    </td>
+                                    <td class="text-ellipsis" style="max-width: 120px;" title="{{ application.school.name }}">
+                                        {{ application.school.name }}
+                                    </td>
+                                    <td>
+                                        {% if application.is_approved %}
+                                            <span class="badge badge-approved rounded-pill">
+                                                <i class="fas fa-check-circle me-1"></i> Approved
+                                            </span>
+                                        {% else %}
+                                            <span class="badge badge-pending rounded-pill">
+                                                <i class="fas fa-clock me-1"></i> Pending
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ application.submission_date|date:"Y-m-d" }}</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <a href="{% url 'view_applicant' application.id %}" class="btn btn-sm btn-primary me-2" aria-label="View {{ application.surname }}'s application">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" id="applicationActions{{ application.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <i class="fas fa-ellipsis-v"></i>
+                                                </button>
+                                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="applicationActions{{ application.id }}">
+                                                    <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Edit</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="fas fa-file-pdf me-2"></i>Generate PDF</a></li>
+                                                    <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Send Email</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <i class="fas fa-inbox fa-3x text-muted mb-2"></i>
+                                            <p class="mb-0">No recent applications found</p>
+                                            <a href="#" class="btn btn-sm btn-primary mt-2">
+                                                <i class="fas fa-plus me-1"></i> Add New Application
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                {% if recent_applications %}
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            Showing <strong>1-{{ recent_applications|length }}</strong> of <strong>{{ total_applications }}</strong> applications
+                        </div>
+                        <div>
+                            <nav aria-label="Applications pagination">
+                                <ul class="pagination pagination-sm mb-0">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                                    </li>
+                                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#">Next</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-auto py-3 bg-light">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6 text-center text-md-start">
+                    <span class="text-muted">&copy; 2025 University Portal | v2.1.0</span>
+                </div>
+                <div class="col-md-6 text-center text-md-end">
+                    <a href="#" class="text-decoration-none me-3">Privacy Policy</a>
+                    <a href="#" class="text-decoration-none me-3">Terms of Service</a>
+                    <a href="#" class="text-decoration-none">Help Center</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+
+    <!-- Dashboard Script -->
+     <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Initialize tooltips
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    
+        // Applications Chart
+        var ctx = document.getElementById('applicationsChart').getContext('2d');
+        
+        // Create gradient fill
+        var gradient = ctx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(67, 97, 238, 0.5)');
+        gradient.addColorStop(1, 'rgba(67, 97, 238, 0.05)');
+    
+        var applicationsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: {{ months|safe }},
+                datasets: [{
+                    label: 'Applications',
+                    data: {{ application_counts|safe }},
+                    backgroundColor: gradient,
+                    borderColor: 'rgba(67, 97, 238, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(255, 255, 255, 1)',
+                    pointBorderColor: 'rgba(67, 97, 238, 1)',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#fff',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        padding: 12,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return 'Applications: ' + context.parsed.y;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: 'var(--light-text)'
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            color: 'var(--light-text)'
+                        }
+                    }
+                },
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                }
+            }
+        });
+    
+        // Chart range selector
+        document.querySelectorAll('[data-range]').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const range = parseInt(this.getAttribute('data-range'));
+                
+                // Update dropdown text
+                document.getElementById('chartRangeDropdown').textContent = this.textContent;
+                
+                // Here you would typically make an AJAX call to get new data
+                // For demo, we'll just animate the chart
+                applicationsChart.data.labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'].slice(0, range);
+                applicationsChart.data.datasets[0].data = applicationsChart.data.datasets[0].data.slice(0, range);
+                applicationsChart.update();
+            });
+        });
+    
+        // WebSocket connection for real-time updates
+        var socketProtocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+        var socket = new WebSocket(socketProtocol + window.location.host + "/ws/applications/");
+    
+        socket.onmessage = function(event) {
+            var data = JSON.parse(event.data);
+            var newMonth = data.month;
+            var newCount = data.count;
+    
+            if (!applicationsChart.data.labels.includes(newMonth)) {
+                applicationsChart.data.labels.push(newMonth);
+                applicationsChart.data.datasets[0].data.push(newCount);
+                
+                // Limit to 12 months for better UX
+                if (applicationsChart.data.labels.length > 12) {
+                    applicationsChart.data.labels.shift();
+                    applicationsChart.data.datasets[0].data.shift();
+                }
+            } else {
+                var index = applicationsChart.data.labels.indexOf(newMonth);
+                applicationsChart.data.datasets[0].data[index] = newCount;
+            }
+            
+            applicationsChart.update();
+            
+            // Update total applications count
+            var totalApplicationsElement = document.querySelector('.stats-card:nth-child(1) h2');
+            if (totalApplicationsElement) {
+                var currentTotal = parseInt(totalApplicationsElement.textContent.trim());
+                totalApplicationsElement.textContent = (currentTotal + 1).toString();
+                
+                // Animate the element
+                totalApplicationsElement.classList.add('pulse');
+                setTimeout(function() {
+                    totalApplicationsElement.classList.remove('pulse');
+                }, 2000);
+            }
+        };
+    
+        socket.onclose = function(event) {
+            console.log("WebSocket connection closed");
+            // Automatically try to reconnect after 5 seconds
+            setTimeout(function() {
+                socket = new WebSocket(socketProtocol + window.location.host + "/ws/applications/");
+            }, 5000);
+        };
+    
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-mode');
+                localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+                
+                // Update chart colors
+                if (document.body.classList.contains('dark-mode')) {
+                    applicationsChart.options.scales.x.ticks.color = 'rgba(255, 255, 255, 0.7)';
+                    applicationsChart.options.scales.y.ticks.color = 'rgba(255, 255, 255, 0.7)';
+                    applicationsChart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+                } else {
+                    applicationsChart.options.scales.x.ticks.color = 'var(--light-text)';
+                    applicationsChart.options.scales.y.ticks.color = 'var(--light-text)';
+                    applicationsChart.options.scales.y.grid.color = 'rgba(0, 0, 0, 0.05)';
+                }
+                applicationsChart.update();
+            });
+            
+            // Check for saved dark mode preference
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+                
+                // Update chart colors for dark mode
+                applicationsChart.options.scales.x.ticks.color = 'rgba(255, 255, 255, 0.7)';
+                applicationsChart.options.scales.y.ticks.color = 'rgba(255, 255, 255, 0.7)';
+                applicationsChart.options.scales.y.grid.color = 'rgba(255, 255, 255, 0.1)';
+                applicationsChart.update();
+            }
+        }
+    
+        // Filter functionality
+        document.querySelectorAll('.dropdown-menu a').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Update active state
+                const parentMenu = this.closest('.dropdown-menu');
+                parentMenu.querySelectorAll('.dropdown-item').forEach(el => {
+                    el.classList.remove('active');
+                });
+                this.classList.add('active');
+                
+                // Update dropdown button text
+                const dropdownButton = parentMenu.previousElementSibling;
+                if (dropdownButton && dropdownButton.classList.contains('dropdown-toggle')) {
+                    dropdownButton.textContent = this.textContent;
+                }
+                
+                // Here you'd typically make an AJAX call to filter data
+                // For demo purposes, we'll just show a loading indicator
+                const section = this.closest('section');
+                if (section) {
+                    section.classList.add('loading');
+                    setTimeout(() => {
+                        section.classList.remove('loading');
+                    }, 1000);
+                }
+            });
+        });
+    
+        // Search functionality
+        const searchInput = document.querySelector('.search-box input');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase().trim();
+                
+                // Filter table rows based on search term
+                const tableRows = document.querySelectorAll('tbody tr');
+                tableRows.forEach(row => {
+                    const text = row.textContent.toLowerCase();
+                    if (text.includes(searchTerm) || searchTerm === '') {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                // Show no results message if needed
+                const noResultsRow = document.getElementById('noResultsRow');
+                const visibleRows = [...tableRows].filter(row => row.style.display !== 'none');
+                
+                if (visibleRows.length === 0 && searchTerm !== '') {
+                    if (!noResultsRow) {
+                        const tbody = document.querySelector('tbody');
+                        const newRow = document.createElement('tr');
+                        newRow.id = 'noResultsRow';
+                        newRow.innerHTML = `
+                            <td colspan="7" class="text-center py-4">
+                                <div class="d-flex flex-column align-items-center">
+                                    <i class="fas fa-search fa-3x text-muted mb-2"></i>
+                                    <p class="mb-0">No results found for "${searchTerm}"</p>
+                                    <button class="btn btn-sm btn-outline-secondary mt-2" id="clearSearch">
+                                        <i class="fas fa-times me-1"></i> Clear Search
+                                    </button>
+                                </div>
+                            </td>
+                        `;
+                        tbody.appendChild(newRow);
+                        
+                        document.getElementById('clearSearch').addEventListener('click', function() {
+                            searchInput.value = '';
+                            searchInput.dispatchEvent(new Event('input'));
+                        });
+                    }
+                } else if (noResultsRow) {
+                    noResultsRow.remove();
+                }
+            });
+        }
+    
+        // Add loading state for async actions
+        document.querySelectorAll('.btn[data-loading]').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const originalText = this.innerHTML;
+                this.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span> Loading...';
+                this.disabled = true;
+                
+                // Simulate async operation
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                    
+                    // Show success message
+                    const toast = document.createElement('div');
+                    toast.className = 'toast position-fixed bottom-0 end-0 m-3';
+                    toast.setAttribute('role', 'alert');
+                    toast.setAttribute('aria-live', 'assertive');
+                    toast.setAttribute('aria-atomic', 'true');
+                    toast.innerHTML = `
+                        <div class="toast-header bg-success text-white">
+                            <i class="fas fa-check-circle me-2"></i>
+                            <strong class="me-auto">Success</strong>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body">
+                            Operation completed successfully!
+                        </div>
+                    `;
+                    document.body.appendChild(toast);
+                    
+                    const bsToast = new bootstrap.Toast(toast);
+                    bsToast.show();
+                    
+                    // Remove toast after it's hidden
+                    toast.addEventListener('hidden.bs.toast', function() {
+                        this.remove();
+                    });
+                }, 1500);
+            });
+        });
+    
+        // Performance metrics refresh
+        const refreshPerfMetrics = () => {
+            const perfCards = document.querySelectorAll('.stats-card');
+            perfCards.forEach(card => {
+                // Simulate data update with slight random variation
+                const numberElement = card.querySelector('h2');
+                if (numberElement) {
+                    const currentValue = parseInt(numberElement.textContent.trim());
+                    const newValue = currentValue + Math.floor(Math.random() * 5) - 2;
+                    if (newValue > 0) {
+                        numberElement.textContent = newValue.toString();
+                    }
+                }
+                
+                // Update progress bars
+                const progressBar = card.querySelector('.progress-bar');
+                if (progressBar) {
+                    const currentWidth = parseInt(progressBar.style.width);
+                    const newWidth = Math.min(100, Math.max(1, currentWidth + Math.floor(Math.random() * 5) - 2));
+                    progressBar.style.width = newWidth + '%';
+                }
+            });
+        };
+    
+        // Refresh metrics every 60 seconds
+        setInterval(refreshPerfMetrics, 60000);
+    
+        // Initialize any lazy-loaded content
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);
+                    
+                    // If the element has a data-chart attribute, initialize its chart
+                    if (entry.target.hasAttribute('data-chart')) {
+                        // Chart initialization would go here
+                    }
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+    
+        document.querySelectorAll('.lazy-load').forEach(item => {
+            observer.observe(item);
+        });
+    
+        // Init any date pickers
+        document.querySelectorAll('[data-datepicker]').forEach(elem => {
+            // Datepicker initialization would go here if you have a datepicker library
+        });
+    
+        // Check for system notifications permission
+        if ('Notification' in window) {
+            if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+                document.querySelector('.enable-notifications')?.addEventListener('click', function() {
+                    Notification.requestPermission();
+                });
+            }
+        }
+    });
+
+</script>    

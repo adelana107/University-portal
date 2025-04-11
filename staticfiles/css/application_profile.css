@@ -1,0 +1,184 @@
+:root {
+    --primary-blue: #0056b3;
+    --dark-blue: #003366;
+    --gold-accent: #ffc107;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #f8f9fa;
+}
+
+.header-title {
+    color: var(--dark-blue);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.header-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: var(--gold-accent);
+    border-radius: 2px;
+}
+
+.dark-mode .header-title {
+    color: #f8f9fa;
+}
+
+.btn-custom {
+    background-color: var(--primary-blue);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-custom:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.biodata-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .biodata-container {
+    background: #2d2d2d;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+}
+
+.profile-img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 5px solid var(--gold-accent);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.bio-label {
+    font-weight: 600;
+    color: var(--dark-blue);
+    min-width: 120px;
+    display: inline-block;
+}
+
+.dark-mode .bio-label {
+    color: var(--gold-accent);
+}
+
+.bio-value {
+    color: #555;
+}
+
+.dark-mode .bio-value {
+    color: #ddd;
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 500;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.approved {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+}
+
+.pending {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+.dark-mode .approved {
+    background-color: rgba(40, 167, 69, 0.3);
+}
+
+.dark-mode .pending {
+    background-color: rgba(255, 193, 7, 0.3);
+}
+
+hr {
+    border-top: 2px solid var(--gold-accent);
+    opacity: 0.5;
+    margin: 1.5rem 0;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+    
+    body {
+        background: white !important;
+        color: black !important;
+    }
+    
+    .biodata-container {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        page-break-inside: avoid;
+    }
+    
+    .profile-img {
+        border-color: #ccc !important;
+    }
+}
+
+.action-buttons {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.login-portal-btn {
+    background-color: var(--gold-accent);
+    color: var(--dark-gray);
+    font-weight: 600;
+    padding: 10px 25px;
+    border-radius: 30px;
+    transition: all 0.3s;
+}
+
+.login-portal-btn:hover {
+    background-color: #e0a800;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.university-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.university-logo {
+    height: 80px;
+    margin-bottom: 1rem;
+}

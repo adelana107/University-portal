@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Grades | Academic System</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            /* Enhanced Color Palette */
+            --primary-900: #1a3a8f;
+            --primary-700: #1d4ed8;
+            --primary-600: #3b82f6;
+            --primary-500: #5b9bf8;
+            --primary-400: #93c5fd;
+            --primary-100: #e0f2fe;
+            --primary-50: #f0f9ff;
+            
+            --secondary-700: #4338ca;
+            --secondary-600: #4f46e5;
+            --secondary-500: #6366f1;
+            --secondary-300: #a5b4fc;
+            --secondary-100: #e0e7ff;
+            
+            --accent-600: #db2777;
+            --accent-500: #ec4899;
+            --accent-300: #f9a8d4;
+            --accent-100: #fce7f3;
+            
+            --success-700: #15803d;
+            --success-600: #16a34a;
+            --success-500: #22c55e;
+            --success-300: #86efac;
+            --success-100: #dcfce7;
+            
+            --warning-700: #c2410c;
+            --warning-600: #ea580c;
+            --warning-500: #f97316;
+            --warning-300: #fdba74;
+            --warning-100: #ffedd5;
+            
+            --danger-700: #b91c1c;
+            --danger-600: #dc2626;
+            --danger-500: #ef4444;
+            --danger-300: #fca5a5;
+            --danger-100: #fee2e2;
+            
+            --info-700: #0e7490;
+            --info-600: #0891b2;
+            --info-500: #06b6d4;
+            --info-300: #67e8f9;
+            --info-100: #cffafe;
+            
+            /* Neutral Colors */
+            --gray-900: #111827;
+            --gray-800: #1f2937;
+            --gray-700: #374151;
+            --gray-600: #4b5563;
+            --gray-500: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-300: #d1d5db;
+            --gray-200: #e5e7eb;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            
+            /* Elevation */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            
+            /* Typography */
+            --font-size-base: 0.9375rem; /* 15px */
+            --font-size-lg: 1.0625rem;  /* 17px */
+            --font-size-xl: 1.25rem;    /* 20px */
+            --font-size-2xl: 1.5rem;    /* 24px */
+            --font-size-3xl: 1.875rem;  /* 30px */
+            
+            --line-height-base: 1.6;
+            --line-height-heading: 1.3;
+            
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-full: 9999px;
+            
+            /* Transition */
+            --transition-fast: 0.15s ease;
+            --transition-normal: 0.3s ease;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-base);
+            color: var(--gray-800);
+            background-color: var(--gray-50);
+        }
+        
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            line-height: var(--line-height-heading);
+            font-weight: 600;
+            margin-bottom: var(--space-md);
+            color: var(--gray-900);
+        }
+        
+        h1 { 
+            font-size: var(--font-size-3xl);
+            color: var(--primary-900);
+        }
+        
+        h2 { font-size: var(--font-size-2xl); }
+        h3 { font-size: var(--font-size-xl); }
+        h4 { font-size: var(--font-size-lg); }
+        
+        /* Layout */
+        .main-content {
+            margin-left: 250px;
+            padding: var(--space-xl);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--gray-50);
+            transition: var(--transition-normal);
+        }
+        
+        /* Header */
+        .page-header {
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: var(--space-md);
+            margin-bottom: var(--space-lg);
+        }
+        
+        .breadcrumb {
+            background-color: transparent;
+            padding: 0;
+            font-size: 0.875rem;
+        }
+        
+        .breadcrumb-item a {
+            color: var(--primary-600);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+        
+        .breadcrumb-item a:hover {
+            color: var(--primary-900);
+        }
+        
+        /* Action Bar */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            gap: var(--space-md);
+            flex-wrap: wrap;
+        }
+        
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+            max-width: 400px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: var(--space-sm);
+        }
+        
+        /* Filter Section */
+        .filter-section {
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: var(--space-md);
+            margin-bottom: var(--space-lg);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: var(--space-md);
+        }
+        
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .filter-group label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: var(--space-sm);
+            color: var(--gray-700);
+            display: block;
+        }
+        
+        /* Form Elements */
+        .form-control, .form-select {
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            padding: 0.625rem 1rem;
+            font-size: var(--font-size-base);
+            transition: all var(--transition-fast);
+        }
+        
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+            outline: none;
+        }
+        
+        .input-group-text {
+            background-color: white;
+            border-color: var(--gray-300);
+            color: var(--gray-500);
+        }
+        
+        /* Buttons */
+        .btn {
+            font-weight: 500;
+            padding: 0.625rem 1.25rem;
+            border-radius: var(--radius-md);
+            transition: all var(--transition-fast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-xs);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-600);
+            border-color: var(--primary-600);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-700);
+            border-color: var(--primary-700);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-outline-secondary {
+            color: var(--gray-700);
+            border-color: var(--gray-300);
+            background-color: white;
+        }
+        
+        .btn-outline-secondary:hover {
+            background-color: var(--gray-100);
+            border-color: var(--gray-400);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .btn-sm {
+            padding: 0.375rem 0.75rem;
+            font-size: 0.8125rem;
+        }
+        
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            padding: var(--space-lg);
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+        
+        /* Cards */
+        .group-card {
+            border: none;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--space-md);
+            background-color: white;
+            transition: all var(--transition-fast);
+            overflow: hidden;
+        }
+        
+        .group-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+        
+        .group-header {
+            padding: var(--space-md) var(--space-lg);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color var(--transition-fast);
+            background-color: white;
+        }
+        
+        .group-header:hover {
+            background-color: var(--gray-50);
+        }
+        
+        .group-header h3 {
+            margin: 0;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            font-size: var(--font-size-lg);
+        }
+        
+        .group-header .badge {
+            font-weight: 500;
+            padding: 0.35em 0.75em;
+            font-size: 0.8125rem;
+            border-radius: var(--radius-full);
+        }
+        
+        /* Badges */
+        .badge.bg-primary {
+            background-color: var(--primary-600) !important;
+            color: white;
+        }
+        
+        .badge.bg-secondary {
+            background-color: var(--secondary-600) !important;
+            color: white;
+        }
+        
+        .badge.bg-gray-700 {
+            background-color: var(--gray-700) !important;
+            color: white;
+        }
+        
+        .badge.bg-gray-500 {
+            background-color: var(--gray-500) !important;
+            color: white;
+        }
+        
+        /* Nested Groups */
+        .sub-group {
+            margin-left: var(--space-lg);
+            border-left: 2px solid var(--gray-200);
+            padding-left: var(--space-md);
+        }
+        
+        /* Tables */
+        .grades-table {
+            width: 100%;
+            margin-bottom: 0;
+            font-size: var(--font-size-base);
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .grades-table th {
+            background-color: var(--primary-50);
+            font-weight: 600;
+            font-size: 0.8125rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: var(--space-md);
+            color: var(--primary-900);
+            position: sticky;
+            top: 0;
+        }
+        
+        .grades-table td {
+            padding: var(--space-md);
+            vertical-align: middle;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .grades-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .grades-table tr:hover td {
+            background-color: var(--gray-50);
+        }
+        
+        /* Grade Badges */
+        .grade-badge {
+            font-weight: 600;
+            padding: 0.35em 0.75em;
+            border-radius: var(--radius-full);
+            min-width: 2.5em;
+            text-align: center;
+            display: inline-block;
+            font-size: 0.875rem;
+            border: 1px solid transparent;
+            transition: all var(--transition-fast);
+        }
+        
+        .grade-A {
+            background-color: var(--success-100);
+            color: var(--success-700);
+            border-color: var(--success-300);
+        }
+        
+        .grade-B {
+            background-color: var(--info-100);
+            color: var(--info-700);
+            border-color: var(--info-300);
+        }
+        
+        .grade-C {
+            background-color: var(--warning-100);
+            color: var(--warning-700);
+            border-color: var(--warning-300);
+        }
+        
+        .grade-D {
+            background-color: var(--secondary-100);
+            color: var(--secondary-700);
+            border-color: var(--secondary-300);
+        }
+        
+        .grade-F {
+            background-color: var(--danger-100);
+            color: var(--danger-700);
+            border-color: var(--danger-300);
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: var(--space-sm);
+        }
+        
+        .btn-outline-primary {
+            color: var(--primary-600);
+            border-color: var(--primary-300);
+            background-color: var(--primary-50);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--primary-100);
+            color: var(--primary-700);
+            border-color: var(--primary-400);
+        }
+        
+        .btn-outline-danger {
+            color: var(--danger-600);
+            border-color: var(--danger-300);
+            background-color: var(--danger-50);
+        }
+        
+        .btn-outline-danger:hover {
+            background-color: var(--danger-100);
+            color: var(--danger-700);
+            border-color: var(--danger-400);
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-xl);
+            color: var(--gray-500);
+            background-color: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .empty-state i {
+            font-size: 3.5rem;
+            margin-bottom: var(--space-lg);
+            color: var(--gray-300);
+        }
+        
+        .empty-state h4 {
+            font-size: var(--font-size-2xl);
+            margin-bottom: var(--space-sm);
+            color: var(--gray-800);
+        }
+        
+        .empty-state p {
+            font-size: var(--font-size-lg);
+            margin-bottom: var(--space-lg);
+            color: var(--gray-600);
+        }
+        
+        /* Icons */
+        .fa-university {
+            color: var(--primary-600) !important;
+        }
+        
+        .fa-building {
+            color: var(--secondary-600) !important;
+        }
+        
+        .fa-user-graduate {
+            color: var(--accent-600) !important;
+        }
+        
+        .fa-calendar-alt {
+            color: var(--info-600) !important;
+        }
+        
+        .fa-graduation-cap {
+            color: var(--primary-600) !important;
+        }
+        
+        .fa-edit {
+            color: var(--primary-600);
+        }
+        
+        .fa-trash-alt {
+            color: var(--danger-600);
+        }
+        
+        /* Chevron Animation */
+        .chevron-icon {
+            transition: transform var(--transition-fast);
+            color: var(--primary-600);
+            font-size: var(--font-size-lg);
+        }
+        
+        .collapsed .chevron-icon {
+            transform: rotate(-90deg);
+        }
+        
+        /* Loading Indicator */
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            border-radius: var(--radius-lg);
+        }
+        
+        .spinner {
+            width: 2.5rem;
+            height: 2.5rem;
+            border: 0.25rem solid var(--primary-100);
+            border-top-color: var(--primary-600);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .main-content {
+                margin-left: 0;
+                padding: var(--space-lg);
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            .action-buttons {
+                justify-content: flex-end;
+            }
+            
+            .sub-group {
+                margin-left: var(--space-md);
+                padding-left: var(--space-sm);
+            }
+        }
+        
+        /* Print Styles */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .main-content, .main-content * {
+                visibility: visible;
+            }
+            .main-content {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            .filter-section, .action-buttons, .no-print {
+                display: none !important;
+            }
+            .group-header {
+                page-break-inside: avoid;
+            }
+            .group-card {
+                page-break-inside: avoid;
+                box-shadow: none !important;
+                border: 1px solid #ddd !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% include 'crm/sidebar.html' %}
+    
+    <main class="main-content">
+        <!-- Page Header -->
+        <header class="page-header">
+            <div>
+                <h1>
+                    <i class="fas fa-graduation-cap me-2"></i>Student Grades
+                </h1>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Grades Overview</li>
+                    </ol>
+                </nav>
+            </div>
+        </header>
+        
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="search-box">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search grades...">
+                    <button class="btn btn-outline-secondary" type="button" id="clearSearch">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="action-buttons">
+                <button onclick="window.print()" class="btn btn-outline-secondary">
+                    <i class="fas fa-print me-1"></i>Print
+                </button>
+                <a href="{% url 'add_grade' %}" class="btn btn-primary">
+                    <i class="fas fa-plus-circle me-1"></i>Add Grade
+                </a>
+            </div>
+        </div>
+        
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label for="schoolFilter"><i class="fas fa-university me-1"></i>School</label>
+                    <select class="form-select" id="schoolFilter">
+                        <option value="">All Schools</option>
+                        {% for school in schools %}
+                            <option value="{{ school.id }}">{{ school.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="semesterFilter"><i class="fas fa-calendar-alt me-1"></i>Semester</label>
+                    <select class="form-select" id="semesterFilter">
+                        <option value="">All Semesters</option>
+                        {% for semester in semesters %}
+                            <option value="{{ semester.id }}">{{ semester.name }} - Year {{ semester.year.number }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="gradeFilter"><i class="fas fa-star me-1"></i>Grade</label>
+                    <select class="form-select" id="gradeFilter">
+                        <option value="">All Grades</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="F">F</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Area -->
+        <div class="content-area position-relative">
+            <!-- Loading Overlay -->
+            <div class="loading-overlay d-none" id="loadingOverlay">
+                <div class="spinner"></div>
+            </div>
+            
+            <!-- Hierarchical Grade Groups -->
+            <div id="gradesAccordion">
+                {% regroup grades by student.department.school as school_list %}
+                
+                {% if school_list %}
+                    {% for school in school_list %}
+                    <!-- School Level -->
+                    <div class="group-card mb-3 school-group" data-school-id="{{ school.grouper.id|default:'none' }}">
+                        <div class="group-header collapsed" data-bs-toggle="collapse" data-bs-target="#school-{{ school.grouper.id|default:'none' }}" aria-expanded="false">
+                            <h3>
+                                <i class="fas fa-university"></i>
+                                {{ school.grouper.name|default:"No School" }}
+                                <span class="badge bg-primary ms-2">{{ school.list|length }} departments</span>
+                            </h3>
+                            <i class="fas fa-chevron-down chevron-icon"></i>
+                        </div>
+                        
+                        <div id="school-{{ school.grouper.id|default:'none' }}" class="collapse" data-bs-parent="#gradesAccordion">
+                            <div class="p-4">
+                                {% regroup school.list by student.department as department_list %}
+                                {% for department in department_list %}
+                                <!-- Department Level -->
+                                <div class="group-card mb-3 sub-group department-group" data-department-id="{{ department.grouper.id|default:'none' }}">
+                                    <div class="group-header collapsed" data-bs-toggle="collapse" data-bs-target="#dept-{{ department.grouper.id|default:'none' }}" aria-expanded="false">
+                                        <h3>
+                                            <i class="fas fa-building"></i>
+                                            {{ department.grouper.name|default:"No Department" }}
+                                            <span class="badge bg-secondary ms-2">{{ department.list|length }} students</span>
+                                        </h3>
+                                        <i class="fas fa-chevron-down chevron-icon"></i>
+                                    </div>
+                                    
+                                    <div id="dept-{{ department.grouper.id|default:'none' }}" class="collapse">
+                                        <div class="p-4">
+                                            {% regroup department.list by student as student_list %}
+                                            {% for student in student_list %}
+                                            <!-- Student Level -->
+                                            <div class="group-card mb-3 sub-group student-group" data-student-id="{{ student.grouper.id }}">
+                                                <div class="group-header collapsed" data-bs-toggle="collapse" data-bs-target="#student-{{ student.grouper.id }}" aria-expanded="false">
+                                                    <h3>
+                                                        <i class="fas fa-user-graduate"></i>
+                                                        {{ student.grouper.surname }}, {{ student.grouper.first_name }}
+                                                        <span class="badge bg-gray-700 ms-2">{{ student.grouper.application_number }}</span>
+                                                    </h3>
+                                                    <i class="fas fa-chevron-down chevron-icon"></i>
+                                                </div>
+                                                
+                                                <div id="student-{{ student.grouper.id }}" class="collapse">
+                                                    <div class="p-4">
+                                                        {% regroup student.list by semester as semester_list %}
+                                                        {% for semester in semester_list %}
+                                                        <!-- Semester Level -->
+                                                        <div class="group-card mb-3 sub-group semester-group" data-semester-id="{{ semester.grouper.id }}">
+                                                            <div class="group-header" data-bs-toggle="collapse" data-bs-target="#semester-{{ semester.grouper.id }}" aria-expanded="true">
+                                                                <h3>
+                                                                    <i class="fas fa-calendar-alt"></i>
+                                                                    {{ semester.grouper.name }} semester
+                                                                    <span class="badge bg-gray-500 ms-2">{{ semester.list|length }} courses</span>
+                                                                </h3>
+                                                                <i class="fas fa-chevron-down chevron-icon"></i>
+                                                            </div>
+                                                            
+                                                            <div id="semester-{{ semester.grouper.id }}" class="collapse show">
+                                                                <div class="table-responsive">
+                                                                    <table class="table grades-table">
+                                                                        <thead>
+                                                                            <tr>
+                                                                                <th>Course Code</th>
+                                                                                <th>Course Title</th>
+                                                                                <th>Grade</th>
+                                                                                <th class="no-print">Actions</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            {% for grade in semester.list %}
+                                                                            <tr>
+                                                                                <td class="fw-semibold">{{ grade.course.code }}</td>
+                                                                                <td>{{ grade.course.title }}</td>
+                                                                                <td>
+                                                                                    <span class="grade-badge grade-{{ grade.grade|first }}">
+                                                                                        {{ grade.grade }}
+                                                                                    </span>
+                                                                                </td>
+                                                                                <td class="no-print">
+                                                                                    <div class="action-buttons">
+                                                                                        <a href="{% url 'edit_grade' grade.id %}" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                                                            <i class="fas fa-edit"></i>
+                                                                                        </a>
+                                                                                        <a href="#" class="btn btn-sm btn-outline-danger delete-grade" title="Delete" data-grade-id="{{ grade.id }}">
+                                                                                            <i class="fas fa-trash-alt"></i>
+                                                                                        </a>
+                                                                                    </div>
+                                                                                </td>
+                                                                            </tr>
+                                                                            {% endfor %}
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        {% endfor %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-graduation-cap"></i>
+                        <h4>No Grade Records Found</h4>
+                        <p>There are currently no grades recorded in the system.</p>
+                        <a href="{% url 'add_grade' %}" class="btn btn-primary mt-3">
+                            <i class="fas fa-plus-circle me-2"></i>Add New Grade
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </main>
+    
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Initialize all collapses as closed except the first level
+            $('.group-header').on('click', function() {
+                $(this).find('.chevron-icon').toggleClass('fa-chevron-down fa-chevron-up');
+            });
+            
+            // Show loading indicator
+            function showLoading() {
+                $('#loadingOverlay').removeClass('d-none');
+            }
+            
+            // Hide loading indicator
+            function hideLoading() {
+                $('#loadingOverlay').addClass('d-none');
+            }
+            
+            // Clear search
+            $('#clearSearch').on('click', function() {
+                $('#searchInput').val('').trigger('keyup');
+            });
+            
+            // Search functionality
+            $('#searchInput').on('keyup', function() {
+                const searchText = $(this).val().toLowerCase();
+                
+                if (searchText.length > 0) {
+                    showLoading();
+                    
+                    setTimeout(() => {
+                        $('.group-card').hide();
+                        
+                        // Show matching elements
+                        $('.group-card').each(function() {
+                            const cardText = $(this).text().toLowerCase();
+                            if (cardText.includes(searchText)) {
+                                $(this).show();
+                                // Show all parent elements
+                                $(this).parentsUntil('#gradesAccordion', '.group-card').show();
+                            }
+                        });
+                        
+                        hideLoading();
+                    }, 300);
+                } else {
+                    showLoading();
+                    
+                    setTimeout(() => {
+                        $('.group-card').show();
+                        hideLoading();
+                    }, 300);
+                }
+            });
+            
+            // School filter functionality
+            $('#schoolFilter').on('change', function() {
+                const schoolId = $(this).val();
+                showLoading();
+                
+                setTimeout(() => {
+                    if (schoolId) {
+                        // Hide all school groups first
+                        $('.school-group').hide();
+                        
+                        // Show only the selected school
+                        $(`.school-group[data-school-id="${schoolId}"]`).show();
+                        
+                        // Reset other filters when school changes
+                        $('#semesterFilter').val('');
+                        $('#gradeFilter').val('');
+                    } else {
+                        // Show all if "All Schools" is selected
+                        $('.school-group').show();
+                    }
+                    
+                    hideLoading();
+                }, 300);
+            });
+            
+            // Semester filter functionality
+            $('#semesterFilter').on('change', function() {
+                const semesterId = $(this).val();
+                showLoading();
+                
+                setTimeout(() => {
+                    if (semesterId) {
+                        // Hide all semester sections first
+                        $('.semester-group').hide();
+                        
+                        // Show only the selected semester
+                        $(`.semester-group[data-semester-id="${semesterId}"]`).show();
+                        
+                        // Show all parent elements
+                        $(`.semester-group[data-semester-id="${semesterId}"]`)
+                            .parentsUntil('#gradesAccordion', '.group-card').show();
+                    } else {
+                        // Show all if "All Semesters" is selected
+                        $('.semester-group').show();
+                        $('.group-card').show();
+                    }
+                    
+                    hideLoading();
+                }, 300);
+            });
+            
+            // Grade filter functionality
+            $('#gradeFilter').on('change', function() {
+                const gradeValue = $(this).val();
+                showLoading();
+                
+                setTimeout(() => {
+                    if (gradeValue) {
+                        // Hide all grade rows first
+                        $('.grades-table tbody tr').hide();
+                        
+                        // Show only rows with matching grades
+                        $(`.grade-badge:contains(${gradeValue})`).closest('tr').show();
+                        
+                        // Show all parent elements
+                        $(`.grade-badge:contains(${gradeValue})`)
+                            .parentsUntil('#gradesAccordion', '.group-card').show();
+                    } else {
+                        // Show all if "All Grades" is selected
+                        $('.grades-table tbody tr').show();
+                        $('.group-card').show();
+                    }
+                    
+                    hideLoading();
+                }, 300);
+            });
+            
+            // Confirm before deleting
+            $('.delete-grade').on('click', function(e) {
+                e.preventDefault();
+                const gradeId = $(this).data('grade-id');
+                
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Perform deletion via AJAX
+                        $.ajax({
+                            url: `/grades/delete/${gradeId}/`,
+                            method: 'POST',
+                            data: {
+                                csrfmiddlewaretoken: '{{ csrf_token }}'
+                            },
+                            success: function(response) {
+                                Swal.fire(
+                                    'Deleted!',
+                                    'The grade record has been deleted.',
+                                    'success'
+                                ).then(() => {
+                                    location.reload();
+                                });
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'Error!',
+                                    'There was a problem deleting the record.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+            
+            // Initialize tooltips
+            $('[title]').tooltip({
+                trigger: 'hover',
+                placement: 'top'
+            });
+        });
+    </script>
+</body>
+</html>

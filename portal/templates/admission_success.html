@@ -1,0 +1,115 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>🎉 Admission Successful! | Oceanview University</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="{% static 'css/application_success.css' %}">
+
+    
+</head>
+<body>
+
+    <!-- Confetti elements will be added here by JavaScript -->
+    
+    <div class="container">
+        <div class="card animate__animated animate__fadeInUp">
+            <img src="{% static 'images/university-logo.png' %}" alt="Oceanview University Logo" class="university-logo" onerror="this.src='https://via.placeholder.com/60x60?text=OU'">
+            
+            <div class="success-icon animate__animated animate__bounceIn">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            
+            <h2 class="header">Congratulations, <span class="highlight">{{ first_name }} {{ surname }}</span>!</h2>
+            
+            <p class="lead">
+                Your application to <strong>Oceanview University</strong> has been successful! 🎓
+            </p>
+            
+            <p>
+                We are thrilled to welcome you to our academic community starting 
+                <strong>{{ admission_date|date:"F Y" }}</strong>.
+            </p>
+            
+            <div class="next-steps animate__animated animate__fadeIn">
+                <h5><i class="fas fa-list-check me-2"></i>Next Steps:</h5>
+                <ul>
+                    <li>Complete your registration in the student portal</li>
+                    <li>Upload required documents</li>
+                    <li>Pay your acceptance fee</li>
+                    <li>Attend orientation (details will be emailed)</li>
+                </ul>
+            </div>
+            
+            <a href="{% url 'student_portal' %}" class="btn btn-primary animate__animated animate__pulse animate__infinite">
+                <i class="fas fa-arrow-right me-2"></i> Go to Student Portal
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#0056b3', '#28a745', '#ffc107', '#dc3545', '#17a2b8'];
+            
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = -10 + 'px';
+                confetti.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+                document.body.appendChild(confetti);
+                
+                let duration = Math.random() * 3 + 2;
+                
+                // Animate confetti
+                confetti.animate([
+                    { top: -10 + 'px', opacity: 1 },
+                    { top: window.innerHeight + 'px', opacity: 0 }
+                ], {
+                    duration: duration * 1000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.9, 1)',
+                    delay: Math.random() * 5 * 1000
+                });
+                
+                // Remove confetti after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, duration * 1000);
+            }
+        }
+        
+        // Create new confetti every 5 seconds
+        createConfetti();
+        setInterval(createConfetti, 5000);
+        
+        // Play celebration sound (optional)
+        function playCelebrationSound() {
+            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+            audio.volume = 0.3;
+            audio.play().catch(e => console.log('Audio play prevented:', e));
+        }
+        
+        // Play sound when page loads
+        document.addEventListener('DOMContentLoaded', playCelebrationSound);
+    </script>
+
+</body>
+</html>

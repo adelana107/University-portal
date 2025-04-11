@@ -1,0 +1,141 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/portal_sidebar.css' %}">
+
+
+
+<div class="sidebar">
+    <!-- Profile Section -->
+    <div class="profile-section">
+        <div class="profile-img-container">
+            <img src="{% if student.profile_picture %}{{ student.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                 alt="Profile Picture" 
+                 class="profile-img"
+                 onclick="document.getElementById('profileUpload').click()"
+                 onerror="this.src='{% static 'images/default-profile.png' %}'">
+            <div class="profile-edit" onclick="document.getElementById('profileUpload').click()">
+                <i class="fas fa-camera"></i>
+            </div>
+            <input type="file" id="profileUpload" accept="image/*" style="display: none;">
+        </div>
+        
+        <h3 class="student-id">{{ student.application_number }}</h3>
+        <h4 class="student-name">{{ student.surname }} {{ student.first_name }}</h4>
+    </div>
+
+    <!-- Student Info Card -->
+    <div class="info-card">
+        <div class="info-item">
+            <i class="fas fa-calendar-alt"></i>
+            <span class="info-label">Academic Session:</span>
+            <span class="info-value">{{ student.academic_session.name }}</span>
+        </div>
+        
+        <div class="info-item">
+            <i class="fas fa-graduation-cap"></i>
+            <span class="info-label">Current Level:</span>
+            <span class="info-value">{{ student.year }}</span>
+        </div>
+        
+        <div class="info-item">
+            <i class="fas fa-book"></i>
+            <span class="info-label">Current Semester:</span>
+            <span class="info-value">{{ student.semester }}</span>
+        </div>
+        
+        <div class="info-item">
+            <i class="fas fa-user-check"></i>
+            <span class="info-label">Student Status:</span>
+            <span class="info-value">
+                <span class="status-badge {% if student.status == 'Active' %}status-active{% elif student.status == 'Pending' %}status-pending{% else %}status-inactive{% endif %}">
+                    {{ student.status }}
+                </span>
+            </span>
+        </div>
+        
+        <div class="info-item">
+            <i class="fas fa-money-bill-wave"></i>
+            <span class="info-label">Fees Status:</span>
+            <span class="info-value">
+                <span class="status-badge {% if student.fees_status == 'Paid' %}status-active{% elif student.fees_status == 'Partial' %}status-pending{% else %}status-inactive{% endif %}">
+                    {{ student.fees_status }}
+                </span>
+            </span>
+        </div>
+        
+        <div class="info-item">
+            <i class="fas fa-home"></i>
+            <span class="info-label">Hostel Status:</span>
+            <span class="info-value">
+                <span class="status-badge {% if student.hostel_status == 'Assigned' %}status-active{% elif student.hostel_status == 'Pending' %}status-pending{% else %}status-inactive{% endif %}">
+                    {{ student.hostel_status }}
+                </span>
+            </span>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions">
+        <h5 class="quick-actions-title">
+            <i class="fas fa-bolt"></i> Quick Actions
+        </h5>
+        
+        <button class="action-btn" onclick="window.location.href='{% url 'course_registration' %}'">
+            <i class="fas fa-book"></i> Register Courses
+        </button>
+        
+        <button class="action-btn" onclick="window.location.href='#'">
+            <i class="fas fa-credit-card"></i> Make Payment
+        </button>
+        
+        <button class="action-btn" onclick="window.location.href='#'">
+            <i class="fas fa-calendar-alt"></i> View Timetable
+        </button>
+    </div>
+</div>
+
+<!-- Font Awesome -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Profile picture fallback
+        $('.profile-img').on('error', function() {
+            $(this).attr('src', '{% static 'images/default-profile.png' %}');
+        });
+
+        // Profile picture upload
+        $('#profileUpload').change(function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('.profile-img').attr('src', e.target.result);
+                }
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        // Update status badges on dark mode change
+        function updateStatusBadges() {
+            const isDarkMode = $('body').hasClass('dark-mode');
+            $('.status-badge').each(function() {
+                const opacity = isDarkMode ? '0.3' : '0.2';
+                if ($(this).hasClass('status-active')) {
+                    $(this).css('background-color', `rgba(40, 167, 69, ${opacity})`);
+                } else if ($(this).hasClass('status-pending')) {
+                    $(this).css('background-color', `rgba(255, 193, 7, ${opacity})`);
+                } else {
+                    $(this).css('background-color', `rgba(220, 53, 69, ${opacity})`);
+                }
+            });
+        }
+
+        // Initial update
+        updateStatusBadges();
+        
+        // Listen for dark mode changes
+        $(document).on('darkModeChanged', updateStatusBadges);
+    });
+</script>

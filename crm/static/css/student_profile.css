@@ -1,0 +1,86 @@
+:root {
+    --primary-color: #4361ee;
+    --primary-light: #e6e9ff;
+    --sidebar-width: 280px;
+    --text-dark: #2b2d42;
+    --text-light: #6c757d;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    color: var(--text-dark);
+}
+
+/* Main content area */
+.main-content {
+    margin-left: var(--sidebar-width);
+    padding: 2rem;
+    flex: 1;
+    transition: margin-left 0.3s;
+}
+
+/* Sidebar adjustment for mobile */
+@media (max-width: 992px) {
+    .main-content {
+        margin-left: 0;
+        padding: 1rem;
+    }
+}
+
+/* Profile card styling */
+.profile-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.profile-picture {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid var(--primary-light);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Info table styling */
+.info-table {
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.info-table th {
+    background-color: var(--primary-light);
+    width: 30%;
+    font-weight: 500;
+}
+
+/* Footer styling */
+.footer {
+    background-color: white;
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* Button styling */
+.btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+}
+
+.btn-primary:hover {
+    background-color: #3a56d4;
+    border-color: #3a56d4;
+}

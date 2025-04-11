@@ -1,0 +1,195 @@
+:root {
+    --primary-blue: #0056b3;
+    --dark-blue: #003366;
+    --gold-accent: #ffc107;
+    --light-gray: #f8f9fa;
+    --dark-gray: #343a40;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+body.dark-mode {
+    background: linear-gradient(135deg, #121212 0%, #1e1e1e 100%);
+    color: #f8f9fa;
+}
+
+.login-container {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    width: 100%;
+    max-width: 450px;
+    transition: all 0.3s ease;
+}
+
+.dark-mode .login-container {
+    background: #2d2d2d;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.login-title {
+    color: var(--dark-blue);
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.login-title:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: var(--gold-accent);
+    border-radius: 2px;
+}
+
+.dark-mode .login-title {
+    color: #f8f9fa;
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.25rem rgba(0, 86, 179, 0.25);
+}
+
+.dark-mode .form-control {
+    background-color: #3d3d3d;
+    border-color: #555;
+    color: #f8f9fa;
+}
+
+.dark-mode .form-control:focus {
+    background-color: #3d3d3d;
+    border-color: var(--gold-accent);
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+.btn-primary {
+    background-color: var(--primary-blue);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .btn-primary {
+    background-color: var(--gold-accent);
+    color: var(--dark-gray);
+}
+
+.dark-mode .btn-primary:hover {
+    background-color: #e0a800;
+}
+
+.forgot-password {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.forgot-password a {
+    color: var(--primary-blue);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.forgot-password a:hover {
+    color: var(--dark-blue);
+    text-decoration: underline;
+}
+
+.dark-mode .forgot-password a {
+    color: var(--gold-accent);
+}
+
+.dark-mode .forgot-password a:hover {
+    color: #e0a800;
+}
+
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--dark-blue);
+    color: white;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1);
+}
+
+.dark-mode .dark-mode-toggle {
+    background: var(--gold-accent);
+    color: var(--dark-gray);
+}
+
+.university-logo {
+    width: 80px;
+    height: auto;
+    margin: 0 auto 1rem;
+    display: block;
+}
+
+.alert-danger {
+    border-radius: 8px;
+}
+
+.dark-mode .alert-danger {
+    background-color: #5c2a2a;
+    border-color: #4d2323;
+    color: #ffb3b3;
+}
+
+.input-group-text {
+    background-color: var(--gold-accent);
+    color: var(--dark-gray);
+    border: none;
+}
+
+.dark-mode .input-group-text {
+    background-color: var(--primary-blue);
+    color: white;
+}

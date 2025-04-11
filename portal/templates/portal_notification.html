@@ -1,0 +1,348 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications | Student Portal</title>
+
+    <!-- Bootstrap & Custom CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- FontAwesome for Icons -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/student_portal.css' %}">
+</head>
+<body>
+
+    <!-- Navbar -->
+    {% include 'portal_navbar.html' %}
+
+    <!-- Sidebar -->
+    <div class="sidebar text-white">
+        {% include 'portal_sidebar.html' %}
+    </div>
+
+    <!-- Main Content -->
+    <div class="container dashboard-container">
+        <div class="row mb-4 align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold text-gray-800">Notifications</h1>
+                <p class="lead text-muted">
+                    {% now "F j, Y" %} • 
+                    <span class="badge bg-primary">{{ unread_count }} unread</span>
+                </p>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <div class="btn-group">
+                    <button class="btn btn-outline-primary" id="mark-all-read">
+                        <i class="fas fa-check-double me-1"></i> Mark all as read
+                    </button>
+                    <button class="btn btn-outline-secondary" id="clear-notifications">
+                        <i class="fas fa-trash-alt me-1"></i> Clear all
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Filter -->
+        <div class="card mb-4">
+            <div class="card-body py-2">
+                <div class="row align-items-center">
+                    <div class="col-md-6">
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-search"></i></span>
+                            <input type="text" class="form-control" placeholder="Search notifications..." id="notification-search">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mt-2 mt-md-0">
+                        <div class="d-flex justify-content-md-end">
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-outline-secondary filter-btn active" data-filter="all">All</button>
+                                <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="unread">Unread</button>
+                                <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="academic">Academic</button>
+                                <button type="button" class="btn btn-outline-secondary filter-btn" data-filter="system">System</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notifications List -->
+<!-- In your notifications list section -->
+<div class="card-body p-0">
+    {% if notifications %}
+    <div class="list-group list-group-flush" id="notifications-list">
+        {% for notification in notifications %}
+        <a href="{% url 'notification_page' notification.id %}" class="text-decoration-none">
+            <div class="list-group-item list-group-item-action {% if not notification.read %}bg-light{% endif %} py-3 notification-item" 
+                 data-category="{{ notification.category }}" data-read="{{ notification.read }}" data-id="{{ notification.id }}">
+                <div class="d-flex">
+                    <div class="flex-shrink-0 me-3">
+                        <div class="icon-md rounded-circle bg-{{ notification.get_icon_color }} text-white d-flex align-items-center justify-content-center">
+                            <i class="{{ notification.get_icon }}"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <h6 class="mb-1 {% if not notification.read %}fw-bold{% endif %}">
+                                {{ notification.title }}
+                                {% if not notification.read %}
+                                <span class="badge bg-danger ms-2">New</span>
+                                {% endif %}
+                            </h6>
+                            <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
+                        </div>
+                        <p class="mb-1">{{ notification.message }}</p>
+                        {% if notification.course %}
+                        <span class="badge bg-info">{{ notification.course }}</span>
+                        {% endif %}
+                        {% if notification.link %}
+                        <div class="mt-2">
+                            <span class="btn btn-sm btn-outline-primary">
+                                View details <i class="fas fa-arrow-right ms-1"></i>
+                            </span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">No notifications yet</h4>
+        <p class="text-muted">When you get notifications, they'll appear here</p>
+    </div>
+    {% endif %}
+</div>
+            
+            {% if notifications %}
+            <div class="card-footer bg-transparent">
+                <nav aria-label="Notification pagination">
+                    <ul class="pagination justify-content-center mb-0">
+                        {% if notifications.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1" aria-label="First">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ notifications.previous_page_number }}" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                        
+                        {% for num in notifications.paginator.page_range %}
+                            {% if notifications.number == num %}
+                            <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% elif num > notifications.number|add:'-3' and num < notifications.number|add:'3' %}
+                            <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if notifications.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ notifications.next_page_number }}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ notifications.paginator.num_pages }}" aria-label="Last">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JS for Notifications -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filter notifications
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active state
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.dataset.filter;
+                    const notifications = document.querySelectorAll('.notification-item');
+                    
+                    notifications.forEach(notification => {
+                        const matchesCategory = filter === 'all' || notification.dataset.category === filter;
+                        const matchesUnread = filter !== 'unread' || notification.dataset.read === 'False';
+                        
+                        if (matchesCategory && matchesUnread) {
+                            notification.style.display = '';
+                        } else {
+                            notification.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Search functionality
+            const searchInput = document.getElementById('notification-search');
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const notifications = document.querySelectorAll('.notification-item');
+                
+                notifications.forEach(notification => {
+                    const text = notification.textContent.toLowerCase();
+                    if (text.includes(searchTerm)) {
+                        notification.style.display = '';
+                    } else {
+                        notification.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Mark all as read
+            document.getElementById('mark-all-read').addEventListener('click', function() {
+                fetch('/notifications/mark-all-read/', {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Update UI
+                        document.querySelectorAll('.notification-item[data-read="False"]').forEach(item => {
+                            item.dataset.read = "True";
+                            item.classList.remove('bg-light');
+                            const badge = item.querySelector('.badge.bg-danger');
+                            if (badge) badge.remove();
+                            const title = item.querySelector('h6');
+                            if (title) title.classList.remove('fw-bold');
+                        });
+                        
+                        // Update unread count
+                        const unreadBadge = document.querySelector('.badge.bg-primary');
+                        if (unreadBadge) unreadBadge.textContent = '0 unread';
+                    }
+                });
+            });
+            
+            // Clear all notifications
+            document.getElementById('clear-notifications').addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear all notifications? This cannot be undone.')) {
+                    fetch('/notifications/clear-all/', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}',
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('notifications-list').innerHTML = `
+                                <div class="text-center py-5">
+                                    <i class="fas fa-bell-slash fa-3x text-muted mb-3"></i>
+                                    <h4 class="text-muted">No notifications yet</h4>
+                                    <p class="text-muted">When you get notifications, they'll appear here</p>
+                                </div>
+                            `;
+                            
+                            // Update unread count
+                            const unreadBadge = document.querySelector('.badge.bg-primary');
+                            if (unreadBadge) unreadBadge.textContent = '0 unread';
+                        }
+                    });
+                }
+            });
+            
+            // Mark as read when clicked
+            document.querySelectorAll('.notification-item').forEach(item => {
+                item.addEventListener('click', function() {
+                    if (this.dataset.read === 'False') {
+                        const notificationId = this.dataset.id; // You would need to add data-id attribute to each notification
+                        fetch(`/notifications/mark-read/${notificationId}/`, {
+                            method: 'POST',
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}',
+                                'Content-Type': 'application/json'
+                            }
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                this.dataset.read = "True";
+                                this.classList.remove('bg-light');
+                                const badge = this.querySelector('.badge.bg-danger');
+                                if (badge) badge.remove();
+                                const title = this.querySelector('h6');
+                                if (title) title.classList.remove('fw-bold');
+                                
+                                // Update unread count
+                                const unreadBadge = document.querySelector('.badge.bg-primary');
+                                if (unreadBadge) {
+                                    const currentCount = parseInt(unreadBadge.textContent);
+                                    unreadBadge.textContent = `${currentCount - 1} unread`;
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+        });
+
+
+
+
+        document.querySelectorAll('.notification-item').forEach(item => {
+    item.addEventListener('click', function(e) {
+        // If you need to prevent default link behavior in some cases
+        if (someCondition) {
+            e.preventDefault();
+            // Your custom JavaScript logic
+        }
+        
+        if (this.dataset.read === 'False') {
+            const notificationId = this.dataset.id;
+            fetch(`/notifications/mark-read/${notificationId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.dataset.read = "True";
+                    this.classList.remove('bg-light');
+                    const badge = this.querySelector('.badge.bg-danger');
+                    if (badge) badge.remove();
+                    const title = this.querySelector('h6');
+                    if (title) title.classList.remove('fw-bold');
+                    
+                    // Update unread count
+                    const unreadBadge = document.querySelector('.badge.bg-primary');
+                    if (unreadBadge) {
+                        const currentCount = parseInt(unreadBadge.textContent);
+                        unreadBadge.textContent = `${currentCount - 1} unread`;
+                    }
+                }
+            });
+        }
+    });
+});    
+    </script>
+</body>
+</html>
