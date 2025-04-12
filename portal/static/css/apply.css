@@ -1,0 +1,190 @@
+:root {
+    --primary-blue: #0056b3;
+    --dark-blue: #003366;
+    --gold-accent: #ffc107;
+    --light-gray: #f8f9fa;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
+    min-height: 100vh;
+    padding: 2rem 0;
+}
+
+.application-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: white;
+}
+
+.application-header h2 {
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.application-header p {
+    opacity: 0.9;
+}
+
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.card-header {
+    background-color: var(--gold-accent);
+    color: var(--dark-blue);
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+    border-bottom: none;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--dark-blue);
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    transition: all 0.3s;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--primary-blue);
+    box-shadow: 0 0 0 0.25rem rgba(0, 86, 179, 0.25);
+}
+
+.btn-submit {
+    background-color: var(--primary-blue);
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.btn-submit:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.text-danger {
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.form-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed #eee;
+}
+
+.form-section:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+.form-section-title {
+    color: var(--dark-blue);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.form-section-title i {
+    margin-right: 10px;
+    color: var(--primary-blue);
+}
+
+.required-field::after {
+    content: " *";
+    color: #dc3545;
+}
+
+.progress-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.progress-steps::before {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background-color: #e9ecef;
+    z-index: 1;
+}
+
+.progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+}
+
+.step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+}
+
+.step-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    text-align: center;
+}
+
+.progress-step.active .step-number {
+    background-color: var(--gold-accent);
+    color: var(--dark-blue);
+}
+
+.progress-step.active .step-label {
+    color: var(--dark-blue);
+    font-weight: 500;
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .progress-steps {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .progress-step {
+        margin: 0 10px 15px;
+    }
+}

@@ -1,0 +1,16 @@
+:root {
+    --primary-color: #4361ee;
+    --danger-color: #ef233c;
+    --warning-color: #ff9500;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+}
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.main-content {
+    margin-left: 250px;
+    padding: 20px;
+}

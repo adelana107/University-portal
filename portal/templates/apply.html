@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Apply for Admission | Oceanview University</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/apply.css' %}?v={% now 'U' %}">
+
+    
+    <!-- Custom CSS -->
+   
+</head>
+<body>
+    <div class="container">
+        <div class="application-header">
+            <h2>Apply for Admission</h2>
+            <p>Begin your journey at Oceanview University</p>
+        </div>
+        
+        <!-- Progress Steps -->
+        <div class="progress-steps">
+            <div class="progress-step active">
+                <div class="step-number">1</div>
+                <div class="step-label">Personal Info</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">2</div>
+                <div class="step-label">Academic Info</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">3</div>
+                <div class="step-label">Documents</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">4</div>
+                <div class="step-label">Review</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-user-graduate me-2"></i> Applicant Information
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" id="admissionForm">
+                    {% csrf_token %}
+                    
+                    <div class="form-section">
+                        <h5 class="form-section-title"><i class="fas fa-user"></i> Personal Details</h5>
+                        <div class="row">
+                            {% for field in form %}
+                                {% if field.name in 'surname first_name other_name date_of_birth gender phone_number email' %}
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label {% if field.field.required %}required-field{% endif %}">
+                                        {{ field.label }}
+                                    </label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <small class="text-danger">{{ field.errors.0 }}</small>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h5 class="form-section-title"><i class="fas fa-map-marker-alt"></i> Contact Information</h5>
+                        <div class="row">
+                            {% for field in form %}
+                                {% if field.name in 'address state_of_origin local_government nationality' %}
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label {% if field.field.required %}required-field{% endif %}">
+                                        {{ field.label }}
+                                    </label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <small class="text-danger">{{ field.errors.0 }}</small>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h5 class="form-section-title"><i class="fas fa-graduation-cap"></i> Academic Information</h5>
+                        <div class="row">
+                            {% for field in form %}
+                                {% if field.name in 'academic_session school department' %}
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label {% if field.field.required %}required-field{% endif %}">
+                                        {{ field.label }}
+                                    </label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <small class="text-danger">{{ field.errors.0 }}</small>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <h5 class="form-section-title"><i class="fas fa-file-upload"></i> Documents Upload</h5>
+                        <div class="row">
+                            {% for field in form %}
+                                {% if field.name in 'profile_picture documents' %}
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label {% if field.field.required %}required-field{% endif %}">
+                                        {{ field.label }}
+                                    </label>
+                                    {{ field }}
+                                    {% if field.errors %}
+                                        <small class="text-danger">{{ field.errors.0 }}</small>
+                                    {% endif %}
+                                    {% if field.help_text %}
+                                        <small class="text-muted">{{ field.help_text }}</small>
+                                    {% endif %}
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="form-check mb-4">
+                        <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                        <label class="form-check-label" for="agreeTerms">
+                            I certify that all information provided is accurate and complete
+                        </label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-submit">
+                        <i class="fas fa-paper-plane me-2"></i> Submit Application
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        $(document).ready(function() {
+            // Handle School -> Department Selection
+            $("#id_school").change(function() {
+                const schoolId = $(this).val();
+                const departmentField = $("#id_department");
+                
+                // Show loading state
+                departmentField.empty()
+                    .append('<option value="">Loading departments...</option>')
+                    .prop("disabled", true);
+                
+                if (schoolId) {
+                    $.ajax({
+                        url: "{% url 'get_departments' %}",
+                        data: { 'school_id': schoolId },
+                        dataType: "json",
+                        success: function(data) {
+                            departmentField.empty()
+                                .append('<option value="">Select Department</option>')
+                                .prop("disabled", false);
+                            
+                            data.departments.forEach(department => {
+                                departmentField.append(new Option(department.name, department.id));
+                            });
+                        },
+                        error: function(xhr) {
+                            console.error("Error loading departments:", xhr.responseText);
+                            departmentField.empty()
+                                .append('<option value="">Error loading departments</option>')
+                                .prop("disabled", false);
+                        }
+                    });
+                } else {
+                    departmentField.empty()
+                        .append('<option value="">Select School first</option>')
+                        .prop("disabled", false);
+                }
+            });
+            
+            // Handle State -> LGA Selection
+            $("#id_state_of_origin").change(function() {
+                const stateId = $(this).val();
+                const lgaField = $("#id_local_government");
+                
+                // Show loading state
+                lgaField.empty()
+                    .append('<option value="">Loading local governments...</option>')
+                    .prop("disabled", true);
+                
+                if (stateId) {
+                    $.ajax({
+                        url: "{% url 'get_lgas' %}",
+                        data: { 'state_id': stateId },
+                        dataType: "json",
+                        success: function(data) {
+                            lgaField.empty()
+                                .append('<option value="">Select Local Government</option>')
+                                .prop("disabled", false);
+                            
+                            data.lgas.forEach(lga => {
+                                lgaField.append(new Option(lga.name, lga.id));
+                            });
+                        },
+                        error: function(xhr) {
+                            console.error("Error loading LGAs:", xhr.responseText);
+                            lgaField.empty()
+                                .append('<option value="">Error loading LGAs</option>')
+                                .prop("disabled", false);
+                        }
+                    });
+                } else {
+                    lgaField.empty()
+                        .append('<option value="">Select State first</option>')
+                        .prop("disabled", false);
+                }
+            });
+            
+            // Form submission handling
+            $("#admissionForm").submit(function(e) {
+                // Add any additional validation here if needed
+                if (!$("#agreeTerms").is(":checked")) {
+                    alert("Please certify that all information is accurate by checking the box");
+                    return false;
+                }
+                return true;
+            });
+            
+            // Initialize select2 if you want to use it (would need to include the library)
+            // $('select').select2();
+        });
+    </script>
+</body>
+</html>

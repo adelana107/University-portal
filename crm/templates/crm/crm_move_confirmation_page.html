@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Confirm Semester Transfer</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/crm_move_confirmation.css' %}">
+
+    
+    <!-- Custom CSS -->
+    <style>
+       
+    </style>
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'crm/sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card confirmation-card">
+                    <div class="card-body text-center p-4">
+                        <div class="warning-icon mb-3">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <h2 class="mb-4">Confirm Semester Update</h2>
+                        
+                        <p class="mb-4">You are about to advance all students to the next semester. This action will:</p>
+                        
+                        <!-- SIMPLIFIED LIST - THIS WILL DEFINITELY WORK -->
+                        <ul class="action-list text-start">
+                            <li>Permanently update all current student records</li>
+                            <li>Cannot be automatically undone without administrator intervention</li>
+                            <li>Affect all academic reporting and transcripts</li>
+                            <li>Update student enrollment statuses automatically</li>
+                            <li>Generate system notifications to affected students</li>
+                        </ul>
+                        
+                        <div class="alert alert-warning text-start">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            <strong>Warning:</strong> Please ensure you've backed up data before proceeding.
+                        </div>
+
+                        <form method="POST" action="{% url 'move_semester' %}" class="d-flex justify-content-center gap-3">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-warning btn-lg">
+                                <i class="fas fa-arrow-right me-2"></i> Confirm Update
+                            </button>
+                            <a href="{% url 'crm_dashboard' %}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times me-2"></i> Cancel
+                            </a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer text-center py-3">
+        © 2025 University Portal | v2.1.0
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

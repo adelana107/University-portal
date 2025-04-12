@@ -1,0 +1,32 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f8f9fa;
+}
+
+.confirmation-card {
+    max-width: 600px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.warning-icon {
+    color: #ff9500;
+    font-size: 3rem;
+}
+
+/* SIMPLIFIED ACTION LIST STYLES */
+.action-list {
+    padding-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.action-list li {
+    margin-bottom: 0.5rem;
+    list-style-type: disc;
+    color: #495057;
+}
+
+.btn-warning {
+    background-color: #ff9500;
+    border-color: #ff9500;
+}

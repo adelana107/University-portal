@@ -1,0 +1,27 @@
+body {
+    background-color: #f8f9fa;
+}
+.accordion-button {
+    font-weight: bold;
+}
+.accordion-button:not(.collapsed) {
+    background-color: #34495e;
+    color: white;
+}
+.table th {
+    background-color: #34495e;
+    color: white;
+}
+.table tbody tr:hover {
+    background-color: #34495e;
+}
+.btn-primary {
+    background-color: #34495e;
+    border: none;
+}
+.btn-primary:hover {
+    background-color: #34495e;
+}
+.table-responsive {
+    overflow-x: auto;
+}

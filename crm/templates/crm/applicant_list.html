@@ -1,0 +1,264 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Applications List - CRM</title>
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/applicant_list.css' %}">
+    
+    <!-- Custom CSS -->
+   
+</head>
+
+<body>
+    <!-- Sidebar -->
+    {% include 'crm/sidebar.html' %}
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="text-primary mb-0">
+                <i class="fas fa-users me-2"></i>Applicant Management
+            </h2>
+            <div class="d-flex">
+                <div class="search-container me-3">
+                    <i class="fas fa-search"></i>
+                    <input type="text" class="form-control search-input" placeholder="Search applications..." id="searchInput">
+                </div>
+                <select class="form-select status-filter" id="statusFilter">
+                    <option value="all">All Statuses</option>
+                    <option value="approved">Approved</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Applications Accordion -->
+        <div class="accordion" id="schoolAccordion">
+            {% for school, departments in grouped_applications.items %}
+            <div class="accordion-item mb-2">
+                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                            data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="false">
+                        <i class="fas fa-school me-2"></i> {{ school }}
+                        <span class="badge bg-primary rounded-pill ms-2">{{ departments|length }} Departments</span>
+                    </button>
+                </h2>
+                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse" 
+                     aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#schoolAccordion">
+                    <div class="accordion-body p-0">
+                        <div class="accordion" id="departmentAccordion{{ forloop.counter }}">
+                            {% for department, applications in departments.items %}
+                            <div class="accordion-item border-0">
+                                <h2 class="accordion-header" id="departmentHeading{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                            data-bs-target="#departmentCollapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                        <i class="fas fa-book me-2"></i> {{ department }}
+                                        <span class="badge bg-secondary rounded-pill ms-2">{{ applications|length }} Applicants</span>
+                                    </button>
+                                </h2>
+                                <div id="departmentCollapse{{ forloop.parentloop.counter }}-{{ forloop.counter }}" 
+                                     class="accordion-collapse collapse"
+                                     aria-labelledby="departmentHeading{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                                     data-bs-parent="#departmentAccordion{{ forloop.parentloop.counter }}">
+                                    <div class="accordion-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle">
+                                                <thead class="table-light">
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>Application No</th>
+                                                        <th>Name</th>
+                                                        <th>Contact</th>
+                                                        <th>Status</th>
+                                                        <th>Date</th>
+                                                        <th>Actions</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for application in applications %}
+                                                    <tr class="application-row" data-status="{% if application.is_approved %}approved{% else %}pending{% endif %}">
+                                                        <td>{{ forloop.counter }}</td>
+                                                        <td>{{ application.application_number }}</td>
+                                                        <td>
+                                                            <strong>{{ application.surname }} {{ application.first_name }}</strong>
+                                                        </td>
+                                                        <td>
+                                                            <div>{{ application.email }}</div>
+                                                            <small class="text-muted">{{ application.phone_number }}</small>
+                                                        </td>
+                                                        <td>
+                                                            {% if application.is_approved %}
+                                                                <span class="badge badge-approved rounded-pill">
+                                                                    <i class="fas fa-check-circle me-1"></i> Approved
+                                                                </span>
+                                                            {% else %}
+                                                                <span class="badge badge-pending rounded-pill">
+                                                                    <i class="fas fa-clock me-1"></i> Pending
+                                                                </span>
+                                                            {% endif %}
+                                                        </td>
+                                                        <td>{{ application.submission_date|date:"M d, Y" }}</td>
+                                                        <td>
+                                                            <div class="d-flex">
+                                                                <a href="{% url 'view_applicant' application.id %}" 
+                                                                   class="btn btn-sm btn-primary me-2" 
+                                                                   title="View Details">
+                                                                    <i class="fas fa-eye"></i>
+                                                                </a>
+                                                                <div class="dropdown">
+                                                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" 
+                                                                            type="button" data-bs-toggle="dropdown">
+                                                                        <i class="fas fa-ellipsis-v"></i>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a class="dropdown-item" href="#"><i class="fas fa-edit me-2"></i>Edit</a></li>
+                                                                        <li><a class="dropdown-item" href="#"><i class="fas fa-file-pdf me-2"></i>Export PDF</a></li>
+                                                                        <li><hr class="dropdown-divider"></li>
+                                                                        <li><a class="dropdown-item text-danger" href="#"><i class="fas fa-trash-alt me-2"></i>Delete</a></li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    {% empty %}
+                                                    <tr>
+                                                        <td colspan="7" class="text-center py-4">No applications found in this department.</td>
+                                                    </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle me-2"></i> No applications found in the system.
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1" aria-label="First">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item"><a class="page-link" href="?page={{ num }}">{{ num }}</a></li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+
+    <!-- jQuery & Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        $(document).ready(function() {
+            // Search functionality
+            $("#searchInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                var statusFilter = $("#statusFilter").val();
+                
+                $(".application-row").each(function() {
+                    var rowText = $(this).text().toLowerCase();
+                    var rowStatus = $(this).data("status");
+                    var statusMatch = (statusFilter === "all") || (rowStatus === statusFilter);
+                    
+                    $(this).toggle(
+                        rowText.indexOf(value) > -1 && statusMatch
+                    );
+                });
+            });
+
+            // Status filter functionality
+            $("#statusFilter").change(function() {
+                var statusFilter = $(this).val();
+                var searchValue = $("#searchInput").val().toLowerCase();
+                
+                $(".application-row").each(function() {
+                    var rowText = $(this).text().toLowerCase();
+                    var rowStatus = $(this).data("status");
+                    var textMatch = rowText.indexOf(searchValue) > -1 || searchValue === "";
+                    var statusMatch = (statusFilter === "all") || (rowStatus === statusFilter);
+                    
+                    $(this).toggle(
+                        textMatch && statusMatch
+                    );
+                });
+            });
+
+            // Auto-expand accordion if search is active
+            $("#searchInput").on("keyup", function() {
+                if ($(this).val().length > 0) {
+                    $(".accordion-collapse").addClass("show");
+                }
+            });
+
+            // Remember accordion state
+            $('.accordion-button').click(function() {
+                var target = $(this).attr('data-bs-target');
+                var isCollapsed = $(target).hasClass('show');
+                
+                if (!isCollapsed) {
+                    localStorage.setItem(target, 'expanded');
+                } else {
+                    localStorage.removeItem(target);
+                }
+            });
+
+            // Restore accordion state on page load
+            $('.accordion-collapse').each(function() {
+                var id = '#' + $(this).attr('id');
+                if (localStorage.getItem(id) === 'expanded') {
+                    $(this).addClass('show');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

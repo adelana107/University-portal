@@ -1,0 +1,28 @@
+:root {
+    --primary-color: #4361ee;
+    --danger-color: #ef233c;
+    --warning-color: #ff9500;
+    --telegram-color: #0088cc;
+}
+body {
+    font-family: 'Poppins', sans-serif;
+}
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+.img-thumbnail {
+    max-width: 100px;
+}
+.image-preview {
+    max-height: 200px;
+    display: none;
+}
+.btn-telegram {
+    background-color: var(--telegram-color);
+    color: white;
+}
+.btn-telegram:hover {
+    background-color: #0077b5;
+    color: white;
+}

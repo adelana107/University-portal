@@ -1,0 +1,295 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Registered Courses | Student Portal | Oceanview University</title>
+
+    <!-- Bootstrap & Custom CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/portal_registered_courses.css' %}">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+
+    <style>
+
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    {% include 'portal_navbar.html' %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar Column -->
+            <div class="col-md-3 col-lg-2 d-md-block sidebar">
+                {% include 'portal_sidebar.html' %}
+            </div>
+            
+            <!-- Main Content Column -->
+            <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4 main-content">
+                <div class="content">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h2 class="header-title">My Registered Courses</h2>
+                        <div>
+                            <span class="text-muted">Academic Session:</span>
+                            <strong>{{ current_session.name }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Summary Card -->
+                    <div class="card card-summary">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-info-circle me-2"></i>Registration Summary</span>
+                            <span class="badge bg-primary">{{ registered_courses.count }} Courses</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="summary-item">
+                                <span class="summary-label">Total Units:</span>
+                                <span class="summary-value">{{ total_units }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Compulsory Courses:</span>
+                                <span class="summary-value">{{ compulsory_count }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Elective Courses:</span>
+                                <span class="summary-value">{{ elective_count }}</span>
+                            </div>
+                            <div class="summary-item">
+                                <span class="summary-label">Registration Date:</span>
+                                <span class="summary-value">{{ registration_date|date:"F d, Y" }}</span>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Courses Table -->
+                    <div class="table-container">
+                        <table class="table table-bordered table-hover" id="coursesTable">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Course Title</th>
+                                    <th>Units</th>
+                                    <th>Type</th>
+                                    <th>Lecturer</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in registered_courses %}
+                                <tr>
+                                    <td class="fw-bold">{{ course.course.code }}</td>
+                                    <td>{{ course.course.title }}</td>
+                                    <td class="text-center">{{ course.course.unit }}</td>
+                                    <td class="text-center">
+                                        {% if course.course.is_core %}
+                                            <span class="badge bg-primary">Core</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">Elective</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if course.course.lecturer %}
+                                            {{ course.course.lecturer.get_full_name }}
+                                        {% else %}
+                                            <span class="badge badge-not-assigned">Not assigned</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="status-badge badge-registered">Registered</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#courseModal{{ course.id }}">
+                                            <i class="fas fa-info-circle"></i> Details
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                                <!-- Course Details Modal -->
+                                <div class="modal fade" id="courseModal{{ course.id }}" tabindex="-1" aria-labelledby="courseModalLabel{{ course.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title modal-course-title" id="courseModalLabel{{ course.id }}">
+                                                    {{ course.course.code }} - {{ course.course.title }}
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                        <ul class="course-details-list">
+                                                            <li>
+                                                                <span class="detail-label">Course Code:</span>
+                                                                <span>{{ course.course.code }}</span>
+                                                            </li>
+                                                            <li>
+                                                                <span class="detail-label">Units:</span>
+                                                                <span>{{ course.course.unit }}</span>
+                                                            </li>
+                                                            <li>
+                                                                <span class="detail-label">Course Type:</span>
+                                                                <span>{% if course.course.is_core %}Core{% else %}Elective{% endif %}</span>
+                                                            </li>
+                                                            <li>
+                                                                <span class="detail-label">Department:</span>
+                                                                <span>{{ course.course.department.name }}</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <ul class="course-details-list">
+                                                            <li>
+                                                                <span class="detail-label">Lecturer:</span>
+                                                                <span>{% if course.course.lecturer %}{{ course.course.lecturer.get_full_name }}{% else %}Not assigned{% endif %}</span>
+                                                            </li>
+                                                            <li>
+                                                                <span class="detail-label">Schedule:</span>
+                                                                <span>{% if course.course.schedule %}{{ course.course.schedule }}{% else %}Not scheduled{% endif %}</span>
+                                                            </li>
+                                                            <li>
+                                                                <span class="detail-label">Venue:</span>
+                                                                <span>{% if course.course.venue %}{{ course.course.venue }}{% else %}Not assigned{% endif %}</span>
+                                                            </li>
+                                                            <li>
+                                                                <span class="detail-label">Status:</span>
+                                                                <span class="status-badge badge-registered">Registered</span>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="mt-3">
+                                                    <h6>Course Description:</h6>
+                                                    <p>{{ course.course.description|default:"No description available." }}</p>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <a href="#" class="btn btn-primary">
+                                                    <i class="fas fa-book-open me-2"></i>View Syllabus
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="7" class="text-center py-4">
+                                        <div class="empty-state">
+                                            <i class="fas fa-book-open"></i>
+                                            <h4>No Courses Registered</h4>
+                                            <p>You haven't registered for any courses this semester.</p>
+                                            <a href="{% url 'course_registration' %}" class="btn btn-primary">
+                                                <i class="fas fa-plus me-2"></i> Register Courses
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    {% if registered_courses %}
+                    <div class="action-buttons">
+                        <button class="btn btn-print" onclick="window.print()">
+                            <i class="fas fa-print me-2"></i> Print Registration
+                        </button>
+                        <a href="{% url 'course_registration' %}" class="btn btn-primary">
+                            <i class="fas fa-edit me-2"></i> Modify Registration
+                        </a>
+                        <a href="#" class="btn btn-success">
+                            <i class="fas fa-calendar-alt me-2"></i> Generate Timetable
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+    <script>
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#coursesTable').DataTable({
+                responsive: true,
+                language: {
+                    search: "_INPUT_",
+                    searchPlaceholder: "Search courses...",
+                },
+                dom: '<"top"f>rt<"bottom"lip><"clear">',
+                pageLength: 10
+            });
+        });
+
+        // Print Styles
+        function beforePrint() {
+            $('.sidebar, .navbar, .action-buttons, .dataTables_filter, .dataTables_info, .dataTables_paginate').hide();
+            $('.main-content').css({
+                'padding': '0',
+                'margin': '0'
+            });
+            $('.header-title').css({
+                'color': 'black',
+                'text-align': 'center',
+                'margin-bottom': '1rem'
+            });
+            $('.header-title:after').hide();
+            $('.table th').css({
+                'background-color': '#f8f9fa !important',
+                'color': 'black !important',
+                'border': '1px solid #dee2e6'
+            });
+            $('.table td').css('border', '1px solid #dee2e6');
+            $('.card-summary').css({
+                'background-color': '#f8f9fa !important',
+                'border': '1px solid #dee2e6',
+                'margin-bottom': '1rem'
+            });
+            $('.badge').css({
+                'color': 'black !important',
+                'background-color': 'transparent !important',
+                'border': '1px solid black'
+            });
+        }
+
+        function afterPrint() {
+            $('.sidebar, .navbar, .action-buttons, .dataTables_filter, .dataTables_info, .dataTables_paginate').show();
+        }
+
+        // Set up print event listeners
+        if (window.matchMedia) {
+            const mediaQueryList = window.matchMedia('print');
+            mediaQueryList.addListener((mql) => {
+                if (mql.matches) {
+                    beforePrint();
+                } else {
+                    afterPrint();
+                }
+            });
+        }
+
+        window.onbeforeprint = beforePrint;
+        window.onafterprint = afterPrint;
+    </script>
+</body>
+</html>

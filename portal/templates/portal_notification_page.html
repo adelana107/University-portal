@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Details | Student Portal</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
+    <link rel="stylesheet" href="{% static 'css/student_portal.css' %}">
+    <style>
+        .notification-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .notification-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+        }
+        .notification-content {
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+        .attachment-btn:hover {
+            transform: translateY(-2px);
+            transition: transform 0.2s ease;
+        }
+        #mark-as-read:hover .fa-check {
+            transform: scale(1.2);
+            transition: transform 0.2s ease;
+        }
+    </style>
+</head>
+<body>
+    {% include 'portal_navbar.html' %}
+    
+    <div class="sidebar text-white">
+        {% include 'portal_sidebar.html' %}
+    </div>
+
+    <div class="container dashboard-container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a href="#" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Back to notifications
+            </a>
+            <button class="btn btn-outline-primary" id="mark-as-read">
+                <i class="fas fa-check me-1"></i> Mark as read
+            </button>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header notification-header">
+                <div class="d-flex align-items-center">
+                    <div class="notification-icon bg-{{ notification.type_color|default:'primary' }} text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                        <i class="{{ notification.icon|default:'fas fa-bell' }}"></i>
+                    </div>
+                    <div>
+                        <h2 class="mb-1">{{ notification.title|default:"Notification" }}</h2>
+                        <div class="text-muted">
+                            <span>{{ notification.time|date:"F j, Y · h:i A"|default:"Just now" }}</span>
+                            {% if notification.course %}
+                            <span class="ms-2 badge bg-info">{{ notification.course }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="card-body">
+                {% if notification %}
+                <div class="notification-content mb-4">
+                    {{ notification.message|linebreaks }}
+                </div>
+
+                {% if notification.attachment %}
+                <div class="mb-4">
+                    <h5 class="mb-3"><i class="fas fa-paperclip me-2"></i>Attachment</h5>
+                    <a href="{{ notification.attachment.url }}" class="btn btn-outline-primary attachment-btn">
+                        <i class="fas fa-download me-2"></i> 
+                        <span class="text-truncate" style="max-width: 200px; display: inline-block;">
+                            {{ notification.attachment.name }}
+                        </span>
+                        <span class="badge bg-secondary ms-2">
+                            {{ notification.attachment.size|filesizeformat }}
+                        </span>
+                    </a>
+                </div>
+                {% endif %}
+
+                {% else %}
+                <div class="text-center py-5 text-muted">
+                    <i class="fas fa-exclamation-circle fa-3x mb-3"></i>
+                    <h4 class="mb-2">Notification not found</h4>
+                    <p class="mb-0">The requested notification could not be located</p>
+                    <a href="{% url 'notifications_list' %}" class="btn btn-primary mt-3">
+                        Return to notifications
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="card-footer text-muted bg-transparent">
+                <small>
+                    <i class="fas fa-info-circle me-1"></i>
+                    {% if notification.read %}
+                    Read on {{ notification.read_at|date:"M j, Y \a\t h:i A" }}
+                    {% else %}
+                    Unread notification
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mark single notification as read
+        document.getElementById('mark-as-read').addEventListener('click', function() {
+            const btn = this;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Processing...';
+            
+            fetch('#', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}',
+                    'Content-Type': 'application/json'
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update button and status
+                    btn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Marked as read';
+                    btn.classList.remove('btn-outline-primary');
+                    btn.classList.add('btn-success');
+                    
+                    // Update footer status
+                    const now = new Date();
+                    const options = { 
+                        month: 'short', 
+                        day: 'numeric', 
+                        year: 'numeric', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    };
+                    document.querySelector('.card-footer small').innerHTML = `
+                        <i class="fas fa-check-circle me-1"></i>
+                        Read just now at ${now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}
+                    `;
+                }
+            })
+            .catch(error => {
+                btn.innerHTML = '<i class="fas fa-exclamation-circle me-1"></i> Error';
+                btn.classList.remove('btn-outline-primary');
+                btn.classList.add('btn-danger');
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fas fa-check me-1"></i> Mark as read';
+                    btn.classList.remove('btn-danger');
+                    btn.classList.add('btn-outline-primary');
+                    btn.disabled = false;
+                }, 2000);
+            });
+        });
+        
+        // Auto-mark as read when page loads if unread
+        document.addEventListener('DOMContentLoaded', function() {
+            {% if notification and not notification.read %}
+            setTimeout(() => {
+                document.getElementById('mark-as-read').click();
+            }, 1500); // Delay to allow user to see notification first
+            {% endif %}
+        });
+    </script>
+</body>
+</html>
