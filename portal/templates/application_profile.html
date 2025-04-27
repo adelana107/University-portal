@@ -14,19 +14,41 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/application_profile.css' %}">
     
- 
+    <!-- Additional Styles for Print -->
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-section, #print-section * {
+                visibility: visible;
+            }
+            #print-section {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+        body {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
 
 <div class="container my-5">
     <div class="university-header no-print">
-        <img src="{% static 'images/university-logo.png' %}" alt="University Logo" class="university-logo" onerror="this.src='https://via.placeholder.com/80x80?text=OU'">
+        <img src="{% static 'images/university-logo.png' %}" alt="University Logo" class="university-logo" onerror="this.src='https://via.placeholder.com/80x80?text=OU'" width="80" height="80">
         <h2 class="header-title">Oceanview University</h2>
         <div class="mb-4">
-            <button class="btn btn-custom me-2 no-print" onclick="printBiodata()">
+            <button class="btn btn-custom me-2 no-print" onclick="printBiodata()" aria-label="Print Biodata">
                 <i class="fas fa-print me-2"></i>Print Biodata
             </button>
-            <button class="btn btn-dark no-print" onclick="toggleDarkMode()">
+            <button class="btn btn-dark no-print" onclick="toggleDarkMode()" aria-label="Toggle Dark Mode">
                 <i class="fas fa-moon me-2"></i>Toggle Dark Mode
             </button>
         </div>
@@ -34,9 +56,9 @@
 
     <div id="print-section">
         {% for application in applications %}
-        <div class="biodata-container">
+        <div class="biodata-container mb-4">
             <div class="text-center">
-                <img src="{{ application.profile_picture.url }}" alt="Profile Picture" class="profile-img">
+                <img src="{{ application.profile_picture.url }}" alt="Profile Picture" class="profile-img" width="120" height="120">
                 <h4 class="mt-3">Application Number: <span class="text-primary">{{ application.application_number }}</span></h4>
                 <span class="status-badge {% if application.is_approved %}approved{% else %}pending{% endif %}">
                     {% if application.is_approved %}<i class="fas fa-check-circle me-1"></i> Approved{% else %}<i class="fas fa-clock me-1"></i> Pending{% endif %}
@@ -68,7 +90,7 @@
         <div class="alert alert-warning text-center">No applications found.</div>
         {% endfor %}
     </div>
-    
+
     {% for application in applications %}
     <div class="action-buttons">
         <span class="status-badge {% if application.is_approved %}approved{% else %}pending{% endif %} mb-3">

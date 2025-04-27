@@ -1,14 +1,81 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'css/portal_navbar.css' %}">
 
-
-
 <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
     <div class="container-fluid">
-        <a class="navbar-brand" href="{% url 'student_portal' %}">
-            <i class="fas fa-graduation-cap"></i> Student Portal
-        </a>
-        
+        <!-- Brand with condensed student info -->
+        <div class="d-flex align-items-center">
+            <a class="navbar-brand me-3" href="{% url 'student_portal' %}">
+                <i class="fas fa-graduation-cap"></i> Student Portal
+            </a>
+            
+            <!-- Student info dropdown (replaces sidebar) -->
+            <div class="dropdown">
+                <button class="btn btn-dark dropdown-toggle student-info-toggle" type="button" id="studentInfoDropdown" 
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="d-flex align-items-center">
+                        <div class="position-relative me-2">
+                            <img src="{% if student.profile_picture %}{{ student.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                                 class="rounded-circle border border-2 border-primary" 
+                                 width="32" height="32" 
+                                 alt="Profile"
+                                 onerror="this.src='{% static 'images/default-profile.png' %}'">
+                            <span class="position-absolute bottom-0 end-0 p-1 bg-success rounded-circle online-status"></span>
+                        </div>
+                        <span class="d-none d-md-inline">{{ student.surname }} {{ student.first_name }}</span>
+                    </div>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="studentInfoDropdown">
+                    <li>
+                        <div class="dropdown-header px-3 py-2">
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="{% if student.profile_picture %}{{ student.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                                     class="rounded-circle me-2" width="48" height="48"
+                                     onerror="this.src='{% static 'images/default-profile.png' %}'">
+                                <div>
+                                    <strong>{{ student.surname }} {{ student.first_name }}</strong>
+                                    <div class="small">{{ student.application_number }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li class="px-3 py-1">
+                        <div class="d-flex justify-content-between small">
+                            <span class="text-muted">Program:</span>
+                            <span>{{ student.program|default:"Undergraduate" }}</span>
+                        </div>
+                    </li>
+                    <li class="px-3 py-1">
+                        <div class="d-flex justify-content-between small">
+                            <span class="text-muted">Level:</span>
+                            <span>{{ student.year }}</span>
+                        </div>
+                    </li>
+                    <li class="px-3 py-1">
+                        <div class="d-flex justify-content-between small">
+                            <span class="text-muted">Semester:</span>
+                            <span>{{ student.semester }}</span>
+                        </div>
+                    </li>
+                    <li class="px-3 py-1">
+                        <div class="d-flex justify-content-between small">
+                            <span class="text-muted">Status:</span>
+                            <span class="badge {% if student.status == 'Active' %}bg-success{% elif student.status == 'Pending' %}bg-warning{% else %}bg-danger{% endif %}">
+                                {{ student.status }}
+                            </span>
+                        </div>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'student_biodata' %}">
+                            <i class="fas fa-user-edit me-2"></i> Update Profile
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -23,7 +90,7 @@
                 
                 <li class="nav-item">
                     <a class="nav-link {% if 'course-registration' in request.path %}active{% endif %}" href="{% url 'course_registration' %}">
-                        <i class="fas fa-book-open"></i> Course Registration
+                        <i class="fas fa-book-open"></i> Courses
                     </a>
                 </li>
                 
@@ -39,42 +106,60 @@
                     </a>
                 </li>
                 
+                <!-- Quick Actions Dropdown -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="quickActionsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bolt"></i> Quick Actions
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="quickActionsDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{% url 'course_registration' %}">
+                                <i class="fas fa-book me-2"></i> Register Courses
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-credit-card me-2"></i> Make Payment
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-calendar-alt me-2"></i> View Timetable
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-receipt me-2"></i> Payment History
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                
+                <!-- Notifications -->
                 <li class="nav-item position-relative">
-                    <a class="nav-link" href="{% url 'notifications'    %}">
+                    <a class="nav-link" href="{% url 'notifications' %}">
                         <i class="fas fa-bell"></i> Notifications
                         <span class="badge bg-danger badge-notification">3</span>
                     </a>
                 </li>
                 
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-receipt"></i> Payments
-                    </a>
-                </li>
-
                 <!-- User Dropdown -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fas fa-user-circle"></i> Account
+                        <i class="fas fa-cog"></i> Settings
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li>
-                            <div class="dropdown-header px-3 py-2">
-                                <strong>{{ request.user.get_full_name|default:"Student" }}</strong>
-                                <div class="small text-muted">{{ request.user.email }}</div>
-                            </div>
-                        </li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li>
-                            <a class="dropdown-item" href="{% url 'student_biodata' %}">
-                                <i class="fas fa-user-edit me-2"></i> Profile
-                            </a>
-                        </li>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="userDropdown">
                         <li>
                             <button class="dropdown-item" onclick="toggleDarkMode()">
                                 <i id="darkModeIcon" class="fas fa-moon me-2"></i>
                                 <span id="darkModeText">Dark Mode</span>
                             </button>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-lock me-2"></i> Change Password
+                            </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
@@ -110,6 +195,11 @@
             if (link.getAttribute('href') === currentPath) {
                 link.classList.add('active');
             }
+        });
+        
+        // Profile picture fallback
+        $('img[onerror]').on('error', function() {
+            $(this).attr('src', '{% static 'images/default-profile.png' %}');
         });
     });
 

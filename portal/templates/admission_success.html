@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,8 +19,6 @@
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="{% static 'css/application_success.css' %}">
-
-    
 </head>
 <body>
 
@@ -29,7 +28,7 @@
         <div class="card animate__animated animate__fadeInUp">
             <img src="{% static 'images/university-logo.png' %}" alt="Oceanview University Logo" class="university-logo" onerror="this.src='https://via.placeholder.com/60x60?text=OU'">
             
-            <div class="success-icon animate__animated animate__bounceIn">
+            <div class="success-icon animate__animated animate__bounceIn" aria-hidden="true">
                 <i class="fas fa-graduation-cap"></i>
             </div>
             
@@ -54,8 +53,8 @@
                 </ul>
             </div>
             
-            <a href="{% url 'student_portal' %}" class="btn btn-primary animate__animated animate__pulse animate__infinite">
-                <i class="fas fa-arrow-right me-2"></i> Go to Student Portal
+            <a href="{% url 'student_portal' %}" class="btn btn-primary animate__animated animate__pulse animate__infinite" role="button" aria-label="Go to Student Portal">
+                <i class="fas fa-arrow-right me-2" aria-hidden="true"></i> Go to Student Portal
             </a>
         </div>
     </div>
@@ -64,7 +63,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Create confetti effect
+        // Create confetti effect with better performance
         function createConfetti() {
             const colors = ['#0056b3', '#28a745', '#ffc107', '#dc3545', '#17a2b8'];
             
@@ -96,9 +95,12 @@
             }
         }
         
-        // Create new confetti every 5 seconds
-        createConfetti();
-        setInterval(createConfetti, 5000);
+        // Create new confetti every 5 seconds (but limit repetitions for a more pleasant experience)
+        let confettiInterval = setInterval(createConfetti, 5000);
+        
+        // Stop confetti animation after 1 minute or when user scrolls
+        setTimeout(() => clearInterval(confettiInterval), 60000);
+        window.addEventListener('scroll', () => clearInterval(confettiInterval));
         
         // Play celebration sound (optional)
         function playCelebrationSound() {

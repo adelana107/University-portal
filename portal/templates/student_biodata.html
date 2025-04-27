@@ -13,7 +13,194 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-   
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #5a5c69;
+            padding-top: 60px; /* Account for fixed navbar */
+        }
+
+        /* Fixed navbar styling */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .header-title {
+            color: var(--dark);
+            font-weight: 700;
+        }
+        
+        /* Bio-data Card Styling */
+        .bio-data-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            overflow: hidden;
+        }
+        
+        .bio-data-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .bio-data-header h3 {
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .university-logo {
+            height: 60px;
+            margin-bottom: 15px;
+        }
+        
+        .bio-data-body {
+            padding: 30px;
+        }
+        
+        /* Info Table Styling */
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .info-table th, 
+        .info-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        
+        .info-table th {
+            width: 200px;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+        
+        .info-table tr:last-child th,
+        .info-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        /* Badge Status Styling */
+        .badge-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        
+        .badge-paid {
+            background-color: rgba(28, 200, 138, 0.2);
+            color: var(--success);
+        }
+        
+        .badge-assigned {
+            background-color: rgba(78, 115, 223, 0.2);
+            color: var(--primary);
+        }
+        
+        .badge-not-paid {
+            background-color: rgba(231, 74, 59, 0.2);
+            color: var(--danger);
+        }
+        
+        /* Signature Area Styling */
+        .signature-area {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px dashed #ddd;
+        }
+        
+        .signature-line {
+            width: 250px;
+            height: 1px;
+            background-color: #333;
+            margin: 0 auto;
+        }
+        
+        /* Print Styles */
+        @media print {
+            body {
+                background-color: white !important;
+                padding-top: 0 !important;
+            }
+            
+            .navbar, .no-print {
+                display: none !important;
+            }
+            
+            .bio-data-card {
+                box-shadow: none !important;
+                border-radius: 0 !important;
+            }
+            
+            .bio-data-header {
+                page-break-after: avoid;
+            }
+            
+            .bio-data-body {
+                padding: 20px 0 !important;
+            }
+            
+            .info-table th, 
+            .info-table td {
+                padding: 8px 10px !important;
+            }
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .bio-data-body {
+                padding: 20px;
+            }
+            
+            .info-table th, 
+            .info-table td {
+                padding: 8px 10px;
+                display: block;
+                width: 100%;
+                border-bottom: none;
+            }
+            
+            .info-table tr {
+                border-bottom: 1px solid #eee;
+                padding: 10px 0;
+            }
+            
+            .info-table tr:last-child {
+                border-bottom: none;
+            }
+            
+            .signature-line {
+                width: 150px;
+            }
+            
+            .d-flex.justify-content-between.align-items-center.mb-4 {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -22,13 +209,8 @@
 
     <div class="container-fluid mt-4">
         <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 d-md-block sidebar no-print">
-                {% include 'portal_sidebar.html' %}
-            </div>
-            
-            <!-- Main Content -->
-            <div class="col-md-9 col-lg-10">
+            <!-- Main Content - Full Width -->
+            <div class="col-12">
                 <div class="content">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2 class="header-title">

@@ -8,8 +8,79 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404
 from .forms import ApplicantLoginForm
+from django.views.decorators.http import require_POST
+from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from django.utils import timezone
 
 # Create your views here.
+
+
+@login_required
+@require_POST
+def clear_all_notifications(request):
+    try:
+        # Delete all notifications for the current user
+        deleted_count = Notification.objects.filter(user=request.user).delete()[0]
+        
+        return JsonResponse({
+            'success': True,
+            'count': deleted_count
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
+
+
+
+@login_required
+@require_POST
+def mark_all_notifications_read(request):
+    try:
+        # Update all unread notifications for the current user
+        updated = Notification.objects.filter(
+            user=request.user,
+            read=False
+        ).update(
+            read=True,
+            read_at=timezone.now()
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'count': updated
+        })
+    except Exception as e:
+        return JsonResponse({
+            'success': False,
+            'error': str(e)
+        }, status=500)
+
+
+
+
+@require_POST
+@csrf_exempt  # Only use this if you're having CSRF issues - better to properly handle CSRF
+def mark_notification_read(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id, user=request.user)
+        notification.read = True
+        notification.read_at = timezone.now()
+        notification.save()
+        return JsonResponse({'success': True})
+    except Notification.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Notification not found'}, status=404)
+
+@login_required
+@require_POST
+def update_profile_picture(request):
+    if 'profile_picture' in request.FILES:
+        # Handle the file upload here
+        return JsonResponse({'success': True})
+    return JsonResponse({'success': False}, status=400)
 
 
 def applicant_login(request):
@@ -31,7 +102,6 @@ def applicant_login(request):
         form = ApplicantLoginForm()
 
     return render(request, "applicant_portal_login.html", {"form": form})
-
 
 
 def student_login(request):
@@ -91,27 +161,33 @@ def student_portal(request):
     last_semester = student.get_last_semester()
     last_gpa = student.calculate_gpa_for_semester(last_semester) if last_semester else None
 
+    # Get registered courses for current semester
     registered_courses = RegisteredCourse.objects.filter(
         student=student,
         semester=student.semester
-    )
+    ).select_related('course')
 
-    courses = Course.objects.filter(department=student.department, semester=student.semester)
-    total_units = sum(course.unit for course in courses)
+    # Calculate total units from registered courses
+    total_units = sum(reg_course.course.unit for reg_course in registered_courses)
+    total_course = registered_courses.count()
+    
+    # Calculate units remaining (max 24 units)
+    units_remaining = 24 - total_units if total_units <= 24 else 0
 
     context = {
         'student': student,
-        'courses': courses,
-        'total_course': courses.count(),
+        'total_course': total_course,
         'total_unit': total_units,
+        'units_remaining': units_remaining,
         'registered_courses': registered_courses,
         'last_gpa': last_gpa,
         'last_semester': last_semester,
+        'update_profile_picture_url': reverse('update_profile_picture'),
+        'upcoming_deadlines': [],  # Add your deadlines logic here
+        'recent_announcements': [],  # Add your announcements logic here
     }
 
     return render(request, "student_portal.html", context)
-
-
 
 
 def student_biodata(request):
@@ -268,15 +344,21 @@ def Notification_Page(request):
 
     return render(request, 'portal_notification.html', {'notifications':notifications, 'student':student})
 
-def View_Notification(request, Notification_id): 
+@require_http_methods(["GET", "POST"])
+def View_Notification(request, Notification_id):
     user = request.user
     student = Student.objects.filter(application_number=user.username).first()
-    notification = get_object_or_404(
-        Notification, 
-        id=Notification_id,
-    )
-    
-    
+    notification = get_object_or_404(Notification, id=Notification_id)
+
+    # Handle POST request to mark as read
+    if request.method == 'POST':
+        if not notification.read:
+            notification.read = True
+            notification.read_at = timezone.now()
+            notification.save()
+        return JsonResponse({'success': True})
+
+    # Handle GET request (normal page load)
     return render(request, 'portal_notification_page.html', {
         'notification': notification,
         'student': student,

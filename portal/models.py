@@ -286,6 +286,7 @@ class Notification(models.Model):
     title = models.CharField(max_length=100)
     message = models.CharField(max_length=10000)
     created_at = models.DateTimeField(default=now, editable=True)
+    
 
     def __str__(self):
         return self.title

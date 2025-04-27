@@ -11,25 +11,164 @@
     <!-- FontAwesome for Icons -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"></script>
     <link rel="stylesheet" href="{% static 'css/student_portal.css' %}">
+    
+    <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #5a5c69;
+            padding-top: 60px; /* Added padding to prevent navbar overlap */
+        }
+
+        /* Fixed navbar styling */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+            margin-top: 60px; /* Push content below fixed navbar */
+        }
+        
+        /* Cards */
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .card:hover {
+            box-shadow: 0 0.5rem 1.5rem rgba(0,0,0,.15);
+        }
+        
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #e3e6f0;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem 0.5rem 0 0 !important;
+        }
+        
+        /* Stats Cards */
+        .stat-card {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        
+        .stat-card .icon-lg {
+            width: 50px;
+            height: 50px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            border-radius: 50%;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card .value {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0.5rem 0;
+        }
+        
+        /* Table */
+        .table {
+            margin-bottom: 0;
+        }
+        
+        .table th {
+            background-color: #f8f9fc;
+            font-weight: 600;
+            border-top: none;
+        }
+        
+        /* Progress bars */
+        .progress {
+            height: 6px;
+            border-radius: 3px;
+            background-color: #e9ecef;
+        }
+        
+        /* Avatar */
+        .avatar-img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+        }
+        
+        .online-status {
+            width: 15px;
+            height: 15px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+        }
+        
+        /* List items */
+        .list-group-item {
+            padding: 1rem 1.5rem;
+            border-left: none;
+            border-right: none;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 0 15px;
+                margin-top: 60px;
+            }
+            
+            .card-header h5 {
+                font-size: 1.1rem;
+            }
+            
+            .stat-card .value {
+                font-size: 1.5rem;
+            }
+            
+            .avatar-img {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
 </head>
 <body>
 
     <!-- Navbar -->
     {% include 'portal_navbar.html' %}
 
-    <!-- Sidebar -->
-    <div class="sidebar text-white">
-        {% include 'portal_sidebar.html' %}
-    </div>
-
     <!-- Main Content -->
-    <div class="container dashboard-container">
+    <div class="container-fluid dashboard-container">
         {% if student %}
             <!-- Welcome Section with Profile -->
             <div class="row mb-4 align-items-center">
                 <div class="col-md-8">
-                    <h1 class="display-5 fw-bold text-gray-800">Welcome back, {{ student.surname }}!</h1>
-                    <p class="lead text-muted">
+                    <h1 class="fw-bold mb-2" style="font-size: 2rem; color: var(--dark);">Welcome back, {{ student.surname }}!</h1>
+                    <p class="lead text-muted mb-0">
                         {% now "F j, Y" %} • 
                         <span class="badge bg-primary">{{ student.program|default:"Undergraduate" }}</span>
                         {% if student.department %}
@@ -40,24 +179,23 @@
                 <div class="col-md-4 text-md-end">
                     <div class="d-inline-block position-relative">
                         <img src="{% if student.profile_picture %}{{ student.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
-                             class="rounded-circle border border-3 border-primary avatar-img" 
-                             width="80" height="80" 
+                             class="rounded-circle avatar-img" 
                              alt="{{ student.surname }}'s profile picture">
-                        <span class="position-absolute bottom-0 end-0 p-1 bg-success rounded-circle online-status"></span>
+                        <span class="bg-success online-status"></span>
                     </div>
                 </div>
             </div>
 
             <!-- Stats Cards -->
             <div class="row g-4 mb-4">
-                <div class="col-md-3">
-                    <div class="card h-100 hover-shadow-lg">
-                        <div class="card-body text-center">
-                            <div class="icon-lg bg-primary bg-opacity-10 text-primary rounded-circle mb-3">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body stat-card">
+                            <div class="icon-lg bg-primary bg-opacity-10 text-primary">
                                 <i class="fas fa-book-open"></i>
                             </div>
                             <h5 class="card-title text-muted mb-2">Total Courses</h5>
-                            <p class="display-6 fw-bold text-gray-800">{{ total_course }}</p>
+                            <p class="value">{{ total_course }}</p>
                             <small class="text-success">
                                 <i class="fas fa-arrow-up me-1"></i> 2 from last term
                             </small>
@@ -65,28 +203,28 @@
                     </div>
                 </div>
                 
-                <div class="col-md-3">
-                    <div class="card h-100 hover-shadow-lg">
-                        <div class="card-body text-center">
-                            <div class="icon-lg bg-info bg-opacity-10 text-info rounded-circle mb-3">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body stat-card">
+                            <div class="icon-lg bg-info bg-opacity-10 text-info">
                                 <i class="fas fa-calculator"></i>
                             </div>
                             <h5 class="card-title text-muted mb-2">Total Units</h5>
-                            <p class="display-6 fw-bold text-gray-800">{{ total_unit }}</p>
+                            <p class="value">{{ total_unit }}</p>
                             <small class="text-muted">Max allowed: 24</small>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-md-3">
-                    <div class="card h-100 hover-shadow-lg">
-                        <div class="card-body text-center">
-                            <div class="icon-lg bg-warning bg-opacity-10 text-warning rounded-circle mb-3">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body stat-card">
+                            <div class="icon-lg bg-warning bg-opacity-10 text-warning">
                                 <i class="fas fa-graduation-cap"></i>
                             </div>
                             <h5 class="card-title text-muted mb-2">Last Semester GPA</h5>
                             {% if last_semester %}
-                                <p class="display-6 fw-bold text-gray-800">{{ last_gpa|default:"N/A" }}</p>
+                                <p class="value">{{ last_gpa|default:"N/A" }}</p>
                                 <small class="{% if last_gpa >= 3.5 %}text-success{% elif last_gpa %}text-danger{% else %}text-muted{% endif %}">
                                     {% if last_gpa %}
                                         {% if last_gpa >= 3.5 %}
@@ -101,21 +239,21 @@
                                     {% endif %}
                                 </small>
                             {% else %}
-                                <p class="display-6 fw-bold text-muted">N/A</p>
+                                <p class="value text-muted">N/A</p>
                                 <small class="text-muted">No data</small>
                             {% endif %}
                         </div>
                     </div>
                 </div>
 
-                <div class="col-md-3">
-                    <div class="card h-100 hover-shadow-lg">
-                        <div class="card-body text-center">
-                            <div class="icon-lg bg-success bg-opacity-10 text-success rounded-circle mb-3">
+                <div class="col-xl-3 col-md-6">
+                    <div class="card h-100">
+                        <div class="card-body stat-card">
+                            <div class="icon-lg bg-success bg-opacity-10 text-success">
                                 <i class="fas fa-calendar-alt"></i>
                             </div>
                             <h5 class="card-title text-muted mb-2">Academic Year</h5>
-                            <p class="display-6 fw-bold text-gray-800">{{ student.year }}</p>
+                            <p class="value">{{ student.year }}</p>
                             <small class="text-primary">{{ student.semester }}</small>
                         </div>
                     </div>
@@ -127,16 +265,14 @@
                 <!-- Upcoming Deadlines -->
                 <div class="col-lg-6">
                     <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-calendar-day text-danger me-2"></i> Upcoming Deadlines</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
-                            </h5>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-calendar-day text-danger me-2"></i> Upcoming Deadlines</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
                         </div>
                         <div class="card-body p-0">
                             <ul class="list-group list-group-flush">
                                 {% for deadline in upcoming_deadlines|slice:":3" %}
-                                <li class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <div>
                                         <h6 class="mb-1">{{ deadline.title }}</h6>
                                         <small class="text-muted">{{ deadline.course }}</small>
@@ -159,16 +295,14 @@
                 <!-- Recent Announcements -->
                 <div class="col-lg-6">
                     <div class="card h-100">
-                        <div class="card-header">
-                            <h5 class="mb-0 d-flex justify-content-between align-items-center">
-                                <span><i class="fas fa-bullhorn text-primary me-2"></i> Recent Announcements</span>
-                                <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
-                            </h5>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0"><i class="fas fa-bullhorn text-primary me-2"></i> Recent Announcements</h5>
+                            <a href="#" class="btn btn-sm btn-outline-primary">View All</a>
                         </div>
                         <div class="card-body p-0">
                             <div class="list-group list-group-flush">
                                 {% for announcement in recent_announcements|slice:":3" %}
-                                <a href="#" class="list-group-item list-group-item-action py-3">
+                                <a href="#" class="list-group-item list-group-item-action">
                                     <div class="d-flex w-100 justify-content-between">
                                         <h6 class="mb-1">{{ announcement.title }}</h6>
                                         <small class="text-muted">{{ announcement.posted_at|timesince }} ago</small>
@@ -186,15 +320,15 @@
                 </div>
 
                 <!-- Current Courses -->
-                <div class="col-12 mt-4">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-header">
                             <h5 class="mb-0"><i class="fas fa-book text-success me-2"></i> Current Courses</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body p-0">
                             <div class="table-responsive">
-                                <table class="table table-hover align-middle">
-                                    <thead class="thead-light">
+                                <table class="table table-hover align-middle mb-0">
+                                    <thead>
                                         <tr>
                                             <th>Course Code</th>
                                             <th>Course Title</th>
@@ -213,7 +347,7 @@
                                             <td>{{ registration.course.schedule }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <div class="progress flex-grow-1" style="height: 6px;">
+                                                    <div class="progress flex-grow-1">
                                                         <div class="progress-bar bg-{{ registration.get_progress_color }}" style="width: {{ registration.progress }}%"></div>
                                                     </div>
                                                     <small class="ms-2">{{ registration.progress }}%</small>
@@ -275,11 +409,13 @@
     <!-- Custom JS -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Initialize tooltips
             var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
             var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
 
+            // Update online status
             function updateOnlineStatus() {
                 fetch('/api/online-status/')
                     .then(response => response.json())

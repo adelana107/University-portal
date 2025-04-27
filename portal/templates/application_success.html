@@ -1,10 +1,10 @@
-{% load static %}
+{% load static i18n %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Application Submitted | Oceanview University</title>
+    <title>{% trans "Application Submitted | Oceanview University" %}</title>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -17,65 +17,100 @@
     
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="{% static 'css/application_success.css' %}">
-
-    <style>
-
-    </style>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/application_success.css' %}?v={% now 'U' %}">
 </head>
 <body>
     <div class="container">
-        <div class="card animate__animated animate__fadeInUp">
-            <img src="{% static 'images/university-logo.png' %}" alt="Oceanview University Logo" class="university-logo" onerror="this.src='https://via.placeholder.com/60x60?text=OU'">
+        <main class="card animate__animated animate__fadeInUp" role="main">
+            <img src="{% static 'images/university-logo.png' %}" 
+                 alt="{% trans 'Oceanview University Logo' %}" 
+                 class="university-logo" 
+                 onerror="this.src='https://via.placeholder.com/60x60?text=OU'">
             
-            <div class="success-icon animate__animated animate__bounceIn">
+            <div class="success-icon animate__animated animate__bounceIn" aria-hidden="true">
                 <i class="fas fa-check-circle"></i>
             </div>
             
-            <h2 class="text-success">Application Submitted Successfully!</h2>
+            <h1 class="text-success">{% trans "Application Submitted Successfully!" %}</h1>
             
             <p class="text-muted">
-                Thank you for applying to Oceanview University. We've received your application and will process it shortly.
+                {% trans "Thank you for applying to Oceanview University. We've received your application and will process it shortly." %}
             </p>
 
-            <div class="alert animate__animated animate__fadeIn">
-                <h4><i class="fas fa-file-alt me-2"></i>Your Application Details:</h4>
-                <p><strong>Application Number:</strong> <span class="text-primary">{{ application_number }}</span></p>
-                <p><strong>Name:</strong> {{ surname }} {{ first_name }}</p>
-                <p><strong>Date Submitted:</strong> {% now "F d, Y" %}</p>
+            <div class="alert alert-info animate__animated animate__fadeIn">
+                <h2 class="h4"><i class="fas fa-file-alt me-2" aria-hidden="true"></i>{% trans "Your Application Details" %}:</h2>
+                <ul class="list-unstyled">
+                    <li><strong>{% trans "Application Number" %}:</strong> <span class="text-primary">{{ application_number }}</span></li>
+                    <li><strong>{% trans "Name" %}:</strong> {{ surname }} {{ first_name }}</li>
+                    <li><strong>{% trans "Date Submitted" %}:</strong> {% now "F d, Y" %}</li>
+                </ul>
             </div>
 
             <div class="login-details animate__animated animate__fadeIn">
-                <h5><i class="fas fa-sign-in-alt me-2"></i>Login Information:</h5>
-                <p>Use these credentials to track your application:</p>
-                <p><strong>Username:</strong> <span class="highlight">{{ application_number }}</span></p>
-                <p><strong>Password:</strong> <span class="highlight">{{ surname }}</span></p>
-                <p class="text-muted small mt-2">(You can change your password after logging in)</p>
+                <h2 class="h5"><i class="fas fa-sign-in-alt me-2" aria-hidden="true"></i>{% trans "Login Information" %}:</h2>
+                <p>{% trans "Use these credentials to track your application" %}:</p>
+                <div class="credentials-box bg-light p-3 mb-2">
+                    <p><strong>{% trans "Username" %}:</strong> <span class="highlight">{{ application_number }}</span></p>
+                    <p><strong>{% trans "Temporary Password" %}:</strong> <span class="highlight">{{ surname|lower }}{% now "md" %}</span></p>
+                </div>
+                <div class="alert alert-warning small">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    {% trans "Please change your password after first login for security." %}
+                </div>
             </div>
             
-            <p class="animate__animated animate__fadeIn">
-                We'll notify you via email when your application status changes.
-            </p>
+            <div class="next-steps animate__animated animate__fadeIn">
+                <h2 class="h5"><i class="fas fa-list-check me-2"></i>{% trans "Next Steps" %}:</h2>
+                <ol>
+                    <li>{% trans "Check your email for application confirmation" %}</li>
+                    <li>{% trans "Login to track your application status" %}</li>
+                    <li>{% trans "Complete any additional requirements if requested" %}</li>
+                </ol>
+            </div>
             
-            <a href="{% url 'applicant_login' %}" class="btn btn-primary animate__animated animate__pulse animate__infinite">
-                <i class="fas fa-user-circle me-2"></i> Go to Application Profile
-            </a>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                <a href="{% url 'applicant_login' %}" class="btn btn-primary btn-lg animate__animated animate__pulse animate__infinite">
+                    <i class="fas fa-user-circle me-2" aria-hidden="true"></i> {% trans "Go to Application Profile" %}
+                </a>
+                <a href="{% url 'home' %}" class="btn btn-outline-secondary btn-lg">
+                    <i class="fas fa-home me-2" aria-hidden="true"></i> {% trans "Return to Homepage" %}
+                </a>
+            </div>
             
             <div class="mt-4 small text-muted">
-                <p>Need help? <a href="mailto:admissions@oceanview.edu" class="text-primary">Contact Admissions</a></p>
+                <p>
+                    {% trans "Need help?" %} 
+                    <a href="mailto:admissions@oceanview.edu" class="text-primary">
+                        <i class="fas fa-envelope me-1" aria-hidden="true"></i> {% trans "Contact Admissions" %}
+                    </a>
+                    {% trans "or call" %} <a href="tel:+1234567890" class="text-primary">+1 (234) 567-890</a>
+                </p>
             </div>
-        </div>
+        </main>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
     <script>
-        // Play success sound
+        // Play success sound only if user hasn't disabled audio
         document.addEventListener('DOMContentLoaded', function() {
-            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
-            audio.volume = 0.2;
-            audio.play().catch(e => console.log('Audio play prevented:', e));
+            if (!window.localStorage.getItem('audioDisabled')) {
+                try {
+                    const audio = new Audio('{% static "sounds/success.mp3" %}');
+                    audio.volume = 0.2;
+                    setTimeout(() => { audio.play().catch(e => console.log('Audio play prevented:', e)); }, 500);
+                } catch (e) {
+                    console.log('Audio error:', e);
+                }
+            }
+            
+            // Print-friendly version
+            if (window.location.search.includes('print=true')) {
+                window.print();
+            }
         });
     </script>
 </body>

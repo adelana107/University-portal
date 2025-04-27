@@ -17,7 +17,206 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 
     <style>
+        :root {
+            --primary: #4e73df;
+            --secondary: #858796;
+            --success: #1cc88a;
+            --info: #36b9cc;
+            --warning: #f6c23e;
+            --danger: #e74a3b;
+            --light: #f8f9fc;
+            --dark: #5a5c69;
+        }
+        
+        body {
+            background-color: #f8f9fc;
+            font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: #5a5c69;
+            padding-top: 60px; /* Account for fixed navbar */
+        }
 
+        /* Fixed navbar styling */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+        }
+        
+        .main-content {
+            margin-top: 20px;
+            padding: 20px;
+        }
+        
+        .header-title {
+            color: var(--dark);
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Summary Card Styling */
+        .card-summary {
+            border-radius: 8px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        .card-summary .card-header {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+            border-radius: 8px 8px 0 0 !important;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            color: var(--secondary);
+        }
+        
+        .summary-value {
+            font-weight: 600;
+        }
+        
+        /* Table Styling */
+        .table-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        #coursesTable {
+            width: 100% !important;
+        }
+        
+        #coursesTable th {
+            background-color: #f8f9fc;
+            font-weight: 600;
+            padding: 15px;
+        }
+        
+        #coursesTable td {
+            padding: 12px 15px;
+            vertical-align: middle;
+        }
+        
+        /* Badge Styling */
+        .badge {
+            font-weight: 500;
+            padding: 5px 10px;
+        }
+        
+        .badge-registered {
+            background-color: rgba(28, 200, 138, 0.2);
+            color: var(--success);
+        }
+        
+        .badge-not-assigned {
+            background-color: rgba(231, 74, 59, 0.2);
+            color: var(--danger);
+        }
+        
+        /* Empty State Styling */
+        .empty-state {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+        
+        .empty-state h4 {
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .empty-state p {
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn-print {
+            background-color: white;
+            border: 1px solid var(--secondary);
+            color: var(--dark);
+        }
+        
+        .btn-print:hover {
+            background-color: #f8f9fc;
+        }
+        
+        /* Modal Styling */
+        .modal-course-title {
+            color: var(--primary);
+            font-weight: 700;
+        }
+        
+        .course-details-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .course-details-list li {
+            padding: 8px 0;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: var(--dark);
+            display: inline-block;
+            width: 120px;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 15px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .table-container {
+                padding: 10px;
+            }
+            
+            #coursesTable th, #coursesTable td {
+                padding: 8px;
+                font-size: 0.9rem;
+            }
+            
+            .d-flex.justify-content-between.align-items-center.mb-4 {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -27,13 +226,8 @@
 
     <div class="container-fluid">
         <div class="row">
-            <!-- Sidebar Column -->
-            <div class="col-md-3 col-lg-2 d-md-block sidebar">
-                {% include 'portal_sidebar.html' %}
-            </div>
-            
             <!-- Main Content Column -->
-            <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4 py-4 main-content">
+            <div class="col-12 px-md-4 py-4 main-content">
                 <div class="content">
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2 class="header-title">My Registered Courses</h2>
@@ -47,7 +241,7 @@
                     <div class="card card-summary">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span><i class="fas fa-info-circle me-2"></i>Registration Summary</span>
-                            <span class="badge bg-primary">{{ registered_courses.count }} Courses</span>
+                            <span class="badge bg-light text-dark">{{ registered_courses.count }} Courses</span>
                         </div>
                         <div class="card-body">
                             <div class="summary-item">
@@ -237,13 +431,22 @@
                     searchPlaceholder: "Search courses...",
                 },
                 dom: '<"top"f>rt<"bottom"lip><"clear">',
-                pageLength: 10
+                pageLength: 10,
+                columnDefs: [
+                    { responsivePriority: 1, targets: 0 }, // Course code
+                    { responsivePriority: 2, targets: 1 }, // Course title
+                    { responsivePriority: 3, targets: -1 }, // Actions
+                    { responsivePriority: 4, targets: 2 }, // Units
+                    { responsivePriority: 5, targets: 3 }, // Type
+                    { responsivePriority: 6, targets: 4 }, // Lecturer
+                    { responsivePriority: 7, targets: 5 }  // Status
+                ]
             });
         });
 
         // Print Styles
         function beforePrint() {
-            $('.sidebar, .navbar, .action-buttons, .dataTables_filter, .dataTables_info, .dataTables_paginate').hide();
+            $('.navbar, .action-buttons, .dataTables_filter, .dataTables_info, .dataTables_paginate').hide();
             $('.main-content').css({
                 'padding': '0',
                 'margin': '0'
@@ -253,7 +456,6 @@
                 'text-align': 'center',
                 'margin-bottom': '1rem'
             });
-            $('.header-title:after').hide();
             $('.table th').css({
                 'background-color': '#f8f9fa !important',
                 'color': 'black !important',
@@ -273,7 +475,7 @@
         }
 
         function afterPrint() {
-            $('.sidebar, .navbar, .action-buttons, .dataTables_filter, .dataTables_info, .dataTables_paginate').show();
+            $('.navbar, .action-buttons, .dataTables_filter, .dataTables_info, .dataTables_paginate').show();
         }
 
         // Set up print event listeners

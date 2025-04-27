@@ -12,34 +12,102 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/crm_login.css' %}">
-    
+
+    <style>
+        body {
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .login-logo {
+            width: 60px;
+        }
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .form-control:focus {
+            border-color: #0056b3;
+            box-shadow: 0 0 5px rgba(0, 95, 179, 0.5);
+        }
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1000;
+        }
+        .footer {
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+
     <script>
         function toggleDarkMode() {
             document.body.classList.toggle("dark-mode");
-            // Save preference to localStorage
             const isDark = document.body.classList.contains("dark-mode");
             localStorage.setItem("darkMode", isDark);
+            const icon = document.querySelector('.dark-mode-toggle i');
+            icon.classList.toggle("fa-moon", !isDark);
+            icon.classList.toggle("fa-sun", isDark);
         }
-        
-        // Check for saved dark mode preference
+
         document.addEventListener("DOMContentLoaded", () => {
             if (localStorage.getItem("darkMode") === "true") {
                 document.body.classList.add("dark-mode");
+                const icon = document.querySelector('.dark-mode-toggle i');
+                icon.classList.add("fa-sun");
+                icon.classList.remove("fa-moon");
             }
         });
+
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const passwordIcon = document.getElementById('password-icon');
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordIcon.classList.remove('fa-eye-slash');
+                passwordIcon.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                passwordIcon.classList.remove('fa-eye');
+                passwordIcon.classList.add('fa-eye-slash');
+            }
+        }
     </script>
 </head>
 <body>
 
+    <!-- Dark Mode Toggle Button -->
     <button class="dark-mode-toggle" onclick="toggleDarkMode()" title="Toggle Dark Mode">
         <i class="fas fa-moon"></i>
     </button>
 
+    <!-- Login Form Container -->
     <div class="login-container">
         <div class="text-center mb-4">
-            <img src="{% static 'images/logo.png' %}" alt="Company Logo" class="login-logo" style="height: 50px;">
+            <img src="{% static 'images/logo.png' %}" alt="Company Logo" class="login-logo">
         </div>
-        
+
         <h3 class="login-title">
             <i class="fas fa-lock"></i> Admin Portal
         </h3>
@@ -51,6 +119,7 @@
             </div>
         {% endif %}
 
+        <!-- Login Form -->
         <form method="post">
             {% csrf_token %}
         
@@ -66,7 +135,10 @@
                 <label class="form-label">Password</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="fas fa-key"></i></span>
-                    <input type="password" name="password" class="form-control" required placeholder="Enter Password">
+                    <input type="password" name="password" class="form-control" id="password" required placeholder="Enter Password">
+                    <span class="input-group-text cursor-pointer" onclick="togglePasswordVisibility()">
+                        <i id="password-icon" class="fas fa-eye-slash"></i>
+                    </span>
                 </div>
             </div>
             
@@ -89,6 +161,7 @@
         </div>
     </div>
 
+    <!-- Footer -->
     <div class="footer text-center mt-4">
         © 2025 CRM System | v2.1.0 | <a href="#" class="text-decoration-none">Privacy Policy</a>
     </div>

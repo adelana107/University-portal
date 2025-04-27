@@ -38,7 +38,14 @@ urlpatterns = [
 
     #notifications
     path('student-notifications/', views.Notification_Page, name='notifications'),
-    path('student-notification/<int:Notification_id>/',  views.View_Notification,  name='notification_page')
+    path('student-notification/<int:Notification_id>/',  views.View_Notification,  name='notification_page'),
+    path('mark-notification-read/<int:notification_id>/',  views.mark_notification_read, name='mark_notification_read'),
+    path('notifications/mark-all-read/', views.mark_all_notifications_read, name='mark_all_notifications_read'),
+    path('notifications/clear-all/', views.clear_all_notifications, name='clear_all_notifications'),
+   
+
+    path('update-profile-picture/', views.update_profile_picture, name='update_profile_picture'),
+
     
 ]
 
